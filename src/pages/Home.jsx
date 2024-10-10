@@ -85,12 +85,18 @@ export default function Home({ navigation }) {
   const searchData = async () => {
     try {
       const response = await axios.get(
-        `http://IPv4:8080/api/dependents/findDependentsByCpfRes/${userType[2]}`,
+        `http://10.0.2.2:8080/api/dependent/commonuser/findDependentsByCpfRes/${userType[2]}`,
+        {
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJST0xFX0NPTU1PTl9VU0VSIl0sImlhdCI6MTcyODUxODg0NiwiZXhwIjoxNzI4NTIyNDQ2LCJzdWIiOiJsZWFuZHJvIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.fIRGF13ZSMLIMeB0D47LanNlcVSEUUCDzhuFhhXIjOM'
+          }
+        }
       );
+
       if (response) {
-        setUserData(response.data._embedded.dependentVOes);
-        setListData(response.data._embedded.dependentVOes)
-        setUserDataToBeShown(response.data._embedded.dependentVOes[0]);
+        setUserData(response.data._embedded.dependentDTOList);
+        setListData(response.data._embedded.dependentDTOList)
+        setUserDataToBeShown(response.data._embedded.dependentDTOList[0]);
       } else {
         setUserData(null);
       }

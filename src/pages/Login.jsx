@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -10,20 +10,20 @@ import {
 
 import BubbleBackground from '../components/BubbleBackground';
 
-import {COLORS, FONTS} from '../constants/constants'
+import { COLORS, FONTS } from '../constants/constants'
 
 import axios from 'axios';
 
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
-import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
-import {useUser} from '../contexts/UserContext';
+import { useUser } from '../contexts/UserContext';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-export default function Login({navigation}) {
-  const {userType, updateUserType} = useUser();
+export default function Login({ navigation }) {
+  const { userType, updateUserType } = useUser();
 
   const [startAnimation, setStartAnimation] = useState(false)
 
@@ -39,7 +39,13 @@ export default function Login({navigation}) {
   const verifyLogin = async () => {
     if ((emailValue && passwordValue) != '') {
       try {
-        const response = await axios.get(`http://IPv4:8080/api/responsibles/findResponsiblesCpfAndName/params?emailRes=${emailValue}&senhaRes=${passwordValue}`);
+        const response = await axios.get(`http://10.0.2.2:8080/api/responsible/commonuser/findResponsibleCpfAndName/params?emailRes=${emailValue}&senhaRes=${passwordValue}`,
+          {
+            headers: {
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJST0xFX0NPTU1PTl9VU0VSIl0sImlhdCI6MTcyODUxODg0NiwiZXhwIjoxNzI4NTIyNDQ2LCJzdWIiOiJsZWFuZHJvIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.fIRGF13ZSMLIMeB0D47LanNlcVSEUUCDzhuFhhXIjOM'
+            }
+          }
+        );
         let idRes = response.data[0][0]
         let nomeRes = response.data[0][1]
         let emergePhone = response.data[0][2]
@@ -48,7 +54,7 @@ export default function Login({navigation}) {
           updateUserType([{}, true, idRes, nomeRes, emergePhone]);
           navigation.navigate('Home');
         } else {
-         console.log("Erro na verificação do login!")
+          console.log("Erro na verificação do login!")
         }
       } catch (error) {
         console.error(error);
