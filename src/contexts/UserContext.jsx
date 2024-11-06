@@ -1,16 +1,18 @@
-import React, {createContext, useContext, useState} from 'react';
+import React, {createContext, useContext, useState, useEffect} from 'react';
 
 const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
   const [userType, setUserType] = useState([{}, true, '', '', '']);
+  const [authToken, setAuthToken] = useState(null);
 
   const updateUserType = newUserType => {
     setUserType(newUserType);
   };
 
   return (
-    <UserContext.Provider value={{userType, updateUserType}}>
+    <UserContext.Provider
+      value={{userType, updateUserType, authToken, setAuthToken}}>
       {children}
     </UserContext.Provider>
   );

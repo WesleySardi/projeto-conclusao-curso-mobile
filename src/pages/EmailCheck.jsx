@@ -8,20 +8,21 @@ import {
   Dimensions,
 } from 'react-native';
 
+import axios from 'axios';
+
 import {COLORS} from '../constants/constants';
 
-import getFunctions from '../functions/getFunctions';
+import {useUser} from '../contexts/UserContext';
 
 const {width, height} = Dimensions.get('window');
 
-export default function CodeCheck() {
+export default function EmailCheck({navigation}) {
   const {userType, updateUserType, authToken, setAuthToken} = useUser();
-  const [smsValue, setSmsValue] = useState();
+  const [emailValue, setEmailValue] = useState();
 
-  const [smsData] = useState({
-    sendDate: '',
-    cpfDep: '',
-    phoneUser: '',
+  const [emailData] = useState({
+    cpfRes: '',
+    emailUser: '',
   });
 
   useEffect(() => {
@@ -29,41 +30,39 @@ export default function CodeCheck() {
   }, []);
 
   const fillData = () => {
-    smsData.sendDate = getFunctions.generateTimestamp();
-    smsData.phoneUser = '+' + userType[0].contato1Res; // Adicionar o telefone que será enviado o SMS
-    smsData.cpfDep = userType[0].cpfDep; // Adicionar o CPF do RESPONSÁVEL
-    smsHandlerFunction();
+    emailData.emailUser = userType[0].emailRes; // Adicionar o e-mail que será enviado o código
+    emailData.cpfRes = userType[0].cpfRes; // Adicionar o CPF do RESPONSÁVEL
+    emailHandlerFunction();
   };
 
-  const smsHandlerFunction = async () => {
+  const emailHandlerFunction = async () => {
     try {
       const response = await axios.post(
-        'http://10.0.2.2:8080/api/smshandler/',
+        'http://10.0.2.2:8080/api/emailhandler/',
         {
           headers: {
             Authorization: authToken,
           },
         },
-        smsData,
+        emailData,
       );
-      // if (response) return alert('SMS reenviado com sucesso!')
+      //if (response) return alert('E-mail reenviado com sucesso!')
     } catch (error) {
-      // console.error(error);
-      // alert('Erro ao reenviar SMS!')
+      console.error(error);
     }
   };
 
-  const smsVerifyFunction = async smsCode => {
+  const emailVerifyFunction = async emailCode => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/smshandler/verifySmsCode?smsCode=${smsCode}&returnDate=${getFunctions.generateTimestamp()}&cpfDep=${
-          smsData.cpfDep
-        }`,
+        `http://10.0.2.2:8080/api/emailhandler/verifyEmailCode?email=${emailData.emailUser}&code=${emailCode}`,
       );
       if (response) return navigation.navigate('ChangePassword');
     } catch (error) {
-      // console.error(error);
-      // alert('Valor inválido. Tente novamente ou reenvie o código SMS caso necessário.')
+      console.error(error);
+      alert(
+        'Valor inválido. Tente novamente ou reenvie o código caso necessário.',
+      );
     }
   };
 
@@ -76,10 +75,10 @@ export default function CodeCheck() {
         <View style={styles.view3}>
           <View>
             <TextInput
-              placeholder="Código SMS"
-              keyboardType="numeric"
-              onChangeText={text => setSmsValue(text)}
-              value={smsValue}
+              placeholder="Código do E-mail"
+              keyboardType="number-pad"
+              onChangeText={text => setEmailValue(text)}
+              value={emailValue}
               style={styles.input}
             />
             <View style={styles.viewSendCodeAgain}>
@@ -94,11 +93,11 @@ export default function CodeCheck() {
         <View style={styles.viewButton}>
           <Pressable
             onPress={() => {
-              if (smsValue.length == 0) {
-                // alert('Digite o código enviado ao seu celular.')
+              if (emailValue.length == 0) {
+                alert('Digite o código enviado ao seu E-mail.');
               } else {
-                if (smsValue.length >= 7 && smsValue.length < 9) {
-                  smsVerifyFunction(smsValue);
+                if (emailValue.length == 6) {
+                  emailVerifyFunction(emailValue);
                 } else {
                   // alert('O Você deve digitar um código de 7 ou 8 números.')
                 }

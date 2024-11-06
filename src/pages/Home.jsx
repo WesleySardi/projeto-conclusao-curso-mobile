@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,20 +12,20 @@ import {
 
 import BubbleBackground from '../components/BubbleBackground';
 
-import { COLORS } from '../constants/constants';
+import {COLORS} from '../constants/constants';
 
 import axios from 'axios';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
-import { faEdit } from '@fortawesome/free-solid-svg-icons/faEdit';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
-import { faList } from '@fortawesome/free-solid-svg-icons/faList';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faSearch} from '@fortawesome/free-solid-svg-icons/faSearch';
+import {faEdit} from '@fortawesome/free-solid-svg-icons/faEdit';
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import {faList} from '@fortawesome/free-solid-svg-icons/faList';
 
-import { useUser } from '../contexts/UserContext';
+import {useUser} from '../contexts/UserContext';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const imageHeight = height * 0.07;
 const imageWidth = width * 0.15;
@@ -37,8 +37,8 @@ const fontSize_Gigantic = width * 0.065;
 
 const borderRadius_Main = width * 0.03;
 
-export default function Home({ navigation }) {
-  const { userType, updateUserType } = useUser();
+export default function Home({navigation}) {
+  const {userType, updateUserType, authToken, setAuthToken} = useUser();
 
   const [textoInput, setTextoInput] = useState('');
   const [userData, setUserData] = useState({});
@@ -61,7 +61,7 @@ export default function Home({ navigation }) {
   useEffect(() => {
     navigation.addListener('focus', () => {
       searchData();
-    })
+    });
   }, [navigation]);
 
   useEffect(() => {
@@ -72,9 +72,9 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     if (valuesToShowData.length >= 0 && userData.length > 0) {
-      setListData(valuesToShowData.map(indice => userData[indice]))
+      setListData(valuesToShowData.map(indice => userData[indice]));
 
-      console.log(valuesToShowData)
+      console.log(valuesToShowData);
     }
   }, [valuesToShowData]);
 
@@ -88,15 +88,20 @@ export default function Home({ navigation }) {
         `http://10.0.2.2:8080/api/dependent/commonuser/findDependentsByCpfRes/${userType[2]}`,
         {
           headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJST0xFX0NPTU1PTl9VU0VSIl0sImlhdCI6MTcyODUxODg0NiwiZXhwIjoxNzI4NTIyNDQ2LCJzdWIiOiJsZWFuZHJvIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIn0.fIRGF13ZSMLIMeB0D47LanNlcVSEUUCDzhuFhhXIjOM'
-          }
-        }
+            Authorization: authToken,
+          },
+        },
+      );
+
+      console.log(
+        response.data._embedded,
+        'response.data._embedded.dependentDTOList',
       );
 
       if (response) {
-        setUserData(response.data._embedded.dependentDTOList);
-        setListData(response.data._embedded.dependentDTOList)
-        setUserDataToBeShown(response.data._embedded.dependentDTOList[0]);
+        setUserData(response.data._embedded.dependentDTOes);
+        setListData(response.data._embedded.dependentDTOes);
+        setUserDataToBeShown(response.data._embedded.dependentDTOes[0]);
       } else {
         setUserData(null);
       }
@@ -135,14 +140,26 @@ export default function Home({ navigation }) {
   };
 
   const handlePressChangeDependentButton = () => {
-    updateUserType([userDataToBeShown, false, userType[2], userType[3], userType[4]]);
+    updateUserType([
+      userDataToBeShown,
+      false,
+      userType[2],
+      userType[3],
+      userType[4],
+    ]);
     navigation.navigate('RegisterOrChangeUser');
   };
 
-  const handlePressGetDependentByList = (id) => {
-    updateUserType([userData[id], false, userType[2], userType[3], userType[4]]);
+  const handlePressGetDependentByList = id => {
+    updateUserType([
+      userData[id],
+      false,
+      userType[2],
+      userType[3],
+      userType[4],
+    ]);
     navigation.navigate('RegisterOrChangeUser');
-  }
+  };
 
   const changeDependentBackwards = () => {
     if (changeDependentColor == false) {
@@ -175,15 +192,15 @@ export default function Home({ navigation }) {
   };
 
   const changeDependentNavigation = () => {
-    setTextoInput('')
-    setListData(userData)
-    setValueToShowData(0)
+    setTextoInput('');
+    setListData(userData);
+    setValueToShowData(0);
     if (isList == false) {
       setIsList(true);
     } else {
       setIsList(false);
     }
-  }
+  };
 
   return (
     <View style={styles.mainView}>
@@ -208,7 +225,9 @@ export default function Home({ navigation }) {
             <Pressable
               onPress={() => handlePressNewDependentButton()}
               style={styles.pressableNoDependents}>
-              <Text style={styles.textDependentsButton}>Cadastrar dependente</Text>
+              <Text style={styles.textDependentsButton}>
+                Cadastrar dependente
+              </Text>
             </Pressable>
           </View>
         ) : (
@@ -221,7 +240,10 @@ export default function Home({ navigation }) {
                     placeholderTextColor={COLORS.GREY_MAIN}
                     onChangeText={text => setTextoInput(text)}
                     value={textoInput}
-                    style={[styles.searchInput, { borderColor: COLORS.GREY_MAIN }]}
+                    style={[
+                      styles.searchInput,
+                      {borderColor: COLORS.GREY_MAIN},
+                    ]}
                   />
                   <FontAwesomeIcon
                     icon={faSearch}
@@ -231,7 +253,15 @@ export default function Home({ navigation }) {
                   />
                 </View>
                 <View style={styles.viewSearchRightView}>
-                  <Pressable style={[styles.buttonChangeDependentNavigation, { backgroundColor: isList == true ? COLORS.GREY_MAIN : COLORS.BLACK }]} onPress={() => changeDependentNavigation()}>
+                  <Pressable
+                    style={[
+                      styles.buttonChangeDependentNavigation,
+                      {
+                        backgroundColor:
+                          isList == true ? COLORS.GREY_MAIN : COLORS.BLACK,
+                      },
+                    ]}
+                    onPress={() => changeDependentNavigation()}>
                     <FontAwesomeIcon
                       icon={faList}
                       color={COLORS.WHITE}
@@ -245,12 +275,17 @@ export default function Home({ navigation }) {
             {isList == true ? (
               <View style={styles.list_centralizationView}>
                 <View style={styles.list_viewDependentsInfoBackground}>
-                  <Text style={styles.list_dependentsTotalText}>Você é responsável por: <Text style={{ color: COLORS.RED_MAIN, fontWeight: "bold" }}>{userData.length}</Text> dependentes.</Text>
+                  <Text style={styles.list_dependentsTotalText}>
+                    Você é responsável por:{' '}
+                    <Text style={{color: COLORS.RED_MAIN, fontWeight: 'bold'}}>
+                      {userData.length}
+                    </Text>{' '}
+                    dependentes.
+                  </Text>
                   <ScrollView
                     style={styles.list_scrollView}
                     showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                  >
+                    showsHorizontalScrollIndicator={false}>
                     {listData.map((dependents, index) => (
                       <View key={index} style={styles.list_viewDependentsInfo}>
                         <View style={styles.list_viewDependent}>
@@ -258,7 +293,9 @@ export default function Home({ navigation }) {
                             style={styles.list_image}
                             source={require('../assets/imgs/IconePerfilAnonimo.jpg')}
                           />
-                          <Text style={styles.list_textNameDep}>{dependents.nomeDep}</Text>
+                          <Text style={styles.list_textNameDep}>
+                            {dependents.nomeDep}
+                          </Text>
                         </View>
                         <View style={styles.list_viewEditButton}>
                           <Pressable
@@ -268,7 +305,7 @@ export default function Home({ navigation }) {
                               icon={faEdit}
                               color={COLORS.DARK_BLUE}
                               style={styles.list_iconEdit}
-                              size={height * 0.040}
+                              size={height * 0.04}
                             />
                           </Pressable>
                         </View>
@@ -284,7 +321,9 @@ export default function Home({ navigation }) {
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronLeft}
-                    color={isPressedBackward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN}
+                    color={
+                      isPressedBackward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN
+                    }
                     style={styles.arrowsIcon}
                     size={isPressedBackward ? width * 0.1 : width * 0.09}
                   />
@@ -303,7 +342,9 @@ export default function Home({ navigation }) {
                       <Text style={styles.textTitle}>
                         {userDataToBeShown.nomeDep}
                       </Text>
-                      <Text style={styles.text}>ID: {userDataToBeShown.cpfDep}</Text>
+                      <Text style={styles.text}>
+                        ID: {userDataToBeShown.cpfDep}
+                      </Text>
                     </View>
                     <Image
                       style={styles.image}
@@ -312,9 +353,27 @@ export default function Home({ navigation }) {
                   </View>
                   <View style={styles.viewDependentInfo}>
                     <View style={styles.infoDep}>
-                      <Text style={[styles.textInfoDep, styles.spaceBottom]}><Text style={{ color: COLORS.DARK_BLUE, fontWeight: "bold" }}>Idade:</Text> {userDataToBeShown.idadeDep}</Text>
-                      <Text style={[styles.textInfoDep, styles.spaceTopBottom]}><Text style={{ color: COLORS.DARK_BLUE, fontWeight: "bold" }}>Gênero:</Text> {userDataToBeShown.generoDep}</Text>
-                      <Text style={[styles.textInfoDep, styles.spaceTop]}><Text style={{ color: COLORS.DARK_BLUE, fontWeight: "bold" }}>Tipo Sanguíneo:</Text> {userDataToBeShown.tipoSanguineo}</Text>
+                      <Text style={[styles.textInfoDep, styles.spaceBottom]}>
+                        <Text
+                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
+                          Idade:
+                        </Text>{' '}
+                        {userDataToBeShown.idadeDep}
+                      </Text>
+                      <Text style={[styles.textInfoDep, styles.spaceTopBottom]}>
+                        <Text
+                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
+                          Gênero:
+                        </Text>{' '}
+                        {userDataToBeShown.generoDep}
+                      </Text>
+                      <Text style={[styles.textInfoDep, styles.spaceTop]}>
+                        <Text
+                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
+                          Tipo Sanguíneo:
+                        </Text>{' '}
+                        {userDataToBeShown.tipoSanguineo}
+                      </Text>
                     </View>
                     <View style={styles.viewEditButton}>
                       <Pressable
@@ -324,7 +383,7 @@ export default function Home({ navigation }) {
                           icon={faEdit}
                           color={COLORS.WHITE}
                           style={styles.iconEdit}
-                          size={height * 0.060}
+                          size={height * 0.06}
                         />
                       </Pressable>
                     </View>
@@ -335,7 +394,9 @@ export default function Home({ navigation }) {
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    color={isPressedForward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN}
+                    color={
+                      isPressedForward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN
+                    }
                     style={styles.arrowsIcon}
                     size={isPressedForward ? width * 0.1 : width * 0.09}
                   />
@@ -346,7 +407,9 @@ export default function Home({ navigation }) {
               <Pressable
                 onPress={() => handlePressNewDependentButton()}
                 style={styles.pressableNewDependent}>
-                <Text style={styles.textDependentsButton}>Cadastrar dependente</Text>
+                <Text style={styles.textDependentsButton}>
+                  Cadastrar dependente
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -357,7 +420,6 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   image: {
     borderRadius: width * 1,
     height: imageHeight,
@@ -365,8 +427,8 @@ const styles = StyleSheet.create({
   },
 
   searchIcon: {
-    position: "absolute",
-    right: width * 0.05
+    position: 'absolute',
+    right: width * 0.05,
   },
   searchInput: {
     backgroundColor: COLORS.WHITE,
@@ -391,7 +453,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   viewSearchBackground: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   viewSearch: {
     flexDirection: 'row',
@@ -399,31 +461,31 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   viewSearchLeftView: {
-    width: "80%",
-    alignItems: "center",
-    justifyContent: "center"
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   viewSearchRightView: {
-    width: "20%",
-    alignItems: "center",
-    justifyContent: "center"
+    width: '20%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonChangeDependentNavigation: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "80%",
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '80%',
     height: width * 0.12,
     borderRadius: borderRadius_Main,
     borderColor: COLORS.WHITE,
-    borderWidth: 1
+    borderWidth: 1,
   },
   viewArrows: {
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   arrows: {
     alignItems: 'center',
-    width: '10%'
+    width: '10%',
   },
   viewNoDependents: {
     width: '100%',
@@ -491,7 +553,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: borderRadius_Main,
     borderTopStartRadius: borderRadius_Main,
     padding: width * 0.03,
-    height: "30%"
+    height: '30%',
   },
   viewDependentInfoBackground: {
     borderColor: COLORS.WHITE,
@@ -499,21 +561,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: width * 0.02,
     width: '80%',
-    height: height * 0.4
+    height: height * 0.4,
   },
   viewDependentInfo: {
     alignItems: 'flex-end',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: "70%"
+    height: '70%',
   },
   infoDep: {
     backgroundColor: COLORS.LIGHT_GREY,
     borderBottomStartRadius: borderRadius_Main,
     padding: width * 0.03,
-    justifyContent: "center",
-    width: "60%",
-    height: "100%"
+    justifyContent: 'center',
+    width: '60%',
+    height: '100%',
   },
   spaceTop: {
     paddingTop: height * 0.02,
@@ -531,20 +593,20 @@ const styles = StyleSheet.create({
   viewEditButton: {
     backgroundColor: COLORS.DARK_BLUE,
     borderBottomEndRadius: borderRadius_Main,
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     height: width * 0.4,
-    width: "40%",
-    height: "100%"
+    width: '40%',
+    height: '100%',
   },
   textInfoDep: {
-    fontWeight: "thin",
+    fontWeight: 'thin',
     color: COLORS.BLACK,
-    fontSize: fontSize_Small
+    fontSize: fontSize_Small,
   },
   list_centralizationView: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   list_viewDependentsInfoBackground: {
     backgroundColor: COLORS.BLUE_MAIN,
@@ -555,25 +617,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '80%',
-    padding: width * 0.02
+    padding: width * 0.02,
   },
   list_dependentsTotalText: {
     fontSize: fontSize_Small,
     color: COLORS.BLACK,
     padding: width * 0.02,
-    textAlign: "center",
+    textAlign: 'center',
     borderBottomWidth: 1,
     borderColor: COLORS.DARK_BLUE,
     backgroundColor: COLORS.LIGHT_BLUE,
-    width: "100%",
+    width: '100%',
     borderTopLeftRadius: borderRadius_Main,
     borderTopRightRadius: borderRadius_Main,
   },
   list_scrollView: {
-    width: "100%",
+    width: '100%',
     backgroundColor: COLORS.LIGHT_BLUE,
     borderBottomLeftRadius: borderRadius_Main,
-    borderBottomRightRadius: borderRadius_Main
+    borderBottomRightRadius: borderRadius_Main,
   },
   list_viewDependentsInfo: {
     backgroundColor: COLORS.WHITE,
@@ -584,7 +646,7 @@ const styles = StyleSheet.create({
     margin: width * 0.02,
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   list_viewDependent: {
     flexDirection: 'row',
@@ -598,15 +660,9 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     alignSelf: 'center',
     fontSize: fontSize_Normal,
-    paddingLeft: width * 0.02
+    paddingLeft: width * 0.02,
   },
-  list_viewEditButton: {
-
-  },
-  list_pressableEdit: {
-
-  },
-  list_iconEdit: {
-
-  }
+  list_viewEditButton: {},
+  list_pressableEdit: {},
+  list_iconEdit: {},
 });

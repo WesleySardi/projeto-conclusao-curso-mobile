@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,18 +7,18 @@ import {
   TextInput,
   ScrollView,
   Dimensions,
-  Image
+  Image,
 } from 'react-native';
 
-import NfcManager, { Ndef, NfcTech, NfcEvents } from 'react-native-nfc-manager';
+import NfcManager, {Ndef, NfcTech, NfcEvents} from 'react-native-nfc-manager';
 
-import { useUser } from '../contexts/UserContext';
-import { COLORS, FONTS } from '../constants/constants'
+import {useUser} from '../contexts/UserContext';
+import {COLORS, FONTS} from '../constants/constants';
 import NfcVector from '../assets/gifs/nfc_vector.gif';
 
 import axios from 'axios';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const fontSize_Small = width * 0.035;
 const fontSize_Normal = width * 0.045;
@@ -27,8 +27,8 @@ const fontSize_Gigantic = width * 0.065;
 
 const borderRadius_Main = width * 0.03;
 
-export default function RegisterOrChangeUser({ navigation }) {
-  const { userType, updateUserType } = useUser();
+export default function RegisterOrChangeUser({navigation}) {
+  const {userType, updateUserType, authToken, setAuthToken} = useUser();
   const [isCreate, setIsCreate] = useState(userType[1]);
 
   const [nfcRead, setNfcRead] = useState(false);
@@ -57,19 +57,27 @@ export default function RegisterOrChangeUser({ navigation }) {
 
     setNfcRead(true);
     try {
-
       // STEP 1
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
-      const bytes = Ndef.encodeMessage([Ndef.textRecord(`https://zloapp.online/home?cpfDep=${userType[0].cpfDep}&emergPhone=${"47" + userType[4]}`)]);
+      const bytes = Ndef.encodeMessage([
+        Ndef.textRecord(
+          `https://10.0.2.2:8080/home?cpfDep=${userType[0].cpfDep}&emergPhone=${
+            '47' + userType[4]
+          }`,
+          {
+            headers: {
+              Authorization: authToken,
+            },
+          },
+        ),
+      ]);
 
       if (bytes) {
         await NfcManager.ndefHandler // STEP 2
           .writeNdefMessage(bytes); // STEP 3
         result = true;
       }
-
-
     } catch (error) {
       console.warn('Falha ao escrever na tag NFC', error);
       Alert.alert('Erro', 'Falha ao escrever na tag NFC');
@@ -102,11 +110,16 @@ export default function RegisterOrChangeUser({ navigation }) {
 
       try {
         const response = await axios.post(
-          `http://IPv4:8080/api/dependents/`,
+          `http://10.0.2.2:8080/api/dependents/`,
+          {
+            headers: {
+              Authorization: authToken,
+            },
+          },
           newUser,
         );
         console.log('Dependente criado com sucesso!');
-        handleWriteNfcTag()
+        handleWriteNfcTag();
       } catch (error) {
         console.error(error);
       }
@@ -124,13 +137,12 @@ export default function RegisterOrChangeUser({ navigation }) {
 
       try {
         const response = await axios.put(
-          `http://IPv4:8080/api/dependents/`,
+          `http://10.0.2.2:8080/api/dependents/`,
           newUser,
         );
         console.log('Dependente alterado com sucesso!');
 
         navigation.navigate('Home');
-
       } catch (error) {
         console.error(error);
       }
@@ -155,7 +167,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>CPF</Text>
               <TextInput
-                placeholder='CPF do dependente'
+                placeholder="CPF do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoCPFInput(text)}
                 value={textoCPFInput}
@@ -167,7 +179,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>Nome</Text>
               <TextInput
-                placeholder='Nome do dependente'
+                placeholder="Nome do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoNomeInput(text)}
                 value={textoNomeInput}
@@ -177,7 +189,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>Idade</Text>
               <TextInput
-                placeholder='Idade do dependente'
+                placeholder="Idade do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoIdadeInput(text)}
                 value={textoIdadeInput}
@@ -187,7 +199,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>Tipo Sanguíneo</Text>
               <TextInput
-                placeholder='Tipo sanguíneo do dep...'
+                placeholder="Tipo sanguíneo do dep..."
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoTipoSanguineoInput(text)}
                 value={textoTipoSanguineoInput}
@@ -197,7 +209,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>Gênero</Text>
               <TextInput
-                placeholder='Gênero do dependente'
+                placeholder="Gênero do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoGeneroInput(text)}
                 value={textoGeneroInput}
@@ -207,7 +219,7 @@ export default function RegisterOrChangeUser({ navigation }) {
             <View style={styles.viewInput}>
               <Text style={styles.titleInput}>Laudo médico</Text>
               <TextInput
-                placeholder='Laudo médico do dep...'
+                placeholder="Laudo médico do dep..."
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoLaudoInput(text)}
                 value={textoLaudoInput}
@@ -249,13 +261,13 @@ const styles = StyleSheet.create({
   scrollView: {
     marginBottom: '5%',
     marginTop: '5%',
-    width: '70%'
+    width: '70%',
   },
   title: {
     color: COLORS.BLUE_MAIN,
     fontSize: fontSize_Big,
     fontWeight: '600',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   titleButton: {
     color: COLORS.WHITE,
@@ -274,7 +286,7 @@ const styles = StyleSheet.create({
   view1: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: COLORS.WHITE
+    backgroundColor: COLORS.WHITE,
   },
   view2: {
     alignItems: 'center',
@@ -300,17 +312,17 @@ const styles = StyleSheet.create({
     width: '70%',
   },
   viewZloBandStyle: {
-    alignItems: "center"
+    alignItems: 'center',
   },
   titleNfcNear: {
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-    color: COLORS.BLACK
+    color: COLORS.BLACK,
   },
   zloBandStyle: {
     marginBottom: 20,
     width: 300,
     height: 300,
-  }
+  },
 });

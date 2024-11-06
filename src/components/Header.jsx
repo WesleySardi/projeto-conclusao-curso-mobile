@@ -60,14 +60,24 @@ function Header() {
     justifyContent: 'center',
     top: '50%',
     height: windowHeight * 0.055,
-    width: windowWidth * 0.10,
+    width: windowWidth * 0.1,
     marginTop: -(windowWidth * 0.0475),
   };
 
   return (
     <View style={backgroundStyle}>
       {showIcon && (
-        <Pressable onPress={() => currentScreen == "Register" ? navigation.navigate('Login') : navigation.navigate('Home')} style={iconStyle}>
+        <Pressable
+          onPress={() =>
+            currentScreen == 'AccessRecovery'
+              ? navigation.navigate('Login')
+              : currentScreen == 'EmailCheck'
+              ? navigation.navigate('Login')
+              : currentScreen == 'ChangePassword'
+              ? navigation.navigate('Login')
+              : navigation.navigate('Home')
+          }
+          style={iconStyle}>
           <FontAwesomeIcon
             icon={faChevronLeft}
             color={COLORS.WHITE}
