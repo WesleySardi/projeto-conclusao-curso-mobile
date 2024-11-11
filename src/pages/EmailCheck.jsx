@@ -17,7 +17,20 @@ import {useUser} from '../contexts/UserContext';
 const {width, height} = Dimensions.get('window');
 
 export default function EmailCheck({navigation}) {
-  const {userType, updateUserType, authToken, setAuthToken} = useUser();
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
   const [emailValue, setEmailValue] = useState();
 
   const [emailData] = useState({
@@ -30,8 +43,8 @@ export default function EmailCheck({navigation}) {
   }, []);
 
   const fillData = () => {
-    emailData.emailUser = userType[0].emailRes; // Adicionar o e-mail que será enviado o código
-    emailData.cpfRes = userType[0].cpfRes; // Adicionar o CPF do RESPONSÁVEL
+    emailData.emailUser = currentRes.emailRes; // Adicionar o e-mail que será enviado o código
+    emailData.cpfRes = currentRes.cpfRes; // Adicionar o CPF do RESPONSÁVEL
     emailHandlerFunction();
   };
 

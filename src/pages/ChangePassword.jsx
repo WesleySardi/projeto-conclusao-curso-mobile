@@ -21,7 +21,20 @@ import axios from 'axios';
 const {width, height} = Dimensions.get('window');
 
 export default function ChangePassword({navigation}) {
-  const {userType, updateUserType, authToken, setAuthToken} = useUser();
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
 
   const [textoNovaSenhaInput, setTextoNovaSenhaInput] = useState();
   const [textoRepSenhaInput, setTextoRepSenhaInput] = useState();
@@ -30,12 +43,9 @@ export default function ChangePassword({navigation}) {
   const [isRepSenhaVisible, setIsRepSenhaVisible] = useState(false);
 
   const changeData = async () => {
-    var updatePass = userType[0];
+    var updatePass = currentRes;
 
-    console.log(userType);
-
-    updatePass.cpfRes = userType[0].cpfRes;
-    console.log(updatePass);
+    updatePass.cpfRes = currentRes.cpfRes;
 
     if (textoNovaSenhaInput != textoRepSenhaInput) {
       // depois adicionar toast
@@ -45,7 +55,7 @@ export default function ChangePassword({navigation}) {
         const response = await axios.put(
           `http://10.0.2.2:8080/api/responsible/updatePassword`,
           {
-            cpfRes: userType[0].cpfRes,
+            cpfRes: currentRes.cpfRes,
             senhaRes: textoRepSenhaInput,
           },
         );

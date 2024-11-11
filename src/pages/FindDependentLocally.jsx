@@ -11,7 +11,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import {COLORS} from '../constants/constants'
+import {COLORS} from '../constants/constants';
 
 import NfcVector from '../assets/gifs/nfc_vector.gif';
 import EmergencyCallImage from '../assets/imgs/EmergencyCall.png';
@@ -45,9 +45,7 @@ const FindDependentLocally = () => {
   };
 
   const handlePhoneCall = () => {
-    console.log(emergencyPhone);
     const phoneNumber = `tel:+55${emergencyPhone}`;
-    console.log(phoneNumber);
     Linking.openURL(phoneNumber).catch(err =>
       console.error('Ocorreu um erro ao tentar fazer a chamada', err),
     );
@@ -147,19 +145,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginLeft: 10,
     marginBottom: 5,
-    color: COLORS.BLACK
+    color: COLORS.BLACK,
   },
   title: {
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 25,
-    color: COLORS.BLACK
+    color: COLORS.BLACK,
   },
   subTitle: {
     textAlign: 'center',
     fontSize: 16,
     marginBottom: 25,
-    color: COLORS.BLACK
+    color: COLORS.BLACK,
   },
   gifStyleNfc: {
     width: 200,
@@ -169,7 +167,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     textAlign: 'center',
-    color: COLORS.BLACK
+    color: COLORS.BLACK,
   },
   zloBandStyle: {
     marginBottom: 20,

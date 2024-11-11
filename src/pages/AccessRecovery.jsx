@@ -17,7 +17,20 @@ import {useUser} from '../contexts/UserContext';
 const {width, height} = Dimensions.get('window');
 
 const AccessRecovery = ({navigation}) => {
-  const {userType, updateUserType} = useUser();
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
 
   const [email, setEmail] = useState('');
 
@@ -27,41 +40,22 @@ const AccessRecovery = ({navigation}) => {
         `http://10.0.2.2:8080/api/responsible/findByEmail/${email}`,
       );
       if (response) {
-        updateUserType([
-          {
-            cpfRes: response.data.cpfRes,
-            emailRes: response.data.emailRes,
-          },
-          true,
-          '',
-          '',
-        ]);
+        setCurrentRes({
+          cpfRes: response.data.cpfRes,
+          emailRes: response.data.emailRes,
+        });
+        setIsCreate(true);
+        setIdRes('');
+        setNomeRes('');
+        setEmergePhone('');
 
         navigation.navigate('EmailCheck');
-
-        // Toast.show({
-        //   type: 'success',
-        //   text1: 'Código SMS Enviado!',
-        //   text2: 'Por gentileza, digite o código na próxima tela.',
-        // });
       } else {
         alert('Email não vinculado a usuário');
-        // Handle case where number is not associated with any user
-        // Toast.show({
-        //   type: 'error',
-        //   text1: 'Número desconhecido',
-        //   text2: 'Por favor, valide o número fornecido.',
-        // });
       }
     } catch (error) {
       alert('Error: ', error);
       console.log(error);
-      // Handle any errors that occur during the API call
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Erro',
-      //   text2: 'Um erro inesperado aconteceu. Tente novamente.',
-      // });
     }
   };
 

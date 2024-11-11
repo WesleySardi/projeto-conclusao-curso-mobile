@@ -3,16 +3,29 @@ import React, {createContext, useContext, useState, useEffect} from 'react';
 const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
-  const [userType, setUserType] = useState([{}, true, '', '', '']);
   const [authToken, setAuthToken] = useState(null);
-
-  const updateUserType = newUserType => {
-    setUserType(newUserType);
-  };
+  const [currentRes, setCurrentRes] = useState({});
+  const [isCreate, setIsCreate] = useState(false);
+  const [idRes, setIdRes] = useState('');
+  const [nomeRes, setNomeRes] = useState('');
+  const [emergePhone, setEmergePhone] = useState('');
 
   return (
     <UserContext.Provider
-      value={{userType, updateUserType, authToken, setAuthToken}}>
+      value={{
+        authToken,
+        setAuthToken,
+        isCreate,
+        setIsCreate,
+        currentRes,
+        setCurrentRes,
+        idRes,
+        setIdRes,
+        nomeRes,
+        setNomeRes,
+        emergePhone,
+        setEmergePhone,
+      }}>
       {children}
     </UserContext.Provider>
   );

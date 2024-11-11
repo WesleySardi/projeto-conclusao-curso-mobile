@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import axios from 'axios';
 import {
   StyleSheet,
   View,
@@ -12,9 +13,7 @@ import {
 
 import BubbleBackground from '../components/BubbleBackground';
 
-import {COLORS, FONTS} from '../constants/constants';
-
-import axios from 'axios';
+import {COLORS} from '../constants/constants';
 
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
@@ -22,22 +21,30 @@ import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
 import {useUser} from '../contexts/UserContext';
 
-import Toast, {BaseToast} from 'react-native-toast-message';
-
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {authSigninRequest} from '../services/services';
+import {verifyLoginRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Login({navigation}) {
-  const {updateUserType, setAuthToken} = useUser();
-
-  const [startAnimation, setStartAnimation] = useState(false);
-
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
+  const [_, setStartAnimation] = useState(false);
   const [emailValue, setEmailValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
-
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const [isTokenLoading, setIsTokenLoading] = useState(false);
 
   useEffect(() => {
@@ -45,85 +52,29 @@ export default function Login({navigation}) {
   }, []);
 
   const getAuthToken = async () => {
-    try {
-      setIsTokenLoading(true);
-      const response = await axios.post(`http://10.0.2.2:8080/auth/signin`, {
-        username: emailValue,
-        password: passwordValue,
-      });
-      setIsTokenLoading(false);
+    const response = await authSigninRequest(
+      emailValue,
+      passwordValue,
+      setIsTokenLoading,
+    );
 
-      if (response) {
-        setAuthToken('Bearer ' + response.data.accessToken);
-        verifyLogin('Bearer ' + response.data.accessToken);
-      }
-    } catch (error) {
-      setIsTokenLoading(false);
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Notificação!',
-        text2: 'Usuário ou senha incorretos!',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+    if (response != null && response.isOk) {
+      setAuthToken('Bearer ' + response.contentResponse.accessToken);
+      verifyLogin('Bearer ' + response.contentResponse.accessToken);
     }
   };
 
   const verifyLogin = async token => {
-    if (
-      (emailValue && passwordValue) != '' &&
-      token != undefined &&
-      token != null
-    ) {
-      try {
-        const response = await axios.get(
-          `http://10.0.2.2:8080/api/responsible/commonuser/findResponsibleCpfAndName/params?emailRes=${emailValue}&senhaRes=${passwordValue}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          },
-        );
-        let idRes = response.data[0][0];
-        let nomeRes = response.data[0][1];
-        let emergePhone = response.data[0][2];
+    const response = await verifyLoginRequest(emailValue, passwordValue, token);
 
-        if (response) {
-          updateUserType([{}, true, idRes, nomeRes, emergePhone]);
-          navigation.navigate('Home');
-        } else {
-          console.log('Erro na verificação do login!');
-          Toast.show({
-            type: 'error',
-            position: 'top',
-            text1: 'Notificação!',
-            text2: 'Erro na verificação do login!',
-            visibilityTime: 3000,
-            autoHide: true,
-          });
-        }
-      } catch (error) {
-        console.error(error);
-        Toast.show({
-          type: 'error',
-          position: 'top',
-          text1: 'Notificação!',
-          text2: error,
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-      }
-    } else {
-      console.log('Preencha os campos!');
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        text1: 'Notificação!',
-        text2: 'Preencha os campos!',
-        visibilityTime: 3000,
-        autoHide: true,
-      });
+    if (response != null && response.isOk) {
+      setCurrentRes({});
+      setIsCreate(true);
+      setIdRes(response.contentResponse[0][0]);
+      setNomeRes(response.contentResponse[0][1]);
+      setEmergePhone(response.contentResponse[0][2]);
+
+      navigation.navigate('Home');
     }
   };
 
@@ -189,10 +140,13 @@ export default function Login({navigation}) {
               </View>
             </View>
             <View style={styles.viewButton}>
-              <Pressable onPress={getAuthToken} style={styles.pressable}>
-                {!isTokenLoading && (
-                  <Text style={styles.titleButton}>Confirmar</Text>
-                )}
+              <Pressable
+                disabled={isTokenLoading}
+                onPress={getAuthToken}
+                style={() => styles.pressable(isTokenLoading)}>
+                <Text style={styles.titleButton}>
+                  {isTokenLoading ? 'Carregando...' : 'Confirmar'}
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -216,14 +170,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     width: '100%',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: isTokenLoading => ({
+    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: 10,
     color: COLORS.GREY_MAIN,
     padding: width * 0.02,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   title: {
     color: COLORS.BLUE_MAIN,
     fontSize: width * 0.06,

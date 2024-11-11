@@ -10,7 +10,7 @@ import {
   Image,
 } from 'react-native';
 
-import NfcManager, {Ndef, NfcTech, NfcEvents} from 'react-native-nfc-manager';
+import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 
 import {useUser} from '../contexts/UserContext';
 import {COLORS, FONTS} from '../constants/constants';
@@ -28,28 +28,27 @@ const fontSize_Gigantic = width * 0.065;
 const borderRadius_Main = width * 0.03;
 
 export default function RegisterOrChangeUser({navigation}) {
-  const {userType, updateUserType, authToken, setAuthToken} = useUser();
-  const [isCreate, setIsCreate] = useState(userType[1]);
+  const {authToken, isCreate, currentRes, idRes, emergePhone} = useUser();
 
   const [nfcRead, setNfcRead] = useState(false);
 
   const [textoCPFInput, setTextoCPFInput] = useState(
-    isCreate ? '' : userType[0].cpfDep,
+    isCreate ? '' : currentRes.cpfDep,
   );
   const [textoNomeInput, setTextoNomeInput] = useState(
-    isCreate ? '' : userType[0].nomeDep,
+    isCreate ? '' : currentRes.nomeDep,
   );
   const [textoIdadeInput, setTextoIdadeInput] = useState(
-    isCreate ? '' : userType[0].idadeDep,
+    isCreate ? '' : currentRes.idadeDep,
   );
   const [textoTipoSanguineoInput, setTextoTipoSanguineoInput] = useState(
-    isCreate ? '' : userType[0].tipoSanguineo,
+    isCreate ? '' : currentRes.tipoSanguineo,
   );
   const [textoGeneroInput, setTextoGeneroInput] = useState(
-    isCreate ? '' : userType[0].generoDep,
+    isCreate ? '' : currentRes.generoDep,
   );
   const [textoLaudoInput, setTextoLaudoInput] = useState(
-    isCreate ? '' : userType[0].laudo,
+    isCreate ? '' : currentRes.laudo,
   );
 
   const writeUrlToNfcTag = async () => {
@@ -62,8 +61,8 @@ export default function RegisterOrChangeUser({navigation}) {
 
       const bytes = Ndef.encodeMessage([
         Ndef.textRecord(
-          `https://10.0.2.2:8080/home?cpfDep=${userType[0].cpfDep}&emergPhone=${
-            '47' + userType[4]
+          `https://10.0.2.2:8080/home?cpfDep=${currentRes.cpfDep}&emergPhone=${
+            '47' + emergePhone
           }`,
           {
             headers: {
@@ -95,8 +94,6 @@ export default function RegisterOrChangeUser({navigation}) {
   };
 
   const changeData = async () => {
-    console.log(isCreate);
-
     if (isCreate) {
       var newUser = {
         cpfDep: textoCPFInput,
@@ -105,7 +102,7 @@ export default function RegisterOrChangeUser({navigation}) {
         tipoSanguineo: textoTipoSanguineoInput,
         generoDep: textoGeneroInput,
         laudo: textoLaudoInput,
-        cpfResDep: userType[2],
+        cpfResDep: idRes,
       };
 
       try {
@@ -126,7 +123,7 @@ export default function RegisterOrChangeUser({navigation}) {
     }
 
     if (!isCreate) {
-      var newUser = userType[0];
+      var newUser = currentRes;
 
       newUser.cpfDep = textoCPFInput;
       newUser.nomeDep = textoNomeInput;

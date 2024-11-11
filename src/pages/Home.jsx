@@ -38,7 +38,20 @@ const fontSize_Gigantic = width * 0.065;
 const borderRadius_Main = width * 0.03;
 
 export default function Home({navigation}) {
-  const {userType, updateUserType, authToken, setAuthToken} = useUser();
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
 
   const [textoInput, setTextoInput] = useState('');
   const [userData, setUserData] = useState({});
@@ -73,8 +86,6 @@ export default function Home({navigation}) {
   useEffect(() => {
     if (valuesToShowData.length >= 0 && userData.length > 0) {
       setListData(valuesToShowData.map(indice => userData[indice]));
-
-      console.log(valuesToShowData);
     }
   }, [valuesToShowData]);
 
@@ -85,7 +96,7 @@ export default function Home({navigation}) {
   const searchData = async () => {
     try {
       const response = await axios.get(
-        `http://10.0.2.2:8080/api/dependent/commonuser/findDependentsByCpfRes/${userType[2]}`,
+        `http://10.0.2.2:8080/api/dependent/commonuser/findDependentsByCpfRes/${idRes}`,
         {
           headers: {
             Authorization: authToken,
@@ -93,15 +104,10 @@ export default function Home({navigation}) {
         },
       );
 
-      console.log(
-        response.data._embedded,
-        'response.data._embedded.dependentDTOList',
-      );
-
       if (response) {
-        setUserData(response.data._embedded.dependentDTOes);
-        setListData(response.data._embedded.dependentDTOes);
-        setUserDataToBeShown(response.data._embedded.dependentDTOes[0]);
+        setUserData(response.data.contentResponse.content);
+        setListData(response.data.contentResponse.content);
+        setUserDataToBeShown(response.data.contentResponse.content[0]);
       } else {
         setUserData(null);
       }
@@ -135,29 +141,29 @@ export default function Home({navigation}) {
   };
 
   const handlePressNewDependentButton = () => {
-    updateUserType([{}, true, userType[2], userType[3], userType[4]]);
+    setCurrentRes({});
+    setIsCreate(true);
+    setIdRes(idRes);
+    setNomeRes(nomeRes);
+    setEmergePhone(emergePhone);
     navigation.navigate('RegisterOrChangeUser');
   };
 
   const handlePressChangeDependentButton = () => {
-    updateUserType([
-      userDataToBeShown,
-      false,
-      userType[2],
-      userType[3],
-      userType[4],
-    ]);
+    setCurrentRes(userDataToBeShown);
+    setIsCreate(false);
+    setIdRes(idRes);
+    setNomeRes(nomeRes);
+    setEmergePhone(emergePhone);
     navigation.navigate('RegisterOrChangeUser');
   };
 
   const handlePressGetDependentByList = id => {
-    updateUserType([
-      userData[id],
-      false,
-      userType[2],
-      userType[3],
-      userType[4],
-    ]);
+    setCurrentRes(userData[id]);
+    setIsCreate(false);
+    setIdRes(idRes);
+    setNomeRes(nomeRes);
+    setEmergePhone(emergePhone);
     navigation.navigate('RegisterOrChangeUser');
   };
 
@@ -216,7 +222,7 @@ export default function Home({navigation}) {
           ]}>
           <View style={styles.viewWelcomeTexts}>
             <Text style={styles.textHello}>Olá,</Text>
-            <Text style={styles.textName}>{userType[3]}</Text>
+            <Text style={styles.textName}>{nomeRes}</Text>
           </View>
         </View>
 

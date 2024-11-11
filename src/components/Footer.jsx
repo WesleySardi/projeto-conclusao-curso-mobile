@@ -12,13 +12,26 @@ import {useNavigation} from '@react-navigation/native';
 
 import {useUser} from '../contexts/UserContext';
 
-import { COLORS } from '../constants/constants';
+import {COLORS} from '../constants/constants';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Footer() {
-  const {userType, updateUserType} = useUser();
-  const [showFooter, setShowFooter] = useState(userType[2]);
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
+  const [showFooter, setShowFooter] = useState(isCreate);
 
   const [drawerValue, setDrawerValue] = useState(0);
   const [drawerButtonValue, setDrawerButtonValue] = useState(0);
@@ -27,8 +40,8 @@ export default function Footer() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    setShowFooter(userType[2]);
-  }, [userType]);
+    setShowFooter(isCreate);
+  }, [isCreate]);
 
   const handleDrawer = () => {
     if (drawerValue === 0) {

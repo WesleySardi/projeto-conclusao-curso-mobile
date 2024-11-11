@@ -15,7 +15,20 @@ import getFunctions from '../functions/getFunctions';
 const {width, height} = Dimensions.get('window');
 
 export default function CodeCheck() {
-  const {userType, updateUserType, authToken, setAuthToken} = useUser();
+  const {
+    authToken,
+    setAuthToken,
+    isCreate,
+    setIsCreate,
+    currentRes,
+    setCurrentRes,
+    idRes,
+    setIdRes,
+    nomeRes,
+    setNomeRes,
+    emergePhone,
+    setEmergePhone,
+  } = useUser();
   const [smsValue, setSmsValue] = useState();
 
   const [smsData] = useState({
@@ -30,8 +43,8 @@ export default function CodeCheck() {
 
   const fillData = () => {
     smsData.sendDate = getFunctions.generateTimestamp();
-    smsData.phoneUser = '+' + userType[0].contato1Res; // Adicionar o telefone que será enviado o SMS
-    smsData.cpfDep = userType[0].cpfDep; // Adicionar o CPF do RESPONSÁVEL
+    smsData.phoneUser = '+' + currentRes.contato1Res; // Adicionar o telefone que será enviado o SMS
+    smsData.cpfDep = currentRes.cpfDep; // Adicionar o CPF do RESPONSÁVEL
     smsHandlerFunction();
   };
 
@@ -56,7 +69,7 @@ export default function CodeCheck() {
   const smsVerifyFunction = async smsCode => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/smshandler/verifySmsCode?smsCode=${smsCode}&returnDate=${getFunctions.generateTimestamp()}&cpfDep=${
+        `http://10.0.2.2:8080/api/smshandler/verifySmsCode?smsCode=${smsCode}&returnDate=${getFunctions.generateTimestamp()}&cpfDep=${
           smsData.cpfDep
         }`,
       );
