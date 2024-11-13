@@ -69,7 +69,7 @@ function Header() {
       {showIcon && (
         <Pressable
           onPress={() =>
-            currentScreen == 'AccessRecovery'
+            currentScreen == 'AccessRecovery' || currentScreen == 'Register'
               ? navigation.navigate('Login')
               : currentScreen == 'EmailCheck'
               ? navigation.navigate('Login')

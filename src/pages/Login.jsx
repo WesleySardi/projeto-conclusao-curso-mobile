@@ -58,9 +58,9 @@ export default function Login({navigation}) {
       setIsTokenLoading,
     );
 
-    if (response != null && response.isOk) {
-      setAuthToken('Bearer ' + response.contentResponse.accessToken);
-      verifyLogin('Bearer ' + response.contentResponse.accessToken);
+    if (response != null) {
+      setAuthToken('Bearer ' + response);
+      verifyLogin('Bearer ' + response);
     }
   };
 
@@ -150,6 +150,12 @@ export default function Login({navigation}) {
               </Pressable>
             </View>
           </View>
+          <View style={styles.viewRegister}>
+            <Text style={styles.textRegister1}>Não possui cadastro? </Text>
+            <Pressable onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.textRegister2}>Clique aqui!</Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -199,6 +205,10 @@ const styles = StyleSheet.create({
     fontSize: width * 0.04,
     fontWeight: 'bold',
   },
+  viewSendCodeAgain: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   view1: {
     alignItems: 'center',
     flex: 1,
@@ -217,9 +227,21 @@ const styles = StyleSheet.create({
   viewButton: {
     width: '100%',
   },
-  viewSendCodeAgain: {
+  viewRegister: {
+    position: 'absolute',
+    bottom: 20,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  textRegister1: {
+    color: COLORS.GREY_MAIN,
+    fontSize: width * 0.04,
+    fontWeight: 'thin',
+  },
+  textRegister2: {
+    color: COLORS.BLUE_MAIN,
+    fontSize: width * 0.04,
+    fontWeight: 'bold',
   },
   viewTitle: {
     alignItems: 'center',
