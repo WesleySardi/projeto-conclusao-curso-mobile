@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {StyleSheet, View, Pressable, Keyboard, Dimensions} from 'react-native';
-
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircleUser} from '@fortawesome/free-solid-svg-icons/faCircleUser';
 import {faBell} from '@fortawesome/free-solid-svg-icons/faBell';
@@ -9,39 +8,17 @@ import {faBars} from '@fortawesome/free-solid-svg-icons/faBars';
 import {faStreetView} from '@fortawesome/free-solid-svg-icons/faStreetView';
 import Drawer from './Drawer';
 import {useNavigation} from '@react-navigation/native';
-
 import {useUser} from '../contexts/UserContext';
-
 import {COLORS} from '../constants/constants';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Footer() {
-  const {
-    authToken,
-    setAuthToken,
-    isCreate,
-    setIsCreate,
-    currentRes,
-    setCurrentRes,
-    idRes,
-    setIdRes,
-    nomeRes,
-    setNomeRes,
-    emergePhone,
-    setEmergePhone,
-  } = useUser();
-  const [showFooter, setShowFooter] = useState(isCreate);
-
+  const {currentScreen} = useUser();
   const [drawerValue, setDrawerValue] = useState(0);
   const [drawerButtonValue, setDrawerButtonValue] = useState(0);
   const [animacaoAtiva, setAnimacaoAtiva] = useState(false);
-
   const navigation = useNavigation();
-
-  useEffect(() => {
-    setShowFooter(isCreate);
-  }, [isCreate]);
 
   const handleDrawer = () => {
     if (drawerValue === 0) {
@@ -66,73 +43,83 @@ export default function Footer() {
       {drawerValue === 1 && (
         <Drawer state={animacaoAtiva} handleDrawer={handleDrawer} />
       )}
-      {showFooter != '' && (
-        <View style={styles.view2}>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              Keyboard.dismiss();
-              navigation.navigate('Home');
-            }}>
-            <FontAwesomeIcon
-              icon={faHome}
-              color={COLORS.WHITE}
-              style={styles.image}
-              size={height * 0.035}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              Keyboard.dismiss();
-            }}>
-            <FontAwesomeIcon
-              icon={faBell}
-              color={COLORS.WHITE}
-              style={styles.imageMiddle}
-              size={height * 0.04}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.pressableMain}
-            onPress={() => {
-              Keyboard.dismiss();
-              navigation.navigate('FindDependentLocally');
-            }}>
-            <FontAwesomeIcon
-              icon={faStreetView}
-              color={COLORS.WHITE}
-              style={styles.imageMain}
-              size={height * 0.045}
-            />
-          </Pressable>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              Keyboard.dismiss();
-            }}>
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              color={COLORS.WHITE}
-              style={styles.imageMiddle}
-              size={height * 0.04}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              Keyboard.dismiss();
-              handleDrawer();
-            }}
-            style={styles.pressable}>
-            <FontAwesomeIcon
-              icon={faBars}
-              color={drawerButtonValue == 0 ? COLORS.WHITE : COLORS.YELLOW_MAIN}
-              style={styles.image}
-              size={height * 0.035}
-            />
-          </Pressable>
-        </View>
-      )}
+      {currentScreen != 'AccessRecovery' &&
+        currentScreen != 'Register' &&
+        currentScreen != 'Login' && (
+          <View style={styles.view2}>
+            <Pressable
+              style={styles.pressable}
+              onPress={() => {
+                Keyboard.dismiss();
+                navigation.navigate('Home');
+              }}>
+              <FontAwesomeIcon
+                icon={faHome}
+                color={
+                  currentScreen === 'Home' ? COLORS.YELLOW_MAIN : COLORS.WHITE
+                }
+                style={styles.image}
+                size={height * 0.035}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.pressable}
+              onPress={() => {
+                Keyboard.dismiss();
+              }}>
+              <FontAwesomeIcon
+                icon={faBell}
+                color={COLORS.WHITE}
+                style={styles.imageMiddle}
+                size={height * 0.04}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.pressableMain}
+              onPress={() => {
+                Keyboard.dismiss();
+                navigation.navigate('FindDependentLocally');
+              }}>
+              <FontAwesomeIcon
+                icon={faStreetView}
+                color={
+                  currentScreen === 'FindDependentLocally'
+                    ? COLORS.YELLOW_MAIN
+                    : COLORS.WHITE
+                }
+                style={styles.imageMain}
+                size={height * 0.045}
+              />
+            </Pressable>
+            <Pressable
+              style={styles.pressable}
+              onPress={() => {
+                Keyboard.dismiss();
+              }}>
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                color={COLORS.WHITE}
+                style={styles.imageMiddle}
+                size={height * 0.04}
+              />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                Keyboard.dismiss();
+                handleDrawer();
+              }}
+              style={styles.pressable}>
+              <FontAwesomeIcon
+                icon={faBars}
+                color={
+                  drawerButtonValue == 0 ? COLORS.WHITE : COLORS.YELLOW_MAIN
+                }
+                style={styles.image}
+                size={height * 0.035}
+              />
+            </Pressable>
+          </View>
+        )}
     </View>
   );
 }

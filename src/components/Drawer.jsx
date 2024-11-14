@@ -6,7 +6,7 @@ import {faCircleHalfStroke} from '@fortawesome/free-solid-svg-icons/faCircleHalf
 
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS } from '../constants/constants'
+import {COLORS} from '../constants/constants';
 
 const {width, height} = Dimensions.get('window');
 
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pressable: {
-    paddingTop: width * 0.02,
+    paddingTop: width * 0.1,
     alignItems: 'center',
   },
   text: {

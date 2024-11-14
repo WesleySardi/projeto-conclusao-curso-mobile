@@ -7,35 +7,24 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-
-import axios from 'axios';
-
+import Toast from 'react-native-toast-message';
 import {COLORS} from '../constants/constants';
-
 import {useUser} from '../contexts/UserContext';
+import {createEmailRequest, emailVerifyRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 export default function EmailCheck({navigation}) {
-  const {
-    authToken,
-    setAuthToken,
-    isCreate,
-    setIsCreate,
-    currentRes,
-    setCurrentRes,
-    idRes,
-    setIdRes,
-    nomeRes,
-    setNomeRes,
-    emergePhone,
-    setEmergePhone,
-  } = useUser();
+  const {currentRes} = useUser();
   const [emailValue, setEmailValue] = useState();
+  const [isTokenLoading, setIsTokenLoading] = useState(false);
 
   const [emailData] = useState({
-    cpfRes: '',
+    emailCode: '',
+    sendDate: '',
+    returnDate: '',
     emailUser: '',
+    cpfDep: '',
   });
 
   useEffect(() => {
@@ -43,40 +32,36 @@ export default function EmailCheck({navigation}) {
   }, []);
 
   const fillData = () => {
-    emailData.emailUser = currentRes.emailRes; // Adicionar o e-mail que será enviado o código
-    emailData.cpfRes = currentRes.cpfRes; // Adicionar o CPF do RESPONSÁVEL
+    emailData.emailUser = currentRes.emailRes;
     emailHandlerFunction();
   };
 
   const emailHandlerFunction = async () => {
     try {
-      const response = await axios.post(
-        'http://10.0.2.2:8080/api/emailhandler/',
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        },
-        emailData,
-      );
-      //if (response) return alert('E-mail reenviado com sucesso!')
+      const response = await createEmailRequest(emailData);
+      if (response) {
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Sucesso!',
+          text2: 'Email enviado com sucesso.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   const emailVerifyFunction = async emailCode => {
-    try {
-      const response = await axios.get(
-        `http://10.0.2.2:8080/api/emailhandler/verifyEmailCode?email=${emailData.emailUser}&code=${emailCode}`,
-      );
-      if (response) return navigation.navigate('ChangePassword');
-    } catch (error) {
-      console.error(error);
-      alert(
-        'Valor inválido. Tente novamente ou reenvie o código caso necessário.',
-      );
-    }
+    console.log(emailCode, 'emailCode');
+    setIsTokenLoading(true);
+    const response = await emailVerifyRequest(emailCode, emailData);
+    setIsTokenLoading(false);
+    console.log(response.contentResponse, 'response.contentResponse');
+    if (response.contentResponse != null)
+      return navigation.navigate('ChangePassword');
   };
 
   return (
@@ -96,7 +81,7 @@ export default function EmailCheck({navigation}) {
             />
             <View style={styles.viewSendCodeAgain}>
               <Pressable
-                onPress={fillData}
+                onPress={() => fillData()}
                 style={styles.pressableSendCodeAgain}>
                 <Text style={styles.titleSendCodeAgain}>Reenviar código</Text>
               </Pressable>
@@ -105,19 +90,36 @@ export default function EmailCheck({navigation}) {
         </View>
         <View style={styles.viewButton}>
           <Pressable
+            disabled={isTokenLoading}
             onPress={() => {
               if (emailValue.length == 0) {
-                alert('Digite o código enviado ao seu E-mail.');
+                Toast.show({
+                  type: 'info',
+                  position: 'top',
+                  text1: 'Info!',
+                  text2: 'Digite o código enviado ao seu E-mail.',
+                  visibilityTime: 2000,
+                  autoHide: true,
+                });
               } else {
                 if (emailValue.length == 6) {
                   emailVerifyFunction(emailValue);
                 } else {
-                  // alert('O Você deve digitar um código de 7 ou 8 números.')
+                  Toast.show({
+                    type: 'info',
+                    position: 'top',
+                    text1: 'Info!',
+                    text2: 'Você deve digitar um código de 7 ou 8 números.',
+                    visibilityTime: 2000,
+                    autoHide: true,
+                  });
                 }
               }
             }}
-            style={styles.pressable}>
-            <Text style={styles.titleButton}>Confirmar</Text>
+            style={() => styles.pressable(isTokenLoading)}>
+            <Text style={styles.titleButton}>
+              {isTokenLoading ? 'Carregando...' : 'Confirmar'}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -140,14 +142,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     textAlign: 'left',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: isTokenLoading => ({
+    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: 10,
     color: COLORS.GREY_MAIN,
     padding: width * 0.02,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   title: {
     color: COLORS.BLUE_MAIN,
     fontSize: width * 0.06,

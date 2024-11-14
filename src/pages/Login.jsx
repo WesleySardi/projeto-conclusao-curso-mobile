@@ -88,7 +88,7 @@ export default function Login({navigation}) {
         keyboardShouldPersistTaps="handled" // Permite o toque fora do teclado para fechá-lo
       >
         <View style={styles.view1}>
-          <BubbleBackground></BubbleBackground>
+          {/*<BubbleBackground></BubbleBackground>*/}
           <View style={styles.view2}>
             <View style={styles.viewTitle}>
               <Text style={styles.title}>Entrar</Text>
@@ -142,7 +142,7 @@ export default function Login({navigation}) {
             <View style={styles.viewButton}>
               <Pressable
                 disabled={isTokenLoading}
-                onPress={getAuthToken}
+                onPress={() => getAuthToken()}
                 style={() => styles.pressable(isTokenLoading)}>
                 <Text style={styles.titleButton}>
                   {isTokenLoading ? 'Carregando...' : 'Confirmar'}

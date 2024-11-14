@@ -11,12 +11,11 @@ function Header() {
 
   const navigation = useNavigation();
 
-  const [showIcon, setShowIcon] = useState(false); // Defina o estado inicial como false
+  const [showIcon, setShowIcon] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('');
 
   useLayoutEffect(() => {
     const unsubscribe = navigation.addListener('state', state => {
-      // Verifique se state.data.state está definido antes de tentar acessar suas propriedades
       if (state.data.state && state.data.state.routes.length > 0) {
         const newScreen = state.data.state.routes[state.data.state.index].name;
         if (newScreen !== currentScreen) {

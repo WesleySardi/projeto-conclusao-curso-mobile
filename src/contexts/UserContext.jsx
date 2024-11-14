@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useState, useEffect} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useLayoutEffect,
+} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const UserContext = createContext();
 
@@ -9,6 +15,21 @@ export const UserProvider = ({children}) => {
   const [idRes, setIdRes] = useState('');
   const [nomeRes, setNomeRes] = useState('');
   const [emergePhone, setEmergePhone] = useState('');
+  const [currentScreen, setCurrentScreen] = useState('Login');
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    const unsubscribe = navigation.addListener('state', state => {
+      if (state.data.state && state.data.state.routes.length > 0) {
+        const newScreen = state.data.state.routes[state.data.state.index].name;
+        if (newScreen !== currentScreen) {
+          setCurrentScreen(newScreen);
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, currentScreen]);
 
   return (
     <UserContext.Provider
@@ -25,6 +46,7 @@ export const UserProvider = ({children}) => {
         setNomeRes,
         emergePhone,
         setEmergePhone,
+        currentScreen,
       }}>
       {children}
     </UserContext.Provider>

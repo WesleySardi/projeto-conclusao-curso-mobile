@@ -24,6 +24,7 @@ import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import {faList} from '@fortawesome/free-solid-svg-icons/faList';
 
 import {useUser} from '../contexts/UserContext';
+import {findDependentByCpfDepRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
@@ -78,13 +79,16 @@ export default function Home({navigation}) {
   }, [navigation]);
 
   useEffect(() => {
-    if (valueToShowData >= 0 && userData.length > 0) {
+    if (valueToShowData >= 0 && (userData === null ? 0 : userData.length) > 0) {
       setUserDataToBeShown(userData[valueToShowData]);
     }
   }, [valueToShowData, userData]);
 
   useEffect(() => {
-    if (valuesToShowData.length >= 0 && userData.length > 0) {
+    if (
+      valuesToShowData.length >= 0 &&
+      (userData === null ? 0 : userData.length) > 0
+    ) {
       setListData(valuesToShowData.map(indice => userData[indice]));
     }
   }, [valuesToShowData]);
@@ -94,25 +98,19 @@ export default function Home({navigation}) {
   }, [textoInput]);
 
   const searchData = async () => {
+    console.log(idRes, 'idRes');
     try {
-      const response = await axios.get(
-        `http://10.0.2.2:8080/api/dependent/commonuser/findDependentsByCpfRes/${idRes}`,
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        },
-      );
+      const response = await findDependentByCpfDepRequest(idRes, authToken);
 
-      if (response) {
-        setUserData(response.data.contentResponse.content);
-        setListData(response.data.contentResponse.content);
-        setUserDataToBeShown(response.data.contentResponse.content[0]);
+      if (response.contentResponse.content.length > 0) {
+        setUserData(response.contentResponse.content);
+        setListData(response.contentResponse.content);
+        setUserDataToBeShown(response.contentResponse.content[0]);
       } else {
         setUserData(null);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Erro: ', error);
     }
   };
 
@@ -178,7 +176,8 @@ export default function Home({navigation}) {
     }, 300);
     setTextoInput('');
     setValueToShowData(
-      (valueToShowData - 1 + userData.length) % userData.length,
+      (valueToShowData - 1 + userData === null ? 0 : userData.length) %
+        (userData === null ? 0 : userData.length),
     );
     setIsPressedBackward(true);
   };
@@ -193,7 +192,9 @@ export default function Home({navigation}) {
       setIsPressedForward(false);
     }, 300);
     setTextoInput('');
-    setValueToShowData((valueToShowData + 1) % userData.length);
+    setValueToShowData(
+      (valueToShowData + 1) % (userData === null ? 0 : userData.length),
+    );
     setIsPressedForward(true);
   };
 
@@ -210,14 +211,13 @@ export default function Home({navigation}) {
 
   return (
     <View style={styles.mainView}>
-      <BubbleBackground></BubbleBackground>
+      {/*<BubbleBackground></BubbleBackground>*/}
       <View>
         <View
           style={[
             styles.viewWelcome,
             {
-              bottom:
-                userData.length == undefined ? height * 0.2 : height * 0.025,
+              bottom: userData === null ? height * 0.2 : height * 0.025,
             },
           ]}>
           <View style={styles.viewWelcomeTexts}>
@@ -226,7 +226,7 @@ export default function Home({navigation}) {
           </View>
         </View>
 
-        {userData.length == undefined ? (
+        {userData === null ? (
           <View style={styles.viewNoDependents}>
             <Pressable
               onPress={() => handlePressNewDependentButton()}
@@ -284,7 +284,7 @@ export default function Home({navigation}) {
                   <Text style={styles.list_dependentsTotalText}>
                     Você é responsável por:{' '}
                     <Text style={{color: COLORS.RED_MAIN, fontWeight: 'bold'}}>
-                      {userData.length}
+                      {userData === null ? 0 : userData.length}
                     </Text>{' '}
                     dependentes.
                   </Text>
@@ -383,7 +383,7 @@ export default function Home({navigation}) {
                     </View>
                     <View style={styles.viewEditButton}>
                       <Pressable
-                        onPress={handlePressChangeDependentButton}
+                        onPress={() => handlePressChangeDependentButton()}
                         style={styles.pressableEdit}>
                         <FontAwesomeIcon
                           icon={faEdit}

@@ -35,9 +35,9 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <UserProvider>
-      <View style={styles.container}>
-        <NavigationContainer>
+    <NavigationContainer>
+      <UserProvider>
+        <View style={styles.container}>
           <StatusBar style="auto" backgroundColor={COLORS.BLUE_MAIN} />
           <Stack.Navigator
             initialRouteName="Login"
@@ -62,52 +62,52 @@ export default function App() {
           </Stack.Navigator>
           <Header />
           <Footer />
-        </NavigationContainer>
-      </View>
-      <Toast
-        config={{
-          success: props => (
-            <BaseToast
-              {...props}
-              style={{borderLeftColor: 'green', zIndex: 9999}}
-              text1Style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-              }}
-              text2Style={{
-                fontSize: 14,
-              }}
-            />
-          ),
-          error: props => (
-            <BaseToast
-              {...props}
-              style={{borderLeftColor: 'red', zIndex: 9999}}
-              text1Style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-              }}
-              text2Style={{
-                fontSize: 14,
-              }}
-            />
-          ),
-          info: props => (
-            <BaseToast
-              {...props}
-              style={{borderLeftColor: 'blue', zIndex: 9999}}
-              text1Style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-              }}
-              text2Style={{
-                fontSize: 14,
-              }}
-            />
-          ),
-        }}
-      />
-    </UserProvider>
+        </View>
+        <Toast
+          config={{
+            success: props => (
+              <BaseToast
+                {...props}
+                style={{borderLeftColor: 'green', zIndex: 9999}}
+                text1Style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}
+                text2Style={{
+                  fontSize: 14,
+                }}
+              />
+            ),
+            error: props => (
+              <BaseToast
+                {...props}
+                style={{borderLeftColor: 'red', zIndex: 9999}}
+                text1Style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}
+                text2Style={{
+                  fontSize: 14,
+                }}
+              />
+            ),
+            info: props => (
+              <BaseToast
+                {...props}
+                style={{borderLeftColor: 'blue', zIndex: 9999}}
+                text1Style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                }}
+                text2Style={{
+                  fontSize: 14,
+                }}
+              />
+            ),
+          }}
+        />
+      </UserProvider>
+    </NavigationContainer>
   );
 }
 

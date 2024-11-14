@@ -104,7 +104,7 @@ const FindDependentLocally = () => {
             editable={false}
           />
           {/* Botão para testar a simulação da leitura NFC */}
-          <TouchableOpacity onPress={handlePhoneCall}>
+          <TouchableOpacity onPress={() => handlePhoneCall()}>
             <Image
               source={EmergencyCallImage}
               style={{width: 100, height: 100}}

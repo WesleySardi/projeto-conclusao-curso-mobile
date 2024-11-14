@@ -11,25 +11,14 @@ import {
 import {COLORS} from '../constants/constants';
 
 import getFunctions from '../functions/getFunctions';
+import {createSmsRequest, smsVerifyRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 export default function CodeCheck() {
-  const {
-    authToken,
-    setAuthToken,
-    isCreate,
-    setIsCreate,
-    currentRes,
-    setCurrentRes,
-    idRes,
-    setIdRes,
-    nomeRes,
-    setNomeRes,
-    emergePhone,
-    setEmergePhone,
-  } = useUser();
+  const {currentRes} = useUser();
   const [smsValue, setSmsValue] = useState();
+  const [isTokenLoading, setIsTokenLoading] = useState(false);
 
   const [smsData] = useState({
     sendDate: '',
@@ -43,41 +32,27 @@ export default function CodeCheck() {
 
   const fillData = () => {
     smsData.sendDate = getFunctions.generateTimestamp();
-    smsData.phoneUser = '+' + currentRes.contato1Res; // Adicionar o telefone que será enviado o SMS
-    smsData.cpfDep = currentRes.cpfDep; // Adicionar o CPF do RESPONSÁVEL
+    smsData.phoneUser = '+' + currentRes.contato1Res;
+    smsData.cpfDep = currentRes.cpfDep;
     smsHandlerFunction();
   };
 
   const smsHandlerFunction = async () => {
-    try {
-      const response = await axios.post(
-        'http://10.0.2.2:8080/api/smshandler/',
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        },
-        smsData,
-      );
-      // if (response) return alert('SMS reenviado com sucesso!')
-    } catch (error) {
-      // console.error(error);
-      // alert('Erro ao reenviar SMS!')
+    const response = await createSmsRequest(smsData);
+
+    if (response.contentResponse != null) {
+      return true;
     }
   };
 
   const smsVerifyFunction = async smsCode => {
-    try {
-      const response = await axios.get(
-        `http://10.0.2.2:8080/api/smshandler/verifySmsCode?smsCode=${smsCode}&returnDate=${getFunctions.generateTimestamp()}&cpfDep=${
-          smsData.cpfDep
-        }`,
-      );
-      if (response) return navigation.navigate('ChangePassword');
-    } catch (error) {
-      // console.error(error);
-      // alert('Valor inválido. Tente novamente ou reenvie o código SMS caso necessário.')
-    }
+    setIsTokenLoading(true);
+    const response = await smsVerifyRequest(smsCode, smsData);
+
+    if (response.contentResponse != null)
+      return navigation.navigate('ChangePassword');
+
+    setIsTokenLoading(false);
   };
 
   return (
@@ -97,7 +72,7 @@ export default function CodeCheck() {
             />
             <View style={styles.viewSendCodeAgain}>
               <Pressable
-                onPress={fillData}
+                onPress={() => fillData()}
                 style={styles.pressableSendCodeAgain}>
                 <Text style={styles.titleSendCodeAgain}>Reenviar código</Text>
               </Pressable>
@@ -106,19 +81,36 @@ export default function CodeCheck() {
         </View>
         <View style={styles.viewButton}>
           <Pressable
+            disabled={isTokenLoading}
             onPress={() => {
               if (smsValue.length == 0) {
-                // alert('Digite o código enviado ao seu celular.')
+                Toast.show({
+                  type: 'info',
+                  position: 'top',
+                  text1: 'Info!',
+                  text2: 'Digite o código enviado ao seu celular.',
+                  visibilityTime: 2000,
+                  autoHide: true,
+                });
               } else {
                 if (smsValue.length >= 7 && smsValue.length < 9) {
                   smsVerifyFunction(smsValue);
                 } else {
-                  // alert('O Você deve digitar um código de 7 ou 8 números.')
+                  Toast.show({
+                    type: 'info',
+                    position: 'top',
+                    text1: 'Info!',
+                    text2: 'Você deve digitar um código de 7 ou 8 números.',
+                    visibilityTime: 2000,
+                    autoHide: true,
+                  });
                 }
               }
             }}
-            style={styles.pressable}>
-            <Text style={styles.titleButton}>Confirmar</Text>
+            style={() => styles.pressable(isTokenLoading)}>
+            <Text style={styles.titleButton}>
+              {isTokenLoading ? 'Carregando...' : 'Confirmar'}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -141,14 +133,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     textAlign: 'left',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: isTokenLoading => ({
+    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: 10,
     color: COLORS.GREY_MAIN,
     padding: width * 0.02,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   title: {
     color: COLORS.BLUE_MAIN,
     fontSize: width * 0.06,

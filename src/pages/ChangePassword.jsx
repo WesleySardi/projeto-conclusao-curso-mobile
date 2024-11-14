@@ -17,24 +17,12 @@ import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
 import axios from 'axios';
+import {updatePasswordRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 export default function ChangePassword({navigation}) {
-  const {
-    authToken,
-    setAuthToken,
-    isCreate,
-    setIsCreate,
-    currentRes,
-    setCurrentRes,
-    idRes,
-    setIdRes,
-    nomeRes,
-    setNomeRes,
-    emergePhone,
-    setEmergePhone,
-  } = useUser();
+  const {currentRes} = useUser();
 
   const [textoNovaSenhaInput, setTextoNovaSenhaInput] = useState();
   const [textoRepSenhaInput, setTextoRepSenhaInput] = useState();
@@ -48,19 +36,18 @@ export default function ChangePassword({navigation}) {
     updatePass.cpfRes = currentRes.cpfRes;
 
     if (textoNovaSenhaInput != textoRepSenhaInput) {
-      // depois adicionar toast
       alert('Senhas diferentes');
     } else {
       try {
-        const response = await axios.put(
-          `http://10.0.2.2:8080/api/responsible/updatePassword`,
-          {
-            cpfRes: currentRes.cpfRes,
-            senhaRes: textoRepSenhaInput,
-          },
+        const response = await updatePasswordRequest(
+          currentRes,
+          textoRepSenhaInput,
         );
-        console.log('Senha alterada com sucesso!');
-        navigation.navigate('Login');
+
+        if (response.contentResponse != null) {
+          console.log('Senha alterada com sucesso!');
+          navigation.navigate('Login');
+        }
       } catch (error) {
         console.error(error);
       }
@@ -128,7 +115,7 @@ export default function ChangePassword({navigation}) {
           </View>
         </ScrollView>
         <View style={styles.viewButton}>
-          <Pressable onPress={changeData} style={styles.pressable}>
+          <Pressable onPress={() => changeData()} style={styles.pressable}>
             <Text style={styles.titleButton}>Confirmar</Text>
           </Pressable>
         </View>

@@ -4,7 +4,6 @@ import {
   TextInput,
   Pressable,
   StyleSheet,
-  ActivityIndicator,
   Dimensions,
   Text,
 } from 'react-native';
@@ -13,22 +12,17 @@ import Toast from 'react-native-toast-message';
 import {COLORS} from '../constants/constants';
 
 import {useUser} from '../contexts/UserContext';
+import {validateEmailRequest} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 const AccessRecovery = ({navigation}) => {
   const {
     authToken,
-    setAuthToken,
-    isCreate,
     setIsCreate,
-    currentRes,
     setCurrentRes,
-    idRes,
     setIdRes,
-    nomeRes,
     setNomeRes,
-    emergePhone,
     setEmergePhone,
   } = useUser();
 
@@ -36,13 +30,12 @@ const AccessRecovery = ({navigation}) => {
 
   const validateEmail = async () => {
     try {
-      const response = await axios.get(
-        `http://10.0.2.2:8080/api/responsible/findByEmail/${email}`,
-      );
-      if (response) {
+      const response = await validateEmailRequest(email, authToken);
+
+      if (response != null) {
         setCurrentRes({
-          cpfRes: response.data.cpfRes,
-          emailRes: response.data.emailRes,
+          cpfRes: response.contentResponse.cpfRes,
+          emailRes: response.contentResponse.emailRes,
         });
         setIsCreate(true);
         setIdRes('');
@@ -51,18 +44,24 @@ const AccessRecovery = ({navigation}) => {
 
         navigation.navigate('EmailCheck');
       } else {
-        alert('Email não vinculado a usuário');
+        Toast.show({
+          type: 'error',
+          position: 'top',
+          text1: 'Erro!',
+          text2: 'Email não vinculado a usuário.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
       }
     } catch (error) {
-      alert('Error: ', error);
-      console.log(error);
+      console.log('Error: ', error);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.viewTitle}>
-        <Text style={styles.title}>Digite o seu E-mail</Text>
+        <Text style={styles.title}>Digite o seu e-mail</Text>
       </View>
       <TextInput
         style={styles.input}
@@ -72,7 +71,7 @@ const AccessRecovery = ({navigation}) => {
         onChangeText={text => setEmail(text)}
       />
       <View style={styles.viewButton}>
-        <Pressable onPress={validateEmail} style={styles.pressable}>
+        <Pressable onPress={() => validateEmail()} style={styles.pressable}>
           <Text style={styles.titleButton}>Enviar Código</Text>
         </Pressable>
       </View>

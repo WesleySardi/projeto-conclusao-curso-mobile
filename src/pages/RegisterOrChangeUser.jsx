@@ -17,6 +17,10 @@ import {COLORS, FONTS} from '../constants/constants';
 import NfcVector from '../assets/gifs/nfc_vector.gif';
 
 import axios from 'axios';
+import {
+  registerNewDependentRequest,
+  updateDependentRequest,
+} from '../services/services';
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,6 +33,7 @@ const borderRadius_Main = width * 0.03;
 
 export default function RegisterOrChangeUser({navigation}) {
   const {authToken, isCreate, currentRes, idRes, emergePhone} = useUser();
+  const [loading, setLoading] = useState(false);
 
   const [nfcRead, setNfcRead] = useState(false);
 
@@ -56,7 +61,6 @@ export default function RegisterOrChangeUser({navigation}) {
 
     setNfcRead(true);
     try {
-      // STEP 1
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
       const bytes = Ndef.encodeMessage([
@@ -73,13 +77,28 @@ export default function RegisterOrChangeUser({navigation}) {
       ]);
 
       if (bytes) {
-        await NfcManager.ndefHandler // STEP 2
-          .writeNdefMessage(bytes); // STEP 3
+        await NfcManager.ndefHandler.writeNdefMessage(bytes);
         result = true;
+
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Sucesso!',
+          text2: 'Dados inseridos com sucesso.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
       }
     } catch (error) {
       console.warn('Falha ao escrever na tag NFC', error);
-      Alert.alert('Erro', 'Falha ao escrever na tag NFC');
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Erro!',
+        text2: 'Falha ao escrever na tag NFC.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
     } finally {
       NfcManager.cancelTechnologyRequest();
       setNfcRead(false);
@@ -94,6 +113,7 @@ export default function RegisterOrChangeUser({navigation}) {
   };
 
   const changeData = async () => {
+    setLoading(true);
     if (isCreate) {
       var newUser = {
         cpfDep: textoCPFInput,
@@ -106,23 +126,19 @@ export default function RegisterOrChangeUser({navigation}) {
       };
 
       try {
-        const response = await axios.post(
-          `http://10.0.2.2:8080/api/dependents/`,
-          {
-            headers: {
-              Authorization: authToken,
-            },
-          },
+        const responseRegister = await registerNewDependentRequest(
           newUser,
+          authToken,
         );
-        console.log('Dependente criado com sucesso!');
-        handleWriteNfcTag();
+
+        if (responseRegister != null && responseRegister.isOk) {
+          handleWriteNfcTag();
+        }
       } catch (error) {
+        setLoading(false);
         console.error(error);
       }
-    }
-
-    if (!isCreate) {
+    } else {
       var newUser = currentRes;
 
       newUser.cpfDep = textoCPFInput;
@@ -133,17 +149,17 @@ export default function RegisterOrChangeUser({navigation}) {
       newUser.laudo = textoLaudoInput;
 
       try {
-        const response = await axios.put(
-          `http://10.0.2.2:8080/api/dependents/`,
-          newUser,
-        );
-        console.log('Dependente alterado com sucesso!');
+        const responseUpdate = await updateDependentRequest(newUser, authToken);
 
-        navigation.navigate('Home');
+        if (responseUpdate != null && responseUpdate.isOk) {
+          navigation.navigate('Home');
+        }
       } catch (error) {
+        setLoading(false);
         console.error(error);
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -189,7 +205,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 placeholder="Idade do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoIdadeInput(text)}
-                value={textoIdadeInput}
+                value={textoIdadeInput.toString()}
                 style={styles.input}
               />
             </View>
@@ -225,8 +241,13 @@ export default function RegisterOrChangeUser({navigation}) {
             </View>
           </ScrollView>
           <View style={styles.viewButton}>
-            <Pressable onPress={changeData} style={styles.pressable}>
-              <Text style={styles.titleButton}>Confirmar</Text>
+            <Pressable
+              disabled={loading}
+              onPress={() => changeData()}
+              style={() => styles.pressable(loading)}>
+              <Text style={styles.titleButton}>
+                {loading ? 'Carregando...' : 'Confirmar'}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -248,13 +269,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.WHITE,
     width: '80%',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: loading => ({
+    backgroundColor: loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: borderRadius_Main,
     height: height * 0.06,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   scrollView: {
     marginBottom: '5%',
     marginTop: '5%',

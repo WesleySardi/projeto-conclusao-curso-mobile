@@ -103,7 +103,7 @@ export default function Registration({navigation}) {
 
   return (
     <View style={styles.view1}>
-      <BubbleBackground></BubbleBackground>
+      {/*<BubbleBackground></BubbleBackground>*/}
       <View style={styles.view2}>
         <View style={styles.viewTitle}>
           <Text style={styles.title}>Cadastrar</Text>
