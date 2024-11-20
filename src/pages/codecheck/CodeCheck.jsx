@@ -7,62 +7,51 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-import Toast from 'react-native-toast-message';
-import {COLORS} from '../constants/constants';
-import {useUser} from '../contexts/UserContext';
-import {createEmailRequest, emailVerifyRequest} from '../services/services';
+import {COLORS} from '../../constants/constants';
+import getFunctions from '../../functions/getFunctions';
+import {createSmsRequest, smsVerifyRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 
-export default function EmailCheck({navigation}) {
+export default function CodeCheck() {
   const {currentRes} = useUser();
-  const [emailValue, setEmailValue] = useState();
+  const [smsValue, setSmsValue] = useState();
   const [isTokenLoading, setIsTokenLoading] = useState(false);
 
-  const [emailData] = useState({
-    emailCode: '',
+  const [smsData] = useState({
     sendDate: '',
-    returnDate: '',
-    emailUser: '',
     cpfDep: '',
+    phoneUser: '',
   });
+
+  const fillData = () => {
+    smsData.sendDate = getFunctions.generateTimestamp();
+    smsData.phoneUser = '+' + currentRes.contato1Res;
+    smsData.cpfDep = currentRes.cpfDep;
+    smsHandlerFunction();
+  };
+
+  const smsHandlerFunction = async () => {
+    const response = await createSmsRequest(smsData);
+
+    if (response.contentResponse != null) {
+      return true;
+    }
+  };
+
+  const smsVerifyFunction = async smsCode => {
+    setIsTokenLoading(true);
+    const response = await smsVerifyRequest(smsCode, smsData);
+
+    if (response.contentResponse != null)
+      return navigation.navigate('ChangePassword');
+
+    setIsTokenLoading(false);
+  };
 
   useEffect(() => {
     fillData();
   }, []);
-
-  const fillData = () => {
-    emailData.emailUser = currentRes.emailRes;
-    emailHandlerFunction();
-  };
-
-  const emailHandlerFunction = async () => {
-    try {
-      const response = await createEmailRequest(emailData);
-      if (response) {
-        Toast.show({
-          type: 'success',
-          position: 'top',
-          text1: 'Sucesso!',
-          text2: 'Email enviado com sucesso.',
-          visibilityTime: 3000,
-          autoHide: true,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const emailVerifyFunction = async emailCode => {
-    console.log(emailCode, 'emailCode');
-    setIsTokenLoading(true);
-    const response = await emailVerifyRequest(emailCode, emailData);
-    setIsTokenLoading(false);
-    console.log(response.contentResponse, 'response.contentResponse');
-    if (response.contentResponse != null)
-      return navigation.navigate('ChangePassword');
-  };
 
   return (
     <View style={styles.view1}>
@@ -73,10 +62,10 @@ export default function EmailCheck({navigation}) {
         <View style={styles.view3}>
           <View>
             <TextInput
-              placeholder="Código do E-mail"
-              keyboardType="number-pad"
-              onChangeText={text => setEmailValue(text)}
-              value={emailValue}
+              placeholder="Código SMS"
+              keyboardType="numeric"
+              onChangeText={text => setSmsValue(text)}
+              value={smsValue}
               style={styles.input}
             />
             <View style={styles.viewSendCodeAgain}>
@@ -92,18 +81,18 @@ export default function EmailCheck({navigation}) {
           <Pressable
             disabled={isTokenLoading}
             onPress={() => {
-              if (emailValue.length == 0) {
+              if (smsValue.length == 0) {
                 Toast.show({
                   type: 'info',
                   position: 'top',
                   text1: 'Info!',
-                  text2: 'Digite o código enviado ao seu E-mail.',
+                  text2: 'Digite o código enviado ao seu celular.',
                   visibilityTime: 2000,
                   autoHide: true,
                 });
               } else {
-                if (emailValue.length == 6) {
-                  emailVerifyFunction(emailValue);
+                if (smsValue.length >= 7 && smsValue.length < 9) {
+                  smsVerifyFunction(smsValue);
                 } else {
                   Toast.show({
                     type: 'info',

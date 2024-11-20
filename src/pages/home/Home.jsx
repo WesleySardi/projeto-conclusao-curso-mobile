@@ -9,42 +9,29 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-
-import BubbleBackground from '../components/BubbleBackground';
-
-import {COLORS} from '../constants/constants';
-
-import axios from 'axios';
-
+import {COLORS} from '../../constants/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faSearch} from '@fortawesome/free-solid-svg-icons/faSearch';
 import {faEdit} from '@fortawesome/free-solid-svg-icons/faEdit';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import {faList} from '@fortawesome/free-solid-svg-icons/faList';
-
-import {useUser} from '../contexts/UserContext';
-import {findDependentByCpfDepRequest} from '../services/services';
+import {useUser} from '../../contexts/UserContext';
+import {findDependentByCpfDepRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
-
 const imageHeight = height * 0.07;
 const imageWidth = width * 0.15;
-
 const fontSize_Small = width * 0.035;
 const fontSize_Normal = width * 0.045;
 const fontSize_Big = width * 0.055;
 const fontSize_Gigantic = width * 0.065;
-
 const borderRadius_Main = width * 0.03;
 
 export default function Home({navigation}) {
   const {
     authToken,
-    setAuthToken,
-    isCreate,
     setIsCreate,
-    currentRes,
     setCurrentRes,
     idRes,
     setIdRes,
@@ -60,42 +47,10 @@ export default function Home({navigation}) {
   const [valueToShowData, setValueToShowData] = useState(0);
   const [valuesToShowData, setValuesToShowData] = useState([]);
   const [listData, setListData] = useState([]);
-
   const [isPressedBackward, setIsPressedBackward] = useState(false);
   const [isPressedForward, setIsPressedForward] = useState(false);
-
   const [changeDependentColor, setChangeDependentColor] = useState(false);
-
   const [isList, setIsList] = useState(false);
-
-  useEffect(() => {
-    searchData();
-  }, []);
-
-  useEffect(() => {
-    navigation.addListener('focus', () => {
-      searchData();
-    });
-  }, [navigation]);
-
-  useEffect(() => {
-    if (valueToShowData >= 0 && (userData === null ? 0 : userData.length) > 0) {
-      setUserDataToBeShown(userData[valueToShowData]);
-    }
-  }, [valueToShowData, userData]);
-
-  useEffect(() => {
-    if (
-      valuesToShowData.length >= 0 &&
-      (userData === null ? 0 : userData.length) > 0
-    ) {
-      setListData(valuesToShowData.map(indice => userData[indice]));
-    }
-  }, [valuesToShowData]);
-
-  useEffect(() => {
-    search(textoInput);
-  }, [textoInput]);
 
   const searchData = async () => {
     console.log(idRes, 'idRes');
@@ -138,64 +93,55 @@ export default function Home({navigation}) {
     }
   };
 
-  const handlePressNewDependentButton = () => {
-    setCurrentRes({});
-    setIsCreate(true);
+  const handlePress = (type, id = null) => {
+    if (type === 'register') {
+      setCurrentRes({});
+      setIsCreate(true);
+    } else if (type === 'change') {
+      setCurrentRes(userDataToBeShown);
+      setIsCreate(false);
+    } else {
+      setCurrentRes(userData[id]);
+      setIsCreate(false);
+    }
     setIdRes(idRes);
     setNomeRes(nomeRes);
     setEmergePhone(emergePhone);
+
     navigation.navigate('RegisterOrChangeUser');
   };
 
-  const handlePressChangeDependentButton = () => {
-    setCurrentRes(userDataToBeShown);
-    setIsCreate(false);
-    setIdRes(idRes);
-    setNomeRes(nomeRes);
-    setEmergePhone(emergePhone);
-    navigation.navigate('RegisterOrChangeUser');
-  };
-
-  const handlePressGetDependentByList = id => {
-    setCurrentRes(userData[id]);
-    setIsCreate(false);
-    setIdRes(idRes);
-    setNomeRes(nomeRes);
-    setEmergePhone(emergePhone);
-    navigation.navigate('RegisterOrChangeUser');
-  };
-
-  const changeDependentBackwards = () => {
+  const changeDependent = type => {
     if (changeDependentColor == false) {
       setChangeDependentColor(true);
     } else {
       setChangeDependentColor(false);
     }
-    setTimeout(() => {
-      setIsPressedBackward(false);
-    }, 300);
-    setTextoInput('');
-    setValueToShowData(
-      (valueToShowData - 1 + userData === null ? 0 : userData.length) %
-        (userData === null ? 0 : userData.length),
-    );
-    setIsPressedBackward(true);
-  };
 
-  const changeDependentForward = () => {
-    if (changeDependentColor == false) {
-      setChangeDependentColor(true);
+    if (type === 'forward') {
+      setTimeout(() => {
+        setIsPressedForward(false);
+      }, 300);
     } else {
-      setChangeDependentColor(false);
+      setTimeout(() => {
+        setIsPressedBackward(false);
+      }, 300);
     }
-    setTimeout(() => {
-      setIsPressedForward(false);
-    }, 300);
+
     setTextoInput('');
-    setValueToShowData(
-      (valueToShowData + 1) % (userData === null ? 0 : userData.length),
-    );
-    setIsPressedForward(true);
+
+    if (type === 'forward') {
+      setValueToShowData(
+        (valueToShowData + 1) % (userData === null ? 0 : userData.length),
+      );
+      setIsPressedForward(true);
+    } else {
+      setValueToShowData(
+        (valueToShowData - 1 + userData === null ? 0 : userData.length) %
+          (userData === null ? 0 : userData.length),
+      );
+      setIsPressedBackward(true);
+    }
   };
 
   const changeDependentNavigation = () => {
@@ -209,9 +155,33 @@ export default function Home({navigation}) {
     }
   };
 
+  useEffect(() => {
+    searchData();
+  }, []);
+
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      searchData();
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    if (
+      valuesToShowData.length >= 0 &&
+      (userData === null ? 0 : userData.length) > 0
+    ) {
+      setListData(valuesToShowData.map(indice => userData[indice]));
+      setUserDataToBeShown(userData[valueToShowData]);
+    }
+  }, [valuesToShowData, userData]);
+
+  useEffect(() => {
+    search(textoInput);
+  }, [textoInput]);
+
   return (
     <View style={styles.mainView}>
-      {/*<BubbleBackground></BubbleBackground>*/}
+      <BubbleBackground />
       <View>
         <View
           style={[
@@ -229,7 +199,7 @@ export default function Home({navigation}) {
         {userData === null ? (
           <View style={styles.viewNoDependents}>
             <Pressable
-              onPress={() => handlePressNewDependentButton()}
+              onPress={() => handlePress('register')}
               style={styles.pressableNoDependents}>
               <Text style={styles.textDependentsButton}>
                 Cadastrar dependente
@@ -297,7 +267,7 @@ export default function Home({navigation}) {
                         <View style={styles.list_viewDependent}>
                           <Image
                             style={styles.list_image}
-                            source={require('../assets/imgs/IconePerfilAnonimo.jpg')}
+                            source={require('../../assets/imgs/IconePerfilAnonimo.jpg')}
                           />
                           <Text style={styles.list_textNameDep}>
                             {dependents.nomeDep}
@@ -305,7 +275,7 @@ export default function Home({navigation}) {
                         </View>
                         <View style={styles.list_viewEditButton}>
                           <Pressable
-                            onPress={() => handlePressGetDependentByList(index)}
+                            onPress={() => handlePress('find', index)}
                             style={styles.list_pressableEdit}>
                             <FontAwesomeIcon
                               icon={faEdit}
@@ -323,7 +293,7 @@ export default function Home({navigation}) {
             ) : (
               <View style={styles.viewArrows}>
                 <Pressable
-                  onPress={() => changeDependentBackwards()}
+                  onPress={() => changeDependent('backward')}
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronLeft}
@@ -354,7 +324,7 @@ export default function Home({navigation}) {
                     </View>
                     <Image
                       style={styles.image}
-                      source={require('../assets/imgs/IconePerfilAnonimo.jpg')}
+                      source={require('../../assets/imgs/IconePerfilAnonimo.jpg')}
                     />
                   </View>
                   <View style={styles.viewDependentInfo}>
@@ -383,7 +353,7 @@ export default function Home({navigation}) {
                     </View>
                     <View style={styles.viewEditButton}>
                       <Pressable
-                        onPress={() => handlePressChangeDependentButton()}
+                        onPress={() => handlePress('change')}
                         style={styles.pressableEdit}>
                         <FontAwesomeIcon
                           icon={faEdit}
@@ -396,7 +366,7 @@ export default function Home({navigation}) {
                   </View>
                 </View>
                 <Pressable
-                  onPress={() => changeDependentForward()}
+                  onPress={() => changeDependent('forward')}
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronRight}
@@ -411,7 +381,7 @@ export default function Home({navigation}) {
             )}
             <View style={styles.viewNewDependent}>
               <Pressable
-                onPress={() => handlePressNewDependentButton()}
+                onPress={() => handlePress('register')}
                 style={styles.pressableNewDependent}>
                 <Text style={styles.textDependentsButton}>
                   Cadastrar dependente

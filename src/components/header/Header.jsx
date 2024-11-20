@@ -1,6 +1,6 @@
 import React, {useState, useLayoutEffect} from 'react';
 import {View, Image, Pressable, Dimensions, StatusBar} from 'react-native';
-import {COLORS} from '../constants/constants';
+import {COLORS} from '../../constants/constants';
 import {useNavigation} from '@react-navigation/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
@@ -86,7 +86,7 @@ function Header() {
       )}
       <View style={viewImage}>
         <Image
-          source={require('../assets/imgs/ZloLogoIcon.png')}
+          source={require('../../assets/imgs/ZloLogoIcon.png')}
           style={imgStyleLogo}
           tintColor={COLORS.WHITE}
         />

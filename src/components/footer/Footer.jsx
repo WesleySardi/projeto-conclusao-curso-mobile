@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Pressable, Keyboard, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircleUser} from '@fortawesome/free-solid-svg-icons/faCircleUser';
@@ -6,10 +6,10 @@ import {faBell} from '@fortawesome/free-solid-svg-icons/faBell';
 import {faHome} from '@fortawesome/free-solid-svg-icons/faHome';
 import {faBars} from '@fortawesome/free-solid-svg-icons/faBars';
 import {faStreetView} from '@fortawesome/free-solid-svg-icons/faStreetView';
-import Drawer from './Drawer';
+import Drawer from '../drawer/Drawer';
 import {useNavigation} from '@react-navigation/native';
-import {useUser} from '../contexts/UserContext';
-import {COLORS} from '../constants/constants';
+import {useUser} from '../../contexts/UserContext';
+import {COLORS} from '../../constants/constants';
 
 const {width, height} = Dimensions.get('window');
 

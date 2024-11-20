@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import React, {useState} from 'react';
 import Toast from 'react-native-toast-message';
 import {
   StyleSheet,
@@ -10,23 +9,17 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-
-import BubbleBackground from '../components/BubbleBackground';
-
-import {COLORS} from '../constants/constants';
-
+import {COLORS} from '../../constants/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
-import {registerResponsibleRequest} from '../services/services';
+import {registerResponsibleRequest} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
-
 const fontSize_Small = width * 0.035;
 const fontSize_Normal = width * 0.045;
 const fontSize_Big = width * 0.055;
-const fontSize_Gigantic = width * 0.065;
-
 const borderRadius_Main = width * 0.03;
 
 export default function Registration({navigation}) {
@@ -103,7 +96,7 @@ export default function Registration({navigation}) {
 
   return (
     <View style={styles.view1}>
-      {/*<BubbleBackground></BubbleBackground>*/}
+      <BubbleBackground />
       <View style={styles.view2}>
         <View style={styles.viewTitle}>
           <Text style={styles.title}>Cadastrar</Text>

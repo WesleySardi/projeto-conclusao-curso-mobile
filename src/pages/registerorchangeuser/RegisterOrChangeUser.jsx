@@ -9,18 +9,14 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
-
-import {useUser} from '../contexts/UserContext';
-import {COLORS, FONTS} from '../constants/constants';
-import NfcVector from '../assets/gifs/nfc_vector.gif';
-
-import axios from 'axios';
+import {useUser} from '../../contexts/UserContext';
+import {COLORS} from '../../constants/constants';
+import NfcVector from '../../assets/gifs/nfc_vector.gif';
 import {
   registerNewDependentRequest,
   updateDependentRequest,
-} from '../services/services';
+} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 

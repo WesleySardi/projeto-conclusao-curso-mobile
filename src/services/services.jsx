@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import getFunctions from '../functions/getFunctions';
-import URLs from './utils/urls';
+import URLs from '../utils/urls';
 
 export const authSigninRequest = async (
   emailValue,

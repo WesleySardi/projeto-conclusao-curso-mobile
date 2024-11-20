@@ -3,16 +3,17 @@ import {
   View,
   TextInput,
   Pressable,
-  StyleSheet,
   Dimensions,
   Text,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
 } from 'react-native';
-import axios from 'axios';
 import Toast from 'react-native-toast-message';
-import {COLORS} from '../constants/constants';
-
-import {useUser} from '../contexts/UserContext';
-import {validateEmailRequest} from '../services/services';
+import {COLORS} from '../../constants/constants';
+import {useUser} from '../../contexts/UserContext';
+import {validateEmailRequest} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
 
@@ -59,23 +60,32 @@ const AccessRecovery = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.viewTitle}>
-        <Text style={styles.title}>Digite o seu e-mail</Text>
-      </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o seu e-mail"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <View style={styles.viewButton}>
-        <Pressable onPress={() => validateEmail()} style={styles.pressable}>
-          <Text style={styles.titleButton}>Enviar Código</Text>
-        </Pressable>
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        keyboardShouldPersistTaps="handled">
+        <BubbleBackground />
+        <View style={styles.container}>
+          <View style={styles.viewTitle}>
+            <Text style={styles.title}>Digite o seu e-mail</Text>
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite o seu e-mail"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={text => setEmail(text)}
+          />
+          <View style={styles.viewButton}>
+            <Pressable onPress={() => validateEmail()} style={styles.pressable}>
+              <Text style={styles.titleButton}>Enviar Código</Text>
+            </Pressable>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

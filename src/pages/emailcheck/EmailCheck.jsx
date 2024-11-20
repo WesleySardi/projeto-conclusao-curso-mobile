@@ -7,53 +7,61 @@ import {
   TextInput,
   Dimensions,
 } from 'react-native';
-
-import {COLORS} from '../constants/constants';
-
-import getFunctions from '../functions/getFunctions';
-import {createSmsRequest, smsVerifyRequest} from '../services/services';
+import Toast from 'react-native-toast-message';
+import {COLORS} from '../../constants/constants';
+import {useUser} from '../../contexts/UserContext';
+import {createEmailRequest, emailVerifyRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 
-export default function CodeCheck() {
+export default function EmailCheck({navigation}) {
   const {currentRes} = useUser();
-  const [smsValue, setSmsValue] = useState();
+  const [emailValue, setEmailValue] = useState();
   const [isTokenLoading, setIsTokenLoading] = useState(false);
-
-  const [smsData] = useState({
+  const [emailData] = useState({
+    emailCode: '',
     sendDate: '',
+    returnDate: '',
+    emailUser: '',
     cpfDep: '',
-    phoneUser: '',
   });
+
+  const fillData = () => {
+    emailData.emailUser = currentRes.emailRes;
+    emailHandlerFunction();
+  };
+
+  const emailHandlerFunction = async () => {
+    try {
+      const response = await createEmailRequest(emailData);
+      if (response) {
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          text1: 'Sucesso!',
+          text2: 'Email enviado com sucesso.',
+          visibilityTime: 3000,
+          autoHide: true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const emailVerifyFunction = async emailCode => {
+    console.log(emailCode, 'emailCode');
+    setIsTokenLoading(true);
+    const response = await emailVerifyRequest(emailCode, emailData);
+    setIsTokenLoading(false);
+    console.log(response.contentResponse, 'response.contentResponse');
+    if (response.contentResponse != null)
+      return navigation.navigate('ChangePassword');
+  };
 
   useEffect(() => {
     fillData();
   }, []);
-
-  const fillData = () => {
-    smsData.sendDate = getFunctions.generateTimestamp();
-    smsData.phoneUser = '+' + currentRes.contato1Res;
-    smsData.cpfDep = currentRes.cpfDep;
-    smsHandlerFunction();
-  };
-
-  const smsHandlerFunction = async () => {
-    const response = await createSmsRequest(smsData);
-
-    if (response.contentResponse != null) {
-      return true;
-    }
-  };
-
-  const smsVerifyFunction = async smsCode => {
-    setIsTokenLoading(true);
-    const response = await smsVerifyRequest(smsCode, smsData);
-
-    if (response.contentResponse != null)
-      return navigation.navigate('ChangePassword');
-
-    setIsTokenLoading(false);
-  };
 
   return (
     <View style={styles.view1}>
@@ -64,10 +72,10 @@ export default function CodeCheck() {
         <View style={styles.view3}>
           <View>
             <TextInput
-              placeholder="Código SMS"
-              keyboardType="numeric"
-              onChangeText={text => setSmsValue(text)}
-              value={smsValue}
+              placeholder="Código do E-mail"
+              keyboardType="number-pad"
+              onChangeText={text => setEmailValue(text)}
+              value={emailValue}
               style={styles.input}
             />
             <View style={styles.viewSendCodeAgain}>
@@ -83,18 +91,18 @@ export default function CodeCheck() {
           <Pressable
             disabled={isTokenLoading}
             onPress={() => {
-              if (smsValue.length == 0) {
+              if (emailValue.length == 0) {
                 Toast.show({
                   type: 'info',
                   position: 'top',
                   text1: 'Info!',
-                  text2: 'Digite o código enviado ao seu celular.',
+                  text2: 'Digite o código enviado ao seu E-mail.',
                   visibilityTime: 2000,
                   autoHide: true,
                 });
               } else {
-                if (smsValue.length >= 7 && smsValue.length < 9) {
-                  smsVerifyFunction(smsValue);
+                if (emailValue.length == 6) {
+                  emailVerifyFunction(emailValue);
                 } else {
                   Toast.show({
                     type: 'info',
