@@ -7,6 +7,7 @@ import {
   Text,
   KeyboardAvoidingView,
   ScrollView,
+  StyleSheet,
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import {COLORS} from '../../constants/constants';
