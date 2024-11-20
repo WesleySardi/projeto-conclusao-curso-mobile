@@ -5,16 +5,6 @@ const AUTH_URL =
 const URLs = {
   BASIC: `${BASE_URL}`,
   AUTH: `${BASE_URL}`,
-
-  LOGIN: `${AUTH_URL}/auth/login`,
-  REGISTER: `${AUTH_URL}/auth/register`,
-
-  GET_PRODUCTS: `${BASE_URL}/products`,
-  GET_PRODUCT_BY_ID: `${BASE_URL}/products/${id}`,
-  CREATE_PRODUCT: `${BASE_URL}/products/new`,
-
-  GET_USERS: `${BASE_URL}/users`,
-  GET_USER_BY_ID: `${BASE_URL}/users/${id}`,
 };
 
 export default URLs;

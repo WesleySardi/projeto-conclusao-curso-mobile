@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
 import {
   StyleSheet,
   View,
@@ -10,35 +9,24 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-
-import BubbleBackground from '../components/BubbleBackground';
-
-import {COLORS} from '../constants/constants';
-
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
+import {COLORS} from '../../constants/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
-
-import {useUser} from '../contexts/UserContext';
-
-import {authSigninRequest} from '../services/services';
-import {verifyLoginRequest} from '../services/services';
+import {useUser} from '../../contexts/UserContext';
+import {authSigninRequest} from '../../services/services';
+import {verifyLoginRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Login({navigation}) {
   const {
-    authToken,
     setAuthToken,
-    isCreate,
     setIsCreate,
-    currentRes,
     setCurrentRes,
-    idRes,
     setIdRes,
-    nomeRes,
     setNomeRes,
-    emergePhone,
     setEmergePhone,
   } = useUser();
   const [_, setStartAnimation] = useState(false);
@@ -46,10 +34,6 @@ export default function Login({navigation}) {
   const [passwordValue, setPasswordValue] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isTokenLoading, setIsTokenLoading] = useState(false);
-
-  useEffect(() => {
-    setStartAnimation(true);
-  }, []);
 
   const getAuthToken = async () => {
     const response = await authSigninRequest(
@@ -78,17 +62,19 @@ export default function Login({navigation}) {
     }
   };
 
+  useEffect(() => {
+    setStartAnimation(true);
+  }, []);
+
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Define o comportamento dependendo da plataforma
-    >
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <BubbleBackground />
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
-        keyboardShouldPersistTaps="handled" // Permite o toque fora do teclado para fechá-lo
-      >
+        keyboardShouldPersistTaps="handled">
         <View style={styles.view1}>
-          {/*<BubbleBackground></BubbleBackground>*/}
           <View style={styles.view2}>
             <View style={styles.viewTitle}>
               <Text style={styles.title}>Entrar</Text>
@@ -210,6 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   view1: {
+    backgroundColor: 'transparent',
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',

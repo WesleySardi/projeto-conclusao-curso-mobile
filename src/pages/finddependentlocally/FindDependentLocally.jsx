@@ -3,26 +3,21 @@ import {
   View,
   TextInput,
   Text,
-  Button,
   StyleSheet,
   Image,
   Linking,
   TouchableOpacity,
-  Pressable,
 } from 'react-native';
-
-import {COLORS} from '../constants/constants';
-
-import NfcVector from '../assets/gifs/nfc_vector.gif';
-import EmergencyCallImage from '../assets/imgs/EmergencyCall.png';
-import PersonGif from '../assets/gifs/person_gif.gif';
+import {COLORS} from '../../constants/constants';
+import NfcVector from '../../assets/gifs/nfc_vector.gif';
+import EmergencyCallImage from '../../assets/imgs/EmergencyCall.png';
+import PersonGif from '../../assets/gifs/person_gif.gif';
 import NfcManager, {Ndef, NfcEvents} from 'react-native-nfc-manager';
 
 const FindDependentLocally = () => {
   const [nfcRead, setNfcRead] = useState(false);
-  const [cpf, setCpf] = useState('');
   const [emergencyPhone, setEmergencyPhone] = useState('');
-  const [url, setUrl] = useState('');
+  const [_, setUrl] = useState('');
 
   const maskEmergencyPhone = phone => {
     return phone

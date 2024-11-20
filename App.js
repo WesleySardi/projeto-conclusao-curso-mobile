@@ -1,34 +1,20 @@
 import React from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
-
-import Footer from './src/components/Footer';
-import Header from './src/components/Header';
-
-import Login from './src/pages/Login';
-import Home from './src/pages/Home';
-import CodeCheck from './src/pages/CodeCheck';
-import EmailCheck from './src/pages/EmailCheck';
-import RegisterOrChangeUser from './src/pages/RegisterOrChangeUser';
-import Register from './src/pages/Register';
-import FindDependentLocally from './src/pages/FindDependentLocally';
-import AccessRecovery from './src/pages/AccessRecovery';
-import ChangePassword from './src/pages/ChangePassword';
-
-import {
-  NavigationContainer,
-  useNavigationState,
-} from '@react-navigation/native';
+import {StatusBar, StyleSheet, View} from 'react-native';
+import Footer from './src/components/footer/Footer';
+import Header from './src/components/header/Header';
+import Login from './src/pages/login/Login';
+import Home from './src/pages/home/Home';
+import CodeCheck from './src/pages/codecheck/CodeCheck';
+import EmailCheck from './src/pages/emailcheck/EmailCheck';
+import RegisterOrChangeUser from './src/pages/registerorchangeuser/RegisterOrChangeUser';
+import Register from './src/pages/register/Register';
+import FindDependentLocally from './src/pages/finddependentlocally/FindDependentLocally';
+import AccessRecovery from './src/pages/accessrecovery/AccessRecovery';
+import ChangePassword from './src/pages/changepassword/ChangePassword';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import {UserProvider} from './src/contexts/UserContext';
 import {COLORS} from './src/constants/constants';
-
 import Toast, {BaseToast} from 'react-native-toast-message';
 
 const Stack = createStackNavigator();

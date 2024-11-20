@@ -1,12 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, View, Pressable, Animated, Dimensions} from 'react-native';
-
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircleHalfStroke} from '@fortawesome/free-solid-svg-icons/faCircleHalfStroke';
-
 import * as Animatable from 'react-native-animatable';
-
-import {COLORS} from '../constants/constants';
+import {COLORS} from '../../constants/constants';
 
 const {width, height} = Dimensions.get('window');
 

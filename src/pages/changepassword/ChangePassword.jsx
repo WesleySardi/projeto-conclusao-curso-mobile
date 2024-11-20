@@ -8,16 +8,12 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-
-import {useUser} from '../contexts/UserContext';
-import {COLORS} from '../constants/constants';
-
+import {useUser} from '../../contexts/UserContext';
+import {COLORS} from '../../constants/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
-
-import axios from 'axios';
-import {updatePasswordRequest} from '../services/services';
+import {updatePasswordRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 
