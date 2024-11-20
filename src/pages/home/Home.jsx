@@ -16,8 +16,14 @@ import {faEdit} from '@fortawesome/free-solid-svg-icons/faEdit';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
 import {faList} from '@fortawesome/free-solid-svg-icons/faList';
+import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {useUser} from '../../contexts/UserContext';
-import {findDependentByCpfDepRequest} from '../../services/services';
+import {
+  attCurrentResponsible,
+  deleteDependentRequest,
+  findDependentByCpfDepRequest,
+} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
 const imageHeight = height * 0.07;
@@ -39,6 +45,7 @@ export default function Home({navigation}) {
     setNomeRes,
     emergePhone,
     setEmergePhone,
+    emailRes,
   } = useUser();
 
   const [textoInput, setTextoInput] = useState('');
@@ -52,8 +59,19 @@ export default function Home({navigation}) {
   const [changeDependentColor, setChangeDependentColor] = useState(false);
   const [isList, setIsList] = useState(false);
 
+  const findCurrentResponsible = async () => {
+    const response = await attCurrentResponsible(emailRes, authToken);
+
+    if (response.contentResponse != null && response.isOk) {
+      setCurrentRes(response.contentResponse);
+      setIsCreate(true);
+      setIdRes(response.contentResponse.cpfRes);
+      setNomeRes(response.contentResponse.nomeRes);
+      setEmergePhone(response.contentResponse.contato1Res);
+    }
+  };
+
   const searchData = async () => {
-    console.log(idRes, 'idRes');
     try {
       const response = await findDependentByCpfDepRequest(idRes, authToken);
 
@@ -93,13 +111,29 @@ export default function Home({navigation}) {
     }
   };
 
-  const handlePress = (type, id = null) => {
+  const handlePress = async (type, id = null) => {
     if (type === 'register') {
       setCurrentRes({});
       setIsCreate(true);
     } else if (type === 'change') {
       setCurrentRes(userDataToBeShown);
       setIsCreate(false);
+    } else if (type === 'delete') {
+      const response = await deleteDependentRequest(
+        userDataToBeShown.cpfDep,
+        authToken,
+      );
+
+      if (response.contentResponse != null) {
+        searchData();
+      }
+
+      setIdRes(idRes);
+      setNomeRes(nomeRes);
+      setEmergePhone(emergePhone);
+      setIsList(false);
+
+      return;
     } else {
       setCurrentRes(userData[id]);
       setIsCreate(false);
@@ -107,6 +141,7 @@ export default function Home({navigation}) {
     setIdRes(idRes);
     setNomeRes(nomeRes);
     setEmergePhone(emergePhone);
+    setIsList(false);
 
     navigation.navigate('RegisterOrChangeUser');
   };
@@ -162,6 +197,7 @@ export default function Home({navigation}) {
   useEffect(() => {
     navigation.addListener('focus', () => {
       searchData();
+      findCurrentResponsible();
     });
   }, [navigation]);
 
@@ -173,7 +209,7 @@ export default function Home({navigation}) {
       setListData(valuesToShowData.map(indice => userData[indice]));
       setUserDataToBeShown(userData[valueToShowData]);
     }
-  }, [valuesToShowData, userData]);
+  }, [valueToShowData, valuesToShowData, userData]);
 
   useEffect(() => {
     search(textoInput);
@@ -281,7 +317,17 @@ export default function Home({navigation}) {
                               icon={faEdit}
                               color={COLORS.DARK_BLUE}
                               style={styles.list_iconEdit}
-                              size={height * 0.04}
+                              size={height * 0.03}
+                            />
+                          </Pressable>
+                          <Pressable
+                            onPress={() => handlePress('delete')}
+                            style={styles.list_pressableDelete}>
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              color={COLORS.DARK_BLUE}
+                              style={styles.list_iconDelete}
+                              size={height * 0.03}
                             />
                           </Pressable>
                         </View>
@@ -359,7 +405,17 @@ export default function Home({navigation}) {
                           icon={faEdit}
                           color={COLORS.WHITE}
                           style={styles.iconEdit}
-                          size={height * 0.06}
+                          size={height * 0.05}
+                        />
+                      </Pressable>
+                      <Pressable
+                        onPress={() => handlePress('delete')}
+                        style={styles.pressableDelete}>
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          color={COLORS.WHITE}
+                          style={styles.iconDelete}
+                          size={height * 0.05}
                         />
                       </Pressable>
                     </View>
@@ -580,6 +636,7 @@ const styles = StyleSheet.create({
     color: COLORS.BLACK,
     fontSize: fontSize_Small,
   },
+  pressableDelete: {},
   list_centralizationView: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -638,7 +695,16 @@ const styles = StyleSheet.create({
     fontSize: fontSize_Normal,
     paddingLeft: width * 0.02,
   },
-  list_viewEditButton: {},
-  list_pressableEdit: {},
+  list_viewEditButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  list_pressableEdit: {
+    marginRight: 10,
+  },
+  list_pressableDelete: {
+    marginRight: 5,
+  },
   list_iconEdit: {},
 });

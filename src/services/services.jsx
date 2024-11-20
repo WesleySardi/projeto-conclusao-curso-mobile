@@ -39,15 +39,39 @@ export const authSigninRequest = async (
   }
 };
 
-export const verifyLoginRequest = async (
-  emailValue,
-  passwordValue,
-  authToken,
-) => {
-  console.log(authToken, 'authToken');
+export const authForgotPasswordRequest = async emailValue => {
+  try {
+    const response = await axios.post(`${URLs.AUTH}/auth/forgot-password`, {
+      email: emailValue,
+    });
+
+    Toast.show({
+      type: 'success',
+      position: 'top',
+      text1: 'Sucesso!',
+      text2: 'E-mail enviado com sucesso.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+    return response;
+  } catch (error) {
+    setLoading(false);
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro ao enviar o e-mail.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+    return null;
+  }
+};
+
+export const attCurrentResponsible = async (emailValue, authToken) => {
   try {
     const response = await axios.get(
-      `${URLs.BASIC}/api/responsible/commonuser/findResponsibleCpfAndName/params?emailRes=${emailValue}&senhaRes=${passwordValue}`,
+      `${URLs.BASIC}/api/responsible/commonuser/findByEmail/${emailValue}`,
       {
         headers: {
           Authorization: authToken,
@@ -59,12 +83,20 @@ export const verifyLoginRequest = async (
   } catch (error) {
     console.log('Erro inesperado: ', error);
 
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Usuário não encontrado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
     return null;
   }
 };
 
 export const updateDependentRequest = async (newUser, authToken) => {
-  console.log(newUser, 'newUser');
   try {
     const response = await axios.put(
       `${URLs.BASIC}/api/dependent/commonuser/update`,
@@ -101,9 +133,42 @@ export const updateDependentRequest = async (newUser, authToken) => {
   }
 };
 
+export const deleteDependentRequest = async (id, authToken) => {
+  try {
+    const response = await axios.delete(
+      `${URLs.BASIC}/api/dependent/commonuser/delete/${id}`,
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      },
+    );
+
+    Toast.show({
+      type: response.data.isOk ? 'success' : 'error',
+      position: 'top',
+      text1: response.data.infoMessage,
+      text2: response.data.statusMessage,
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro inesperado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return null;
+  }
+};
+
 export const registerNewDependentRequest = async (newUser, authToken) => {
-  console.log(newUser, 'newUser');
-  console.log(authToken, 'authToken');
   try {
     const response = await axios.post(
       `${URLs.BASIC}/api/dependent/commonuser/create`,
@@ -151,15 +216,6 @@ export const findDependentByCpfDepRequest = async (idRes, authToken) => {
       },
     );
 
-    Toast.show({
-      type: response.data.isOk ? 'success' : 'error',
-      position: 'top',
-      text1: response.data.infoMessage,
-      text2: response.data.statusMessage,
-      visibilityTime: 3000,
-      autoHide: true,
-    });
-
     return response.data;
   } catch (error) {
     console.log('Erro inesperado: ', error);
@@ -179,7 +235,7 @@ export const findDependentByCpfDepRequest = async (idRes, authToken) => {
 export const validateEmailRequest = async (email, authToken) => {
   try {
     const response = await axios.get(
-      `${URLs.BASIC}/api/responsible/findByEmail/${email}`,
+      `${URLs.BASIC}/api/responsible/commonuser/findByEmail/${email}`,
       {
         headers: {
           Authorization: authToken,
@@ -311,7 +367,6 @@ export const emailVerifyRequest = async (emailCode, emailData) => {
 };
 
 export const createEmailRequest = async emailData => {
-  console.log(emailData, 'emailData');
   try {
     const response = await axios.post(
       `${URLs.BASIC}/api/email/commonuser/create`,
@@ -343,33 +398,33 @@ export const createEmailRequest = async emailData => {
   }
 };
 
-export const updatePasswordRequest = async (currentRes, textoRepSenhaInput) => {
+export const updatePasswordRequest = async (
+  authTokenValue,
+  newPasswordValue,
+) => {
   try {
-    const response = await axios.put(
-      `${URLs.BASIC}/api/responsible/updatePassword`,
-      {
-        cpfRes: currentRes.cpfRes,
-        senhaRes: textoRepSenhaInput,
-      },
-    );
+    const response = await axios.post(`${URLs.AUTH}/auth/reset-password`, {
+      token: authTokenValue.replace('Bearer ', ''),
+      newPassword: newPasswordValue,
+    });
 
     Toast.show({
-      type: response.data.isOk ? 'success' : 'error',
+      type: 'success',
       position: 'top',
-      text1: response.data.infoMessage,
-      text2: response.data.statusMessage,
+      text1: 'Sucesso!',
+      text2: 'Senha alterada com sucesso.',
       visibilityTime: 3000,
       autoHide: true,
     });
 
-    return response.data;
+    return response;
   } catch (error) {
     console.log('Erro inesperado: ', error);
     Toast.show({
       type: 'error',
       position: 'top',
       text1: 'Erro!',
-      text2: 'Erro inesperado.',
+      text2: 'Erro ao alterar a senha.',
       visibilityTime: 3000,
       autoHide: true,
     });
@@ -414,6 +469,46 @@ const tryAuthRegisterRequest = async (emailData, passwordData, setLoading) => {
       position: 'top',
       text1: 'Erro!',
       text2: 'Responsável já cadastrado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+    return null;
+  }
+};
+
+export const updateResponsibleRequest = async (data, authToken, setLoading) => {
+  try {
+    setLoading(true);
+
+    const response = await axios.put(
+      `${URLs.BASIC}/api/responsible/commonuser/update`,
+      data,
+      {
+        headers: {
+          Authorization: authToken,
+        },
+      },
+    );
+
+    setLoading(false);
+
+    Toast.show({
+      type: response.data.isOk ? 'success' : 'error',
+      position: 'top',
+      text1: response.data.infoMessage,
+      text2: response.data.statusMessage,
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    setLoading(false);
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro inesperado.',
       visibilityTime: 3000,
       autoHide: true,
     });

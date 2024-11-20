@@ -21,13 +21,14 @@ const AccessRecovery = ({navigation}) => {
   const {
     authToken,
     setIsCreate,
+    currentRes,
     setCurrentRes,
     setIdRes,
     setNomeRes,
     setEmergePhone,
   } = useUser();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(currentRes.emailRes);
 
   const validateEmail = async () => {
     try {

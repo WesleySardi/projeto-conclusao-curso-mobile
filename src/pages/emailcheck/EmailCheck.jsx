@@ -11,12 +11,13 @@ import Toast from 'react-native-toast-message';
 import {COLORS} from '../../constants/constants';
 import {useUser} from '../../contexts/UserContext';
 import {createEmailRequest, emailVerifyRequest} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
 
 export default function EmailCheck({navigation}) {
   const {currentRes} = useUser();
-  const [emailValue, setEmailValue] = useState();
+  const [emailValue, setEmailValue] = useState('');
   const [isTokenLoading, setIsTokenLoading] = useState(false);
   const [emailData] = useState({
     emailCode: '',
@@ -50,11 +51,10 @@ export default function EmailCheck({navigation}) {
   };
 
   const emailVerifyFunction = async emailCode => {
-    console.log(emailCode, 'emailCode');
     setIsTokenLoading(true);
     const response = await emailVerifyRequest(emailCode, emailData);
     setIsTokenLoading(false);
-    console.log(response.contentResponse, 'response.contentResponse');
+
     if (response.contentResponse != null)
       return navigation.navigate('ChangePassword');
   };
@@ -65,6 +65,7 @@ export default function EmailCheck({navigation}) {
 
   return (
     <View style={styles.view1}>
+      <BubbleBackground />
       <View style={styles.view2}>
         <View style={styles.viewTitle}>
           <Text style={styles.title}>Insira o código</Text>

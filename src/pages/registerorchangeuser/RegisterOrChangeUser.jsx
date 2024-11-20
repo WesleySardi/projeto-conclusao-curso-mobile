@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 import NfcManager, {Ndef, NfcTech} from 'react-native-nfc-manager';
 import {useUser} from '../../contexts/UserContext';
 import {COLORS} from '../../constants/constants';
@@ -17,6 +18,7 @@ import {
   registerNewDependentRequest,
   updateDependentRequest,
 } from '../../services/services';
+import Toast from 'react-native-toast-message';
 
 const {width, height} = Dimensions.get('window');
 
@@ -160,6 +162,7 @@ export default function RegisterOrChangeUser({navigation}) {
 
   return (
     <View style={styles.view1}>
+      <BubbleBackground />
       {nfcRead ? (
         <View style={styles.viewZloBandStyle}>
           <Image source={NfcVector} style={styles.zloBandStyle} />

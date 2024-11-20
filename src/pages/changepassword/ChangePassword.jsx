@@ -14,11 +14,12 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import {updatePasswordRequest} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
 
 export default function ChangePassword({navigation}) {
-  const {currentRes} = useUser();
+  const {authToken} = useUser();
 
   const [textoNovaSenhaInput, setTextoNovaSenhaInput] = useState();
   const [textoRepSenhaInput, setTextoRepSenhaInput] = useState();
@@ -27,31 +28,24 @@ export default function ChangePassword({navigation}) {
   const [isRepSenhaVisible, setIsRepSenhaVisible] = useState(false);
 
   const changeData = async () => {
-    var updatePass = currentRes;
-
-    updatePass.cpfRes = currentRes.cpfRes;
-
     if (textoNovaSenhaInput != textoRepSenhaInput) {
-      alert('Senhas diferentes');
+      alert('Senhas diferentes!');
     } else {
-      try {
-        const response = await updatePasswordRequest(
-          currentRes,
-          textoRepSenhaInput,
-        );
+      const response = await updatePasswordRequest(
+        authToken,
+        textoRepSenhaInput,
+      );
 
-        if (response.contentResponse != null) {
-          console.log('Senha alterada com sucesso!');
-          navigation.navigate('Login');
-        }
-      } catch (error) {
-        console.error(error);
+      if (response != null) {
+        console.log('Senha alterada com sucesso!');
+        navigation.navigate('Home');
       }
     }
   };
 
   return (
     <View style={styles.view1}>
+      <BubbleBackground />
       <View style={styles.view2}>
         <View style={styles.viewTitle}>
           <Text style={styles.title}>Alterar Senha</Text>

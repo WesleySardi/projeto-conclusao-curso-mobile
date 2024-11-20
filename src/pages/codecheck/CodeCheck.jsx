@@ -10,6 +10,7 @@ import {
 import {COLORS} from '../../constants/constants';
 import getFunctions from '../../functions/getFunctions';
 import {createSmsRequest, smsVerifyRequest} from '../../services/services';
+import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 
 const {width, height} = Dimensions.get('window');
 
@@ -55,6 +56,7 @@ export default function CodeCheck() {
 
   return (
     <View style={styles.view1}>
+      <BubbleBackground />
       <View style={styles.view2}>
         <View style={styles.viewTitle}>
           <Text style={styles.title}>Insira o código</Text>

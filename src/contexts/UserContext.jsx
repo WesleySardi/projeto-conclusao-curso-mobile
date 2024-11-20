@@ -15,6 +15,7 @@ export const UserProvider = ({children}) => {
   const [idRes, setIdRes] = useState('');
   const [nomeRes, setNomeRes] = useState('');
   const [emergePhone, setEmergePhone] = useState('');
+  const [emailRes, setEmailRes] = useState('');
   const [currentScreen, setCurrentScreen] = useState('Login');
   const navigation = useNavigation();
 
@@ -47,6 +48,8 @@ export const UserProvider = ({children}) => {
         emergePhone,
         setEmergePhone,
         currentScreen,
+        emailRes,
+        setEmailRes,
       }}>
       {children}
     </UserContext.Provider>

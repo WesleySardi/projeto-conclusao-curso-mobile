@@ -10,7 +10,9 @@ import RegisterOrChangeUser from './src/pages/registerorchangeuser/RegisterOrCha
 import Register from './src/pages/register/Register';
 import FindDependentLocally from './src/pages/finddependentlocally/FindDependentLocally';
 import AccessRecovery from './src/pages/accessrecovery/AccessRecovery';
+import ForgotPassword from './src/pages/forgotPassword/ForgotPassword';
 import ChangePassword from './src/pages/changepassword/ChangePassword';
+import UserProfile from './src/pages/userProfile/UserProfile';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {UserProvider} from './src/contexts/UserContext';
@@ -45,6 +47,8 @@ export default function App() {
             />
             <Stack.Screen name="AccessRecovery" component={AccessRecovery} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="UserProfile" component={UserProfile} />
           </Stack.Navigator>
           <Header />
           <Footer />

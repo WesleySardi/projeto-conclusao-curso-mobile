@@ -95,10 +95,15 @@ export default function Footer() {
               style={styles.pressable}
               onPress={() => {
                 Keyboard.dismiss();
+                navigation.navigate('UserProfile');
               }}>
               <FontAwesomeIcon
                 icon={faCircleUser}
-                color={COLORS.WHITE}
+                color={
+                  currentScreen === 'UserProfile'
+                    ? COLORS.YELLOW_MAIN
+                    : COLORS.WHITE
+                }
                 style={styles.imageMiddle}
                 size={height * 0.04}
               />

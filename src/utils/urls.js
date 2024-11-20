@@ -4,7 +4,7 @@ const AUTH_URL =
 
 const URLs = {
   BASIC: `${BASE_URL}`,
-  AUTH: `${BASE_URL}`,
+  AUTH: `${AUTH_URL}`,
 };
 
 export default URLs;

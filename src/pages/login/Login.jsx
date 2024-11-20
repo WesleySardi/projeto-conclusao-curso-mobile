@@ -15,7 +15,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import {useUser} from '../../contexts/UserContext';
-import {authSigninRequest} from '../../services/services';
+import {
+  attCurrentResponsible,
+  authSigninRequest,
+} from '../../services/services';
 import {verifyLoginRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
@@ -28,6 +31,7 @@ export default function Login({navigation}) {
     setIdRes,
     setNomeRes,
     setEmergePhone,
+    setEmailRes,
   } = useUser();
   const [_, setStartAnimation] = useState(false);
   const [emailValue, setEmailValue] = useState('');
@@ -44,19 +48,20 @@ export default function Login({navigation}) {
 
     if (response != null) {
       setAuthToken('Bearer ' + response);
-      verifyLogin('Bearer ' + response);
+      setEmailRes(emailValue);
+      findCurrentResponsible('Bearer ' + response);
     }
   };
 
-  const verifyLogin = async token => {
-    const response = await verifyLoginRequest(emailValue, passwordValue, token);
+  const findCurrentResponsible = async token => {
+    const response = await attCurrentResponsible(emailValue, token);
 
-    if (response != null && response.isOk) {
-      setCurrentRes({});
+    if (response.contentResponse != null && response.isOk) {
+      setCurrentRes(response.contentResponse);
       setIsCreate(true);
-      setIdRes(response.contentResponse[0][0]);
-      setNomeRes(response.contentResponse[0][1]);
-      setEmergePhone(response.contentResponse[0][2]);
+      setIdRes(response.contentResponse.cpfRes);
+      setNomeRes(response.contentResponse.nomeRes);
+      setEmergePhone(response.contentResponse.contato1Res);
 
       navigation.navigate('Home');
     }
@@ -119,7 +124,7 @@ export default function Login({navigation}) {
                   </Text>
                   <Pressable
                     style={styles.pressableSendCodeAgain}
-                    onPress={() => navigation.navigate('AccessRecovery')}>
+                    onPress={() => navigation.navigate('ForgotPassword')}>
                     <Text style={styles.textForgotPassword2}>Clique aqui!</Text>
                   </Pressable>
                 </View>
