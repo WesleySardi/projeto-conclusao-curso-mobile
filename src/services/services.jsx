@@ -121,7 +121,6 @@ export const authForgotPasswordRequest = async emailValue => {
     });
     return response;
   } catch (error) {
-    setLoading(false);
     Toast.show({
       type: 'error',
       position: 'top',

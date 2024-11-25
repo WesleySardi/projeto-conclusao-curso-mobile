@@ -199,6 +199,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 editable={isCreate ? true : false}
                 selectTextOnFocus={isCreate ? true : false}
                 maxLength={11}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.viewInput}>
@@ -210,6 +211,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 value={textoNomeInput}
                 style={styles.input}
                 maxLength={20}
+                keyboardType="default"
               />
             </View>
             <View style={styles.viewInput}>
@@ -221,6 +223,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 value={textoIdadeInput.toString()}
                 style={styles.input}
                 maxLength={3}
+                keyboardType="numeric"
               />
             </View>
             <View style={styles.viewInput}>
@@ -232,6 +235,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 value={textoTipoSanguineoInput}
                 style={styles.input}
                 maxLength={3}
+                keyboardType="default"
               />
             </View>
             <View style={styles.viewInput}>
@@ -243,6 +247,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 value={textoGeneroInput}
                 style={styles.input}
                 maxLength={15}
+                keyboardType="default"
               />
             </View>
             <View style={styles.viewInput}>
@@ -254,6 +259,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 value={textoLaudoInput}
                 style={styles.input}
                 maxLength={15}
+                keyboardType="default"
               />
             </View>
           </ScrollView>

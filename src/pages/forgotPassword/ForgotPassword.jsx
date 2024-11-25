@@ -14,23 +14,40 @@ import {COLORS} from '../../constants/constants';
 import {authForgotPasswordRequest} from '../../services/services';
 import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 import {faPaperPlane} from '@fortawesome/free-solid-svg-icons/faPaperPlane';
+import Toast from 'react-native-toast-message';
 
 const {width, height} = Dimensions.get('window');
 
 const ForgotPassword = ({navigation}) => {
   const [emailSent, setEmailSent] = useState(false);
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = async () => {
+    if (email === '') {
+      Toast.show({
+        type: 'info',
+        position: 'top',
+        text1: 'Info!',
+        text2: 'Digite o seu e-mail.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+
+      return;
+    }
+
+    setLoading(true);
     const response = await authForgotPasswordRequest(email);
 
     if (response != null) {
       setEmailSent(true);
-
+      setLoading(false);
       setTimeout(() => {
         navigation.navigate('Login');
       }, 5000);
     } else {
+      setLoading(false);
       return;
     }
   };
@@ -66,12 +83,16 @@ const ForgotPassword = ({navigation}) => {
                 keyboardType="email-address"
                 value={email}
                 onChangeText={text => setEmail(text)}
+                maxLength={30}
               />
               <View style={styles.viewButton}>
                 <Pressable
+                  disabled={loading}
                   onPress={() => validateEmail()}
-                  style={styles.pressable}>
-                  <Text style={styles.titleButton}>Enviar Código</Text>
+                  style={() => styles.pressable(loading)}>
+                  <Text style={styles.titleButton}>
+                    {loading ? 'Carregando...' : 'Enviar Código'}
+                  </Text>
                 </Pressable>
               </View>
             </>
@@ -102,14 +123,13 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     width: '100%',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
-    borderRadius: 10,
-    color: COLORS.GREY_MAIN,
-    padding: width * 0.02,
+  pressable: loading => ({
+    backgroundColor: loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
+    borderRadius: width * 0.03,
+    height: height * 0.06,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   viewButton: {
     width: '100%',
   },

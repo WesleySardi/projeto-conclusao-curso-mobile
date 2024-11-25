@@ -31,6 +31,19 @@ const AccessRecovery = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const validateEmail = async () => {
+    if (email != currentRes.emailRes) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Info!',
+        text2: 'E-mail incorreto.',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
+
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await validateEmailRequest(email, authToken);
