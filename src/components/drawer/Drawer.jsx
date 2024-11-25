@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pressable: {
-    paddingTop: width * 0.1,
+    paddingBottom: width * 0.05,
     alignItems: 'center',
   },
   text: {
@@ -66,5 +66,6 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 30,
     height: height * 0.35,
     width: width * 0.15,
+    justifyContent: 'flex-end',
   },
 });

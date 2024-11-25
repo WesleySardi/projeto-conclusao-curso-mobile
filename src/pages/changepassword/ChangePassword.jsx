@@ -15,31 +15,40 @@ import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import {updatePasswordRequest} from '../../services/services';
 import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
+import Toast from 'react-native-toast-message';
 
 const {width, height} = Dimensions.get('window');
 
 export default function ChangePassword({navigation}) {
   const {authToken} = useUser();
-
   const [textoNovaSenhaInput, setTextoNovaSenhaInput] = useState();
   const [textoRepSenhaInput, setTextoRepSenhaInput] = useState();
-
   const [isNovaSenhaVisible, setIsNovaSenhaVisible] = useState(false);
   const [isRepSenhaVisible, setIsRepSenhaVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const changeData = async () => {
     if (textoNovaSenhaInput != textoRepSenhaInput) {
-      alert('Senhas diferentes!');
+      Toast.show({
+        type: 'info',
+        position: 'top',
+        text1: 'Info!',
+        text2: 'Senhas diferentes!',
+        visibilityTime: 3000,
+        autoHide: true,
+      });
     } else {
+      setLoading(true);
       const response = await updatePasswordRequest(
         authToken,
         textoRepSenhaInput,
       );
 
       if (response != null) {
-        console.log('Senha alterada com sucesso!');
+        setLoading(false);
         navigation.navigate('Home');
       }
+      setLoading(false);
     }
   };
 
@@ -105,8 +114,13 @@ export default function ChangePassword({navigation}) {
           </View>
         </ScrollView>
         <View style={styles.viewButton}>
-          <Pressable onPress={() => changeData()} style={styles.pressable}>
-            <Text style={styles.titleButton}>Confirmar</Text>
+          <Pressable
+            disabled={loading}
+            onPress={() => changeData()}
+            style={() => styles.pressable(loading)}>
+            <Text style={styles.titleButton}>
+              {loading ? 'Carregando...' : 'Confirmar'}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -128,13 +142,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     width: '100%',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: loading => ({
+    backgroundColor: loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: 10,
-    height: height * 0.06,
+    color: COLORS.GREY_MAIN,
+    padding: width * 0.02,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   scrollView: {
     marginBottom: '8%',
     marginTop: '5%',

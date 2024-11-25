@@ -81,7 +81,6 @@ export default function Registration({navigation}) {
           contato3Res: '',
           planoAssinado: 1,
           emailRes: emailValue,
-          enderecoIdRes: 1,
           rgRes: '',
           senhaRes: passwordValue,
         },
@@ -111,6 +110,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setCpfValue(text)}
               value={cpfValue}
               style={styles.input}
+              maxLength={11}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -123,6 +123,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setNameValue(text)}
               value={nameValue}
               style={styles.input}
+              maxLength={20}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -134,6 +135,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setIdadeValue(text)}
               value={idadeValue}
               style={styles.input}
+              maxLength={3}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -145,6 +147,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setTelValue(text)}
               value={telValue}
               style={styles.input}
+              maxLength={11}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -156,6 +159,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setEmailValue(text)}
               value={emailValue}
               style={styles.input}
+              maxLength={30}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -183,6 +187,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setPasswordValue(text)}
               value={passwordValue}
               style={styles.input}
+              maxLength={15}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -210,6 +215,7 @@ export default function Registration({navigation}) {
               onChangeText={text => setConfPasswordValue(text)}
               value={confPasswordValue}
               style={styles.input}
+              maxLength={15}
             />
           </View>
         </ScrollView>

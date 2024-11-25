@@ -3,6 +3,72 @@ import Toast from 'react-native-toast-message';
 import getFunctions from '../functions/getFunctions';
 import URLs from '../utils/urls';
 
+export const encryptUrlRequest = async (url, authToken) => {
+  try {
+    const response = await axios.post(`${URLs.BASIC}/api/url/encrypt`, url, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    Toast.show({
+      type: response.data.isOk ? 'success' : 'error',
+      position: 'top',
+      text1: response.data.infoMessage,
+      text2: response.data.statusMessage,
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log('Erro inesperado: ', error);
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro inesperado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return null;
+  }
+};
+
+export const decryptUrlRequest = async (url, authToken) => {
+  try {
+    const response = await axios.post(`${URLs.BASIC}/api/url/decrypt`, url, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+
+    Toast.show({
+      type: response.data.isOk ? 'success' : 'error',
+      position: 'top',
+      text1: response.data.infoMessage,
+      text2: response.data.statusMessage,
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log('Erro inesperado: ', error);
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro inesperado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+
+    return null;
+  }
+};
+
 export const authSigninRequest = async (
   emailValue,
   passwordValue,

@@ -172,7 +172,7 @@ export default function Home({navigation}) {
       setIsPressedForward(true);
     } else {
       setValueToShowData(
-        (valueToShowData - 1 + userData === null ? 0 : userData.length) %
+        (valueToShowData - 1 + userData.length) %
           (userData === null ? 0 : userData.length),
       );
       setIsPressedBackward(true);
@@ -181,11 +181,11 @@ export default function Home({navigation}) {
 
   const changeDependentNavigation = () => {
     setTextoInput('');
-    setListData(userData);
-    setValueToShowData(0);
     if (isList == false) {
+      setListData(userData);
       setIsList(true);
     } else {
+      setValueToShowData(0);
       setIsList(false);
     }
   };

@@ -13,11 +13,13 @@ import NfcVector from '../../assets/gifs/nfc_vector.gif';
 import EmergencyCallImage from '../../assets/imgs/EmergencyCall.png';
 import PersonGif from '../../assets/gifs/person_gif.gif';
 import NfcManager, {Ndef, NfcEvents} from 'react-native-nfc-manager';
+import {decryptUrlRequest} from '../../services/services';
+import {useUser} from '../../contexts/UserContext';
 
 const FindDependentLocally = () => {
+  const {authToken} = useUser();
   const [nfcRead, setNfcRead] = useState(false);
   const [emergencyPhone, setEmergencyPhone] = useState('');
-  const [_, setUrl] = useState('');
 
   const maskEmergencyPhone = phone => {
     return phone
@@ -46,17 +48,35 @@ const FindDependentLocally = () => {
     );
   };
 
+  const decryptUrl = async url => {
+    var responseEmergePhone = await decryptUrlRequest(url, authToken);
+
+    if (responseEmergePhone.contentResponse != null) {
+      return responseEmergePhone.contentResponse.decryptedUrl;
+    }
+    return null;
+  };
+
   const readNfcTag = async () => {
     try {
       await NfcManager.start();
-      NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => {
+      NfcManager.setEventListener(NfcEvents.DiscoverTag, async tag => {
         try {
           const ndefRecords = tag.ndefMessage;
           if (ndefRecords && ndefRecords[0]) {
             let parsedUrl = Ndef.uri.decodePayload(ndefRecords[0].payload);
-            setUrl(parsedUrl);
+
             const params = getParamsFromUrl(parsedUrl);
-            setEmergencyPhone(params.emergPhone);
+
+            var decryptedEmergPhone = await decryptUrl({
+              url: params.emergPhone,
+            });
+
+            if (decryptedEmergPhone != null) {
+              setEmergencyPhone(decryptedEmergPhone);
+            } else {
+              setEmergencyPhone(null);
+            }
             setNfcRead(true);
           }
         } finally {
@@ -98,7 +118,6 @@ const FindDependentLocally = () => {
             placeholder="Telefone de emergência"
             editable={false}
           />
-          {/* Botão para testar a simulação da leitura NFC */}
           <TouchableOpacity onPress={() => handlePhoneCall()}>
             <Image
               source={EmergencyCallImage}

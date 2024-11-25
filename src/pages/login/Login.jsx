@@ -19,7 +19,6 @@ import {
   attCurrentResponsible,
   authSigninRequest,
 } from '../../services/services';
-import {verifyLoginRequest} from '../../services/services';
 
 const {width, height} = Dimensions.get('window');
 
@@ -62,7 +61,6 @@ export default function Login({navigation}) {
       setIdRes(response.contentResponse.cpfRes);
       setNomeRes(response.contentResponse.nomeRes);
       setEmergePhone(response.contentResponse.contato1Res);
-
       navigation.navigate('Home');
     }
   };

@@ -57,7 +57,6 @@ export default function UserProfile({navigation}) {
           contato3Res: '',
           planoAssinado: 1,
           emailRes: emailValue,
-          enderecoIdRes: 1,
           rgRes: '',
         },
         authToken,
@@ -88,6 +87,7 @@ export default function UserProfile({navigation}) {
               value={cpfValue}
               style={styles.input}
               editable={false}
+              maxLength={11}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -100,6 +100,7 @@ export default function UserProfile({navigation}) {
               value={emailValue}
               style={styles.input}
               editable={false}
+              maxLength={30}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -112,6 +113,7 @@ export default function UserProfile({navigation}) {
               onChangeText={text => setNameValue(text)}
               value={nameValue}
               style={styles.input}
+              maxLength={20}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -123,6 +125,7 @@ export default function UserProfile({navigation}) {
               onChangeText={text => setIdadeValue(text)}
               value={idadeValue.toString()}
               style={styles.input}
+              maxLength={3}
             />
           </View>
           <View style={styles.viewInputs}>
@@ -134,6 +137,7 @@ export default function UserProfile({navigation}) {
               onChangeText={text => setTelValue(text)}
               value={telValue}
               style={styles.input}
+              maxLength={11}
             />
           </View>
           <View style={styles.viewChangePassword}>

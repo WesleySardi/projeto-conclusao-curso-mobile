@@ -27,11 +27,12 @@ const AccessRecovery = ({navigation}) => {
     setNomeRes,
     setEmergePhone,
   } = useUser();
-
   const [email, setEmail] = useState(currentRes.emailRes);
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = async () => {
     try {
+      setLoading(true);
       const response = await validateEmailRequest(email, authToken);
 
       if (response != null) {
@@ -44,6 +45,7 @@ const AccessRecovery = ({navigation}) => {
         setNomeRes('');
         setEmergePhone('');
 
+        setLoading(false);
         navigation.navigate('EmailCheck');
       } else {
         Toast.show({
@@ -55,6 +57,7 @@ const AccessRecovery = ({navigation}) => {
           autoHide: true,
         });
       }
+      setLoading(false);
     } catch (error) {
       console.log('Error: ', error);
     }
@@ -80,8 +83,13 @@ const AccessRecovery = ({navigation}) => {
             onChangeText={text => setEmail(text)}
           />
           <View style={styles.viewButton}>
-            <Pressable onPress={() => validateEmail()} style={styles.pressable}>
-              <Text style={styles.titleButton}>Enviar Código</Text>
+            <Pressable
+              disabled={loading}
+              onPress={() => validateEmail()}
+              style={() => styles.pressable(loading)}>
+              <Text style={styles.titleButton}>
+                {loading ? 'Carregando...' : 'Enviar Código'}
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -110,14 +118,14 @@ const styles = StyleSheet.create({
     paddingRight: '5%',
     width: '100%',
   },
-  pressable: {
-    backgroundColor: COLORS.GREEN_MAIN,
+  pressable: loading => ({
+    backgroundColor: loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
     borderRadius: 10,
     color: COLORS.GREY_MAIN,
     padding: width * 0.02,
     justifyContent: 'center',
     width: '100%',
-  },
+  }),
   viewButton: {
     width: '100%',
   },

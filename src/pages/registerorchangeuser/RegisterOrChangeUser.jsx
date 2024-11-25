@@ -15,10 +15,12 @@ import {useUser} from '../../contexts/UserContext';
 import {COLORS} from '../../constants/constants';
 import NfcVector from '../../assets/gifs/nfc_vector.gif';
 import {
+  encryptUrlRequest,
   registerNewDependentRequest,
   updateDependentRequest,
 } from '../../services/services';
 import Toast from 'react-native-toast-message';
+import URLs from '../../utils/urls';
 
 const {width, height} = Dimensions.get('window');
 
@@ -61,18 +63,28 @@ export default function RegisterOrChangeUser({navigation}) {
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
-      const bytes = Ndef.encodeMessage([
-        Ndef.textRecord(
-          `https://10.0.2.2:8080/home?cpfDep=${currentRes.cpfDep}&emergPhone=${
-            '47' + emergePhone
-          }`,
-          {
-            headers: {
-              Authorization: authToken,
-            },
-          },
-        ),
-      ]);
+      var responseCpfDep = await encryptUrlRequest(
+        {url: currentRes.cpfDep},
+        authToken,
+      );
+
+      var encryptedCpfDep = responseCpfDep.contentResponse.encryptedUrl;
+
+      var responseEmergePhone = await encryptUrlRequest(
+        {url: emergePhone},
+        authToken,
+      );
+
+      var encryptedEmergePhone =
+        responseEmergePhone.contentResponse.encryptedUrl;
+
+      var url =
+        URLs.ENCRYPT +
+        `/home?cpfDep=${encodeURIComponent(
+          encryptedCpfDep,
+        )}&emergPhone=${encodeURIComponent(encryptedEmergePhone)}`;
+
+      const bytes = Ndef.encodeMessage([Ndef.textRecord(url)]);
 
       if (bytes) {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
@@ -150,7 +162,7 @@ export default function RegisterOrChangeUser({navigation}) {
         const responseUpdate = await updateDependentRequest(newUser, authToken);
 
         if (responseUpdate != null && responseUpdate.isOk) {
-          navigation.navigate('Home');
+          handleWriteNfcTag();
         }
       } catch (error) {
         setLoading(false);
@@ -186,6 +198,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 style={styles.input}
                 editable={isCreate ? true : false}
                 selectTextOnFocus={isCreate ? true : false}
+                maxLength={11}
               />
             </View>
             <View style={styles.viewInput}>
@@ -196,6 +209,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 onChangeText={text => setTextoNomeInput(text)}
                 value={textoNomeInput}
                 style={styles.input}
+                maxLength={20}
               />
             </View>
             <View style={styles.viewInput}>
@@ -206,6 +220,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 onChangeText={text => setTextoIdadeInput(text)}
                 value={textoIdadeInput.toString()}
                 style={styles.input}
+                maxLength={3}
               />
             </View>
             <View style={styles.viewInput}>
@@ -216,6 +231,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 onChangeText={text => setTextoTipoSanguineoInput(text)}
                 value={textoTipoSanguineoInput}
                 style={styles.input}
+                maxLength={3}
               />
             </View>
             <View style={styles.viewInput}>
@@ -226,6 +242,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 onChangeText={text => setTextoGeneroInput(text)}
                 value={textoGeneroInput}
                 style={styles.input}
+                maxLength={15}
               />
             </View>
             <View style={styles.viewInput}>
@@ -236,6 +253,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 onChangeText={text => setTextoLaudoInput(text)}
                 value={textoLaudoInput}
                 style={styles.input}
+                maxLength={15}
               />
             </View>
           </ScrollView>
