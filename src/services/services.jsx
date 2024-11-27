@@ -2,6 +2,7 @@ import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import getFunctions from '../functions/getFunctions';
 import URLs from '../utils/urls';
+import {isTokenActive} from '../utils/utils';
 
 export const encryptUrlRequest = async (url, authToken) => {
   try {
@@ -22,7 +23,8 @@ export const encryptUrlRequest = async (url, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -55,7 +57,8 @@ export const decryptUrlRequest = async (url, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -93,6 +96,9 @@ export const authSigninRequest = async (
     return response.data;
   } catch (error) {
     setLoading(false);
+
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -121,6 +127,8 @@ export const authForgotPasswordRequest = async emailValue => {
     });
     return response;
   } catch (error) {
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -146,7 +154,7 @@ export const attCurrentResponsible = async (emailValue, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
 
     Toast.show({
       type: 'error',
@@ -184,7 +192,8 @@ export const updateDependentRequest = async (newUser, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -220,6 +229,8 @@ export const deleteDependentRequest = async (id, authToken) => {
 
     return response.data;
   } catch (error) {
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -256,7 +267,8 @@ export const registerNewDependentRequest = async (newUser, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -283,7 +295,8 @@ export const findDependentByCpfDepRequest = async (idRes, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -319,7 +332,8 @@ export const validateEmailRequest = async (email, authToken) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -354,7 +368,8 @@ export const smsVerifyRequest = async (smsCode, smsData) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -386,7 +401,8 @@ export const createSmsRequest = async smsData => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -417,7 +433,8 @@ export const emailVerifyRequest = async (emailCode, emailData) => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -449,7 +466,8 @@ export const createEmailRequest = async emailData => {
 
     return response.data;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -484,7 +502,8 @@ export const updatePasswordRequest = async (
 
     return response;
   } catch (error) {
-    console.log('Erro inesperado: ', error);
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -569,6 +588,9 @@ export const updateResponsibleRequest = async (data, authToken, setLoading) => {
     return response.data;
   } catch (error) {
     setLoading(false);
+
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
@@ -596,6 +618,9 @@ const tryCreateResponsibleRequest = async (data, setLoading) => {
     return response;
   } catch (error) {
     setLoading(false);
+
+    if (!(await isTokenActive(error.response.status))) return null;
+
     Toast.show({
       type: 'error',
       position: 'top',
