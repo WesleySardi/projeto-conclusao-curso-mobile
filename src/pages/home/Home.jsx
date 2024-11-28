@@ -62,7 +62,7 @@ export default function Home({navigation}) {
   const findCurrentResponsible = async () => {
     const response = await attCurrentResponsible(emailRes, authToken);
 
-    if (response.contentResponse != null && response.isOk) {
+    if (response?.contentResponse != null && response.isOk) {
       setCurrentRes(response.contentResponse);
       setIsCreate(true);
       setIdRes(response.contentResponse.cpfRes);
@@ -362,10 +362,10 @@ export default function Home({navigation}) {
                   <View style={styles.viewDependentId}>
                     <View>
                       <Text style={styles.textTitle}>
-                        {userDataToBeShown.nomeDep}
+                        {userDataToBeShown?.nomeDep}
                       </Text>
                       <Text style={styles.text}>
-                        ID: {userDataToBeShown.cpfDep}
+                        ID: {userDataToBeShown?.cpfDep}
                       </Text>
                     </View>
                     <Image
@@ -380,21 +380,21 @@ export default function Home({navigation}) {
                           style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
                           Idade:
                         </Text>{' '}
-                        {userDataToBeShown.idadeDep}
+                        {userDataToBeShown?.idadeDep}
                       </Text>
                       <Text style={[styles.textInfoDep, styles.spaceTopBottom]}>
                         <Text
                           style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
                           Gênero:
                         </Text>{' '}
-                        {userDataToBeShown.generoDep}
+                        {userDataToBeShown?.generoDep}
                       </Text>
                       <Text style={[styles.textInfoDep, styles.spaceTop]}>
                         <Text
                           style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
                           Tipo Sanguíneo:
                         </Text>{' '}
-                        {userDataToBeShown.tipoSanguineo}
+                        {userDataToBeShown?.tipoSanguineo}
                       </Text>
                     </View>
                     <View style={styles.viewEditButton}>

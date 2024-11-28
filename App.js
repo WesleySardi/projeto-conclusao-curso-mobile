@@ -18,12 +18,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {UserProvider} from './src/contexts/UserContext';
 import {COLORS} from './src/constants/constants';
 import Toast, {BaseToast} from 'react-native-toast-message';
+import {navigationRef} from './src/utils/NavigationService';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <UserProvider>
         <View style={styles.container}>
           <StatusBar style="auto" backgroundColor={COLORS.BLUE_MAIN} />
