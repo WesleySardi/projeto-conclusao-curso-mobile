@@ -123,7 +123,7 @@ export default function UserProfile({navigation}) {
               placeholderTextColor={COLORS.GREY_MAIN}
               keyboardType="numeric"
               onChangeText={text => setIdadeValue(text)}
-              value={idadeValue.toString()}
+              value={idadeValue?.toString()}
               style={styles.input}
               maxLength={3}
             />

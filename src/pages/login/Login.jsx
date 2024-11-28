@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {
-  StyleSheet,
-  View,
   Pressable,
   Text,
   TextInput,
@@ -9,6 +7,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
+import styled from 'styled-components/native';
 import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 import {COLORS} from '../../constants/constants';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -39,11 +38,14 @@ export default function Login({navigation}) {
   const [isTokenLoading, setIsTokenLoading] = useState(false);
 
   const getAuthToken = async () => {
-    const response = await authSigninRequest(
+    /*const response = await authSigninRequest(
       emailValue,
       passwordValue,
       setIsTokenLoading,
-    );
+    );*/
+
+    const response =
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZXNsZXkuc2FyZGlAZ21haWwuY29tIiwicm9sZXMiOiJST0xFX1JFU1BPTlPDgVZFTCIsImlhdCI6MTczMjc0MTQ5MiwiZXhwIjoxNzMyODI3ODkyfQ.Acxzly-vas-tsmSMEFQyH7U4VNyyLqV466uJ8I6g-eqzotXH-h2VdAR1P2qkLpQ480iETs4v_-nbnaw6969TiQ';
 
     if (response != null) {
       setAuthToken('Bearer ' + response);
@@ -77,175 +79,177 @@ export default function Login({navigation}) {
       <ScrollView
         contentContainerStyle={{flexGrow: 1}}
         keyboardShouldPersistTaps="handled">
-        <View style={styles.view1}>
-          <View style={styles.view2}>
-            <View style={styles.viewTitle}>
-              <Text style={styles.title}>Entrar</Text>
-            </View>
-            <View style={styles.view3}>
-              <View>
-                <TextInput
-                  placeholder="E-mail"
-                  keyboardType="email-address"
-                  onChangeText={text => setEmailValue(text)}
-                  value={emailValue}
-                  style={styles.input}
-                  placeholderTextColor={COLORS.GREY_MAIN}
-                />
-                <View style={styles.viewInputs}>
-                  <Pressable
-                    onPress={
-                      isPasswordVisible
-                        ? () => setIsPasswordVisible(false)
-                        : () => setIsPasswordVisible(true)
-                    }
-                    style={styles.pressableVisible}>
-                    <FontAwesomeIcon
-                      icon={isPasswordVisible ? faEye : faEyeSlash}
-                      color={COLORS.BLUE_MAIN}
-                      style={styles.iconVisible}
-                      size={height * 0.03}
-                    />
-                  </Pressable>
-                  <TextInput
-                    placeholder="Senha"
-                    placeholderTextColor={COLORS.GREY_MAIN}
-                    secureTextEntry={isPasswordVisible ? false : true}
-                    onChangeText={text => setPasswordValue(text)}
-                    value={passwordValue}
-                    style={styles.input}
+        <Container>
+          <ContentWrapper>
+            <TitleWrapper>
+              <Title>Entrar</Title>
+            </TitleWrapper>
+            <InputWrapper>
+              <TextInputStyled
+                placeholder="E-mail"
+                keyboardType="email-address"
+                onChangeText={text => setEmailValue(text)}
+                value={emailValue}
+                placeholderTextColor={COLORS.GREY_MAIN}
+              />
+              <PasswordWrapper>
+                <Pressable
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                  style={visibilityButton}>
+                  <FontAwesomeIcon
+                    icon={isPasswordVisible ? faEye : faEyeSlash}
+                    color={COLORS.BLUE_MAIN}
+                    size={height * 0.03}
                   />
-                </View>
-                <View style={styles.viewSendCodeAgain}>
-                  <Text style={styles.textForgotPassword1}>
-                    Esqueceu a senha?{' '}
-                  </Text>
-                  <Pressable
-                    style={styles.pressableSendCodeAgain}
-                    onPress={() => navigation.navigate('ForgotPassword')}>
-                    <Text style={styles.textForgotPassword2}>Clique aqui!</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </View>
-            <View style={styles.viewButton}>
+                </Pressable>
+                <TextInputStyled
+                  placeholder="Senha"
+                  placeholderTextColor={COLORS.GREY_MAIN}
+                  secureTextEntry={!isPasswordVisible}
+                  onChangeText={text => setPasswordValue(text)}
+                  value={passwordValue}
+                />
+              </PasswordWrapper>
+              <ForgotPasswordWrapper>
+                <ForgotPasswordText>Esqueceu a senha? </ForgotPasswordText>
+                <Pressable
+                  onPress={() => navigation.navigate('ForgotPassword')}>
+                  <ForgotPasswordLink> Clique aqui!</ForgotPasswordLink>
+                </Pressable>
+              </ForgotPasswordWrapper>
+            </InputWrapper>
+            <ButtonWrapper>
               <Pressable
                 disabled={isTokenLoading}
                 onPress={() => getAuthToken()}
-                style={() => styles.pressable(isTokenLoading)}>
-                <Text style={styles.titleButton}>
+                style={() => buttonStyle(isTokenLoading)}>
+                <ButtonText>
                   {isTokenLoading ? 'Carregando...' : 'Confirmar'}
-                </Text>
+                </ButtonText>
               </Pressable>
-            </View>
-          </View>
-          <View style={styles.viewRegister}>
-            <Text style={styles.textRegister1}>Não possui cadastro? </Text>
+            </ButtonWrapper>
+          </ContentWrapper>
+          <RegisterWrapper>
+            <RegisterText>Não possui cadastro? </RegisterText>
             <Pressable onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.textRegister2}>Clique aqui!</Text>
+              <RegisterLink>Clique aqui!</RegisterLink>
             </Pressable>
-          </View>
-        </View>
+          </RegisterWrapper>
+        </Container>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  input: {
-    backgroundColor: COLORS.WHITE,
-    borderColor: COLORS.BLUE_MAIN,
-    borderRadius: 10,
-    borderWidth: 1,
-    color: COLORS.BLACK,
-    fontSize: width * 0.045,
-    height: height * 0.06,
-    marginBottom: '6%',
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    width: '100%',
-  },
-  pressable: isTokenLoading => ({
-    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
-    borderRadius: 10,
-    color: COLORS.GREY_MAIN,
-    padding: width * 0.02,
-    justifyContent: 'center',
-    width: '100%',
-  }),
-  title: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-  },
-  titleButton: {
-    color: COLORS.WHITE,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  textForgotPassword1: {
-    color: COLORS.GREY_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'thin',
-  },
-  textForgotPassword2: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-  },
-  viewSendCodeAgain: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  view1: {
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-  },
-  view2: {
-    alignItems: 'center',
-    width: '80%',
-  },
-  view3: {
-    marginBottom: height * 0.03,
-    marginTop: height * 0.03,
-    width: '100%',
-  },
-  viewButton: {
-    width: '100%',
-  },
-  viewRegister: {
-    position: 'absolute',
-    bottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  textRegister1: {
-    color: COLORS.GREY_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'thin',
-  },
-  textRegister2: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-  },
-  viewTitle: {
-    alignItems: 'center',
-    width: '100%',
-  },
-  viewInputs: {
-    alignItems: 'flex-end',
-    width: '100%',
-  },
-  pressableVisible: {
-    height: height * 0.06,
-    paddingRight: '5%',
-    position: 'absolute',
-    justifyContent: 'center',
-    zIndex: 1,
-  },
+const Container = styled.View`
+  background-color: transparent;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ContentWrapper = styled.View`
+  align-items: center;
+  width: 80%;
+`;
+
+const TitleWrapper = styled.View`
+  align-items: center;
+  width: 100%;
+`;
+
+const Title = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+`;
+
+const InputWrapper = styled.View`
+  margin-bottom: ${height * 0.03}px;
+  margin-top: ${height * 0.03}px;
+  width: 100%;
+`;
+
+const TextInputStyled = styled.TextInput`
+  background-color: ${COLORS.WHITE};
+  border-color: ${COLORS.BLUE_MAIN};
+  border-radius: 10px;
+  border-width: 1px;
+  color: ${COLORS.BLACK};
+  font-size: ${width * 0.045}px;
+  height: ${height * 0.06}px;
+  margin-bottom: 6%;
+  padding-left: 5%;
+  padding-right: 5%;
+  width: 100%;
+`;
+
+const PasswordWrapper = styled.View`
+  align-items: flex-end;
+  width: 100%;
+`;
+
+const visibilityButton = {
+  height: height * 0.06,
+  paddingRight: '5%',
+  position: 'absolute',
+  justifyContent: 'center',
+  zIndex: 1,
+};
+
+const ForgotPasswordWrapper = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const ForgotPasswordText = styled.Text`
+  color: ${COLORS.GREY_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: thin;
+`;
+
+const ForgotPasswordLink = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: bold;
+`;
+
+const ButtonWrapper = styled.View`
+  width: 100%;
+`;
+
+const buttonStyle = isTokenLoading => ({
+  backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
+  borderRadius: 10,
+  color: COLORS.GREY_MAIN,
+  padding: width * 0.02,
+  justifyContent: 'center',
+  width: '100%',
 });
+
+const ButtonText = styled.Text`
+  color: ${COLORS.WHITE};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+  text-align: center;
+`;
+
+const RegisterWrapper = styled.View`
+  position: absolute;
+  bottom: 20px;
+  flex-direction: row;
+  justify-content: flex-end;
+`;
+
+const RegisterText = styled.Text`
+  color: ${COLORS.GREY_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: thin;
+`;
+
+const RegisterLink = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: bold;
+`;

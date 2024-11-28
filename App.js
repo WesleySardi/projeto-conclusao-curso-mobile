@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {StatusBar} from 'react-native';
 import Footer from './src/components/footer/Footer';
 import Header from './src/components/header/Header';
 import Login from './src/pages/login/Login';
@@ -19,14 +19,20 @@ import {UserProvider} from './src/contexts/UserContext';
 import {COLORS} from './src/constants/constants';
 import Toast, {BaseToast} from 'react-native-toast-message';
 import {navigationRef} from './src/utils/NavigationService';
+import styled from 'styled-components/native'; // Importando o styled-components
 
 const Stack = createStackNavigator();
+
+// Criando o container com styled-components
+const Container = styled.View`
+  flex: 1;
+`;
 
 export default function App() {
   return (
     <NavigationContainer ref={navigationRef}>
       <UserProvider>
-        <View style={styles.container}>
+        <Container>
           <StatusBar style="auto" backgroundColor={COLORS.BLUE_MAIN} />
           <Stack.Navigator
             initialRouteName="Login"
@@ -53,7 +59,7 @@ export default function App() {
           </Stack.Navigator>
           <Header />
           <Footer />
-        </View>
+        </Container>
         <Toast
           config={{
             success: props => (
@@ -101,9 +107,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

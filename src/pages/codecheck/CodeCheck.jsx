@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Text,
-  TextInput,
-  Dimensions,
-} from 'react-native';
+import {Dimensions, Pressable, TextInput} from 'react-native';
+import styled from 'styled-components/native';
 import {COLORS} from '../../constants/constants';
 import getFunctions from '../../functions/getFunctions';
 import {createSmsRequest, smsVerifyRequest} from '../../services/services';
@@ -55,31 +49,27 @@ export default function CodeCheck() {
   }, []);
 
   return (
-    <View style={styles.view1}>
+    <Container>
       <BubbleBackground />
-      <View style={styles.view2}>
-        <View style={styles.viewTitle}>
-          <Text style={styles.title}>Insira o código</Text>
-        </View>
-        <View style={styles.view3}>
-          <View>
-            <TextInput
-              placeholder="Código SMS"
-              keyboardType="numeric"
-              onChangeText={text => setSmsValue(text)}
-              value={smsValue}
-              style={styles.input}
-            />
-            <View style={styles.viewSendCodeAgain}>
-              <Pressable
-                onPress={() => fillData()}
-                style={styles.pressableSendCodeAgain}>
-                <Text style={styles.titleSendCodeAgain}>Reenviar código</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-        <View style={styles.viewButton}>
+      <Content>
+        <TitleView>
+          <Title>Insira o código</Title>
+        </TitleView>
+        <InputWrapper>
+          <TextInput
+            placeholder="Código SMS"
+            keyboardType="numeric"
+            onChangeText={text => setSmsValue(text)}
+            value={smsValue}
+            style={inputStyle}
+          />
+          <SendCodeAgainView>
+            <Pressable onPress={() => fillData()}>
+              <ResendCodeText>Reenviar código</ResendCodeText>
+            </Pressable>
+          </SendCodeAgainView>
+        </InputWrapper>
+        <ButtonView>
           <Pressable
             disabled={isTokenLoading}
             onPress={() => {
@@ -107,78 +97,89 @@ export default function CodeCheck() {
                 }
               }
             }}
-            style={() => styles.pressable(isTokenLoading)}>
-            <Text style={styles.titleButton}>
+            style={{
+              backgroundColor: isTokenLoading
+                ? COLORS.GREY_MAIN
+                : COLORS.GREEN_MAIN,
+              borderRadius: 10,
+              padding: width * 0.02,
+              width: '100%',
+              justifyContent: 'center',
+            }}>
+            <TitleButton>
               {isTokenLoading ? 'Carregando...' : 'Confirmar'}
-            </Text>
+            </TitleButton>
           </Pressable>
-        </View>
-      </View>
-    </View>
+        </ButtonView>
+      </Content>
+    </Container>
   );
 }
 
-const styles = StyleSheet.create({
-  input: {
-    backgroundColor: COLORS.WHITE,
-    borderColor: COLORS.BLUE_MAIN,
-    borderRadius: 10,
-    borderWidth: 1,
-    color: COLORS.GREY_MAIN,
-    fontSize: width * 0.045,
-    height: height * 0.06,
-    marginBottom: '5%',
-    marginTop: '5%',
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    textAlign: 'left',
-  },
-  pressable: isTokenLoading => ({
-    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
-    borderRadius: 10,
-    color: COLORS.GREY_MAIN,
-    padding: width * 0.02,
-    justifyContent: 'center',
-    width: '100%',
-  }),
-  title: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-  },
-  titleButton: {
-    color: COLORS.WHITE,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  titleSendCodeAgain: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-    margin: 4,
-    textAlign: 'right',
-  },
-  view1: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-  },
-  view2: {
-    alignItems: 'center',
-    width: '60%',
-  },
-  view3: {
-    marginBottom: height * 0.03,
-    marginTop: height * 0.03,
-    width: '100%',
-  },
-  viewButton: {
-    width: '100%',
-  },
-  viewTitle: {
-    alignItems: 'center',
-    width: '100%',
-  },
-});
+// Estilização com Styled Components
+const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+
+const Content = styled.View`
+  align-items: center;
+  width: 60%;
+`;
+
+const TitleView = styled.View`
+  align-items: center;
+  width: 100%;
+`;
+
+const Title = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+`;
+
+const InputWrapper = styled.View`
+  margin-bottom: ${height * 0.03}px;
+  margin-top: ${height * 0.03}px;
+  width: 100%;
+`;
+
+const inputStyle = {
+  backgroundColor: COLORS.WHITE,
+  borderColor: COLORS.BLUE_MAIN,
+  borderRadius: 10,
+  borderWidth: 1,
+  color: COLORS.GREY_MAIN,
+  fontSize: width * 0.045,
+  height: height * 0.06,
+  marginBottom: '5%',
+  marginTop: '5%',
+  paddingLeft: '5%',
+  paddingRight: '5%',
+  textAlign: 'left',
+};
+
+const SendCodeAgainView = styled.View`
+  align-items: flex-end;
+  margin-top: 5px;
+`;
+
+const ResendCodeText = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: bold;
+  margin: 4px;
+`;
+
+const ButtonView = styled.View`
+  width: 100%;
+`;
+
+const TitleButton = styled.Text`
+  color: ${COLORS.WHITE};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+  text-align: center;
+`;

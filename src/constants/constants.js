@@ -1,5 +1,5 @@
 // Importe StyleSheet do React Native para definir estilos
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 // Cores
 export const COLORS = {
@@ -31,14 +31,14 @@ export const FONTS = {
 export const SHADOWS = {
   SMALL_BOX: {
     shadowColor: 'rgba(0, 0, 0, 0.05)',
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: {width: 0, height: 6},
     shadowRadius: 24,
     shadowOpacity: 1,
     elevation: 1, // Adiciona uma sombra equivalente no Android
   },
   LARGE_BOX: {
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowRadius: 12,
     shadowOpacity: 1,
     elevation: 1,
@@ -59,5 +59,5 @@ FONTS.BUTTON_SIZE = FONTS.BUTTON_SIZE * 2;
 FONTS.LABEL_SIZE = FONTS.LABEL_SIZE * 2;
 
 // Converta os estilos de sombra para objetos de estilo React Native
-SHADOWS.SMALL_BOX = StyleSheet.flatten([SHADOWS.SMALL_BOX]);
-SHADOWS.LARGE_BOX = StyleSheet.flatten([SHADOWS.LARGE_BOX]);
+//SHADOWS.SMALL_BOX = StyleSheet.flatten([SHADOWS.SMALL_BOX]);
+//SHADOWS.LARGE_BOX = StyleSheet.flatten([SHADOWS.LARGE_BOX]);

@@ -220,7 +220,7 @@ export default function RegisterOrChangeUser({navigation}) {
                 placeholder="Idade do dependente"
                 placeholderTextColor={COLORS.GREY_MAIN}
                 onChangeText={text => setTextoIdadeInput(text)}
-                value={textoIdadeInput.toString()}
+                value={textoIdadeInput?.toString()}
                 style={styles.input}
                 maxLength={3}
                 keyboardType="numeric"

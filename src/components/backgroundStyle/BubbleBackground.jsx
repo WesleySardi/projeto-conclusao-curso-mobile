@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {Dimensions} from 'react-native';
+import styled from 'styled-components/native';
 
+// Componente de fundo com bolhas
 const BubbleBackground = ({children}) => {
   const [bubbleCoordinates, setBubbleCoordinates] = useState([]);
 
+  // Função para gerar as coordenadas das bolhas
   const generateBubbleCoordinates = () => {
     const {width, height} = Dimensions.get('window');
     const coordinates = [];
@@ -32,36 +35,38 @@ const BubbleBackground = ({children}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Container>
       {bubbleCoordinates.map((bubble, index) => (
-        <View
+        <Bubble
           key={index}
-          style={[
-            styles.bubble,
-            {
-              left: bubble.x,
-              top: bubble.y,
-              width: bubble.size,
-              height: bubble.size,
-            },
-          ]}
+          style={{
+            left: bubble.x,
+            top: bubble.y,
+            width: bubble.size,
+            height: bubble.size,
+          }}
         />
       ))}
       {children}
-    </View>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'white',
-  },
-  bubble: {
-    position: 'absolute',
-    backgroundColor: 'rgba(173, 216, 230, 0.3)',
-    borderRadius: 100,
-  },
-});
+// Estilizando o container com styled-components
+const Container = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+`;
+
+// Estilizando a bolha com styled-components
+const Bubble = styled.View`
+  position: absolute;
+  background-color: rgba(173, 216, 230, 0.3);
+  border-radius: 100px;
+`;
 
 export default BubbleBackground;

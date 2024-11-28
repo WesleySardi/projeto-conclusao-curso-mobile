@@ -1,13 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  StyleSheet,
-  Image,
-  Linking,
-  TouchableOpacity,
-} from 'react-native';
+import {TextInput, Text, Image, Linking, TouchableOpacity} from 'react-native';
+import styled from 'styled-components/native';
 import {COLORS} from '../../constants/constants';
 import NfcVector from '../../assets/gifs/nfc_vector.gif';
 import EmergencyCallImage from '../../assets/imgs/EmergencyCall.png';
@@ -101,20 +94,18 @@ const FindDependentLocally = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <Container>
       {nfcRead ? (
-        <View style={styles.container}>
-          <Image source={PersonGif} style={styles.gifStyleNfc} />
-          <Text style={styles.title}>Telefone de Emergência</Text>
-          <Text style={styles.subTitle}>
+        <ViewContainer>
+          <Image source={PersonGif} style={gifStyleNfc} />
+          <Title>Telefone de Emergência</Title>
+          <SubTitle>
             Entre em contato com o responsável da pessoa encontrada.
-          </Text>
-          <Text style={styles.label}>Telefone de Emergência:</Text>
-          <TextInput
-            style={styles.input}
+          </SubTitle>
+          <Label>Telefone de Emergência:</Label>
+          <PhoneInput
             onChangeText={setEmergencyPhone}
             value={maskEmergencyPhone(emergencyPhone)}
-            placeholderTextColor={COLORS.GREY_MAIN}
             placeholder="Telefone de emergência"
             editable={false}
           />
@@ -124,70 +115,78 @@ const FindDependentLocally = () => {
               style={{width: 100, height: 100}}
             />
           </TouchableOpacity>
-        </View>
+        </ViewContainer>
       ) : (
-        <View>
-          <Image source={NfcVector} style={styles.zloBandStyle} />
-          <Text style={styles.titleNfcNear}>Aproxime a tag NFC...</Text>
-        </View>
+        <ViewContainer>
+          <Image
+            source={NfcVector}
+            style={{marginBottom: '20px', width: '300px', height: '300px'}}
+          />
+          <TitleNfcNear>Aproxime a tag NFC...</TitleNfcNear>
+        </ViewContainer>
       )}
-    </View>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  input: {
-    height: 60,
-    fontSize: 20,
-    width: '100%',
-    textAlign: 'center',
-    borderColor: '#33A1DE',
-    borderRadius: 10,
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    color: 'black',
-  },
-  label: {
-    alignSelf: 'center',
-    marginLeft: 10,
-    marginBottom: 5,
-    color: COLORS.BLACK,
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 25,
-    color: COLORS.BLACK,
-  },
-  subTitle: {
-    textAlign: 'center',
-    fontSize: 16,
-    marginBottom: 25,
-    color: COLORS.BLACK,
-  },
-  gifStyleNfc: {
-    width: 200,
-    height: 200,
-  },
-  titleNfcNear: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    textAlign: 'center',
-    color: COLORS.BLACK,
-  },
-  zloBandStyle: {
-    marginBottom: 20,
-    width: 300,
-    height: 300,
-  },
-});
+const Container = styled.View`
+  background-color: white;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+`;
+
+const ViewContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+`;
+
+const Title = styled.Text`
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 25px;
+  color: ${COLORS.BLACK};
+`;
+
+const SubTitle = styled.Text`
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: ${COLORS.BLACK};
+`;
+
+const Label = styled.Text`
+  align-self: center;
+  margin-left: 10px;
+  margin-bottom: 5px;
+  color: ${COLORS.BLACK};
+`;
+
+const PhoneInput = styled.TextInput`
+  height: 60px;
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+  border-color: #33a1de;
+  border-radius: 10px;
+  border-width: 1px;
+  margin-bottom: 20px;
+  padding-horizontal: 10px;
+  color: black;
+`;
+
+const gifStyleNfc = {
+  width: 200,
+  height: 200,
+};
+
+const TitleNfcNear = styled.Text`
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  color: ${COLORS.BLACK};
+`;
 
 export default FindDependentLocally;

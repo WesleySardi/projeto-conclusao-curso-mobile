@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
 import {
-  View,
-  TextInput,
-  Pressable,
   Dimensions,
-  Text,
   KeyboardAvoidingView,
   ScrollView,
-  StyleSheet,
+  TextInput,
+  Pressable,
+  Text,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {COLORS} from '../../constants/constants';
@@ -15,6 +13,7 @@ import {authForgotPasswordRequest} from '../../services/services';
 import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
 import {faPaperPlane} from '@fortawesome/free-solid-svg-icons/faPaperPlane';
 import Toast from 'react-native-toast-message';
+import styled from 'styled-components/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -60,12 +59,12 @@ const ForgotPassword = ({navigation}) => {
         contentContainerStyle={{flexGrow: 1}}
         keyboardShouldPersistTaps="handled">
         <BubbleBackground />
-        <View style={styles.container}>
+        <Container>
           {emailSent ? (
             <>
-              <Text style={styles.titleEmailSent}>
+              <TitleEmailSent>
                 Acesse o seu e-mail para alterar a senha.
-              </Text>
+              </TitleEmailSent>
               <FontAwesomeIcon
                 icon={faPaperPlane}
                 color={COLORS.DARK_BLUE}
@@ -74,89 +73,94 @@ const ForgotPassword = ({navigation}) => {
             </>
           ) : (
             <>
-              <View style={styles.viewTitle}>
-                <Text style={styles.title}>Digite o seu e-mail</Text>
-              </View>
-              <TextInput
-                style={styles.input}
+              <ViewTitle>
+                <Title>Digite o seu e-mail</Title>
+              </ViewTitle>
+              <StyledInput
                 placeholder="Digite o seu e-mail"
                 keyboardType="email-address"
                 value={email}
                 onChangeText={text => setEmail(text)}
                 maxLength={30}
               />
-              <View style={styles.viewButton}>
-                <Pressable
+              <ViewButton>
+                <StyledPressable
                   disabled={loading}
                   onPress={() => validateEmail()}
-                  style={() => styles.pressable(loading)}>
-                  <Text style={styles.titleButton}>
+                  loading={loading}>
+                  <ButtonText>
                     {loading ? 'Carregando...' : 'Enviar Código'}
-                  </Text>
-                </Pressable>
-              </View>
+                  </ButtonText>
+                </StyledPressable>
+              </ViewButton>
             </>
           )}
-        </View>
+        </Container>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  input: {
-    backgroundColor: COLORS.WHITE,
-    borderColor: COLORS.BLUE_MAIN,
-    borderRadius: 10,
-    borderWidth: 1,
-    color: COLORS.BLACK,
-    fontSize: width * 0.045,
-    height: height * 0.06,
-    marginBottom: '6%',
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    width: '100%',
-  },
-  pressable: loading => ({
-    backgroundColor: loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
-    borderRadius: width * 0.03,
-    height: height * 0.06,
-    justifyContent: 'center',
-    width: '100%',
-  }),
-  viewButton: {
-    width: '100%',
-  },
-  titleButton: {
-    color: COLORS.WHITE,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  title: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-  },
-  titleEmailSent: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    width: 300,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  viewTitle: {
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: height * 0.03,
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
+
+const ViewTitle = styled.View`
+  align-items: center;
+  width: 100%;
+  margin-bottom: ${height * 0.03}px;
+`;
+
+const Title = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+`;
+
+const StyledInput = styled.TextInput`
+  background-color: ${COLORS.WHITE};
+  border-color: ${COLORS.BLUE_MAIN};
+  border-radius: 10px;
+  border-width: 1px;
+  color: ${COLORS.BLACK};
+  font-size: ${width * 0.045}px;
+  height: ${height * 0.06}px;
+  margin-bottom: 6%;
+  padding-left: 5%;
+  padding-right: 5%;
+  width: 100%;
+`;
+
+const ViewButton = styled.View`
+  width: 100%;
+`;
+
+const StyledPressable = styled(Pressable)`
+  background-color: ${({loading}) =>
+    loading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN};
+  border-radius: ${width * 0.03}px;
+  height: ${height * 0.06}px;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ButtonText = styled.Text`
+  color: ${COLORS.WHITE};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+  text-align: center;
+`;
+
+const TitleEmailSent = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+  width: 300px;
+  text-align: center;
+  margin-bottom: 20px;
+`;
 
 export default ForgotPassword;

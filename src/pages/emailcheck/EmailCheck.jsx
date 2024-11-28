@@ -1,17 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-  Text,
-  TextInput,
-  Dimensions,
-} from 'react-native';
+import {Dimensions, Pressable, TextInput, Text, View} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {COLORS} from '../../constants/constants';
 import {useUser} from '../../contexts/UserContext';
 import {createEmailRequest, emailVerifyRequest} from '../../services/services';
 import BubbleBackground from '../../components/backgroundStyle/BubbleBackground';
+import styled from 'styled-components/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -64,31 +58,27 @@ export default function EmailCheck({navigation}) {
   }, []);
 
   return (
-    <View style={styles.view1}>
+    <ViewContainer>
       <BubbleBackground />
-      <View style={styles.view2}>
-        <View style={styles.viewTitle}>
-          <Text style={styles.title}>Insira o código</Text>
-        </View>
-        <View style={styles.view3}>
-          <View>
-            <TextInput
-              placeholder="Código do E-mail"
-              keyboardType="number-pad"
-              onChangeText={text => setEmailValue(text)}
-              value={emailValue}
-              style={styles.input}
-            />
-            <View style={styles.viewSendCodeAgain}>
-              <Pressable
-                onPress={() => fillData()}
-                style={styles.pressableSendCodeAgain}>
-                <Text style={styles.titleSendCodeAgain}>Reenviar código</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-        <View style={styles.viewButton}>
+      <ViewContent>
+        <ViewTitle>
+          <Title>Insira o código</Title>
+        </ViewTitle>
+        <ViewInput>
+          <TextInput
+            placeholder="Código do E-mail"
+            keyboardType="number-pad"
+            onChangeText={text => setEmailValue(text)}
+            value={emailValue}
+            style={inputStyle}
+          />
+          <ViewResendCode>
+            <Pressable onPress={() => fillData()} style={pressableResendCode}>
+              <ResendCodeText>Reenviar código</ResendCodeText>
+            </Pressable>
+          </ViewResendCode>
+        </ViewInput>
+        <ViewButton>
           <Pressable
             disabled={isTokenLoading}
             onPress={() => {
@@ -109,85 +99,99 @@ export default function EmailCheck({navigation}) {
                     type: 'info',
                     position: 'top',
                     text1: 'Info!',
-                    text2: 'Você deve digitar um código de 7 ou 8 números.',
+                    text2: 'Você deve digitar um código de 6 números.',
                     visibilityTime: 2000,
                     autoHide: true,
                   });
                 }
               }
             }}
-            style={() => styles.pressable(isTokenLoading)}>
-            <Text style={styles.titleButton}>
+            style={() => pressableStyle(isTokenLoading)}>
+            <ButtonTitle>
               {isTokenLoading ? 'Carregando...' : 'Confirmar'}
-            </Text>
+            </ButtonTitle>
           </Pressable>
-        </View>
-      </View>
-    </View>
+        </ViewButton>
+      </ViewContent>
+    </ViewContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  input: {
-    backgroundColor: COLORS.WHITE,
-    borderColor: COLORS.BLUE_MAIN,
-    borderRadius: 10,
-    borderWidth: 1,
-    color: COLORS.GREY_MAIN,
-    fontSize: width * 0.045,
-    height: height * 0.06,
-    marginBottom: '5%',
-    marginTop: '5%',
-    paddingLeft: '5%',
-    paddingRight: '5%',
-    textAlign: 'left',
-  },
-  pressable: isTokenLoading => ({
-    backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
-    borderRadius: 10,
-    color: COLORS.GREY_MAIN,
-    padding: width * 0.02,
-    justifyContent: 'center',
-    width: '100%',
-  }),
-  title: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-  },
-  titleButton: {
-    color: COLORS.WHITE,
-    fontSize: width * 0.06,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  titleSendCodeAgain: {
-    color: COLORS.BLUE_MAIN,
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-    margin: 4,
-    textAlign: 'right',
-  },
-  view1: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    width: '100%',
-  },
-  view2: {
-    alignItems: 'center',
-    width: '60%',
-  },
-  view3: {
-    marginBottom: height * 0.03,
-    marginTop: height * 0.03,
-    width: '100%',
-  },
-  viewButton: {
-    width: '100%',
-  },
-  viewTitle: {
-    alignItems: 'center',
-    width: '100%',
-  },
+const pressableStyle = isTokenLoading => ({
+  backgroundColor: isTokenLoading ? COLORS.GREY_MAIN : COLORS.GREEN_MAIN,
+  borderRadius: 10,
+  color: COLORS.GREY_MAIN,
+  padding: width * 0.02,
+  justifyContent: 'center',
+  width: '100%',
 });
+
+const inputStyle = {
+  backgroundColor: COLORS.WHITE,
+  borderColor: COLORS.BLUE_MAIN,
+  borderRadius: 10,
+  borderWidth: 1,
+  color: COLORS.GREY_MAIN,
+  fontSize: width * 0.045,
+  height: height * 0.06,
+  marginBottom: '5%',
+  marginTop: '5%',
+  paddingLeft: '5%',
+  paddingRight: '5%',
+  textAlign: 'left',
+};
+
+const ViewContainer = styled.View`
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+  width: 100%;
+`;
+
+const ViewContent = styled.View`
+  align-items: center;
+  width: 60%;
+`;
+
+const ViewTitle = styled.View`
+  align-items: center;
+  width: 100%;
+`;
+
+const Title = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+`;
+
+const ViewInput = styled.View`
+  margin-bottom: ${height * 0.03}px;
+  margin-top: ${height * 0.03}px;
+  width: 100%;
+`;
+
+const ViewResendCode = styled.View`
+  margin-top: 4%;
+`;
+
+const ResendCodeText = styled.Text`
+  color: ${COLORS.BLUE_MAIN};
+  font-size: ${width * 0.04}px;
+  font-weight: bold;
+  text-align: right;
+`;
+
+const ViewButton = styled.View`
+  width: 100%;
+`;
+
+const ButtonTitle = styled.Text`
+  color: ${COLORS.WHITE};
+  font-size: ${width * 0.06}px;
+  font-weight: 600;
+  text-align: center;
+`;
+
+const pressableResendCode = styled.View`
+  margin: 4%;
+`;

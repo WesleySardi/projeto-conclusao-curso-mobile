@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Pressable, Keyboard, Dimensions} from 'react-native';
+import {Keyboard, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircleUser} from '@fortawesome/free-solid-svg-icons/faCircleUser';
 import {faBell} from '@fortawesome/free-solid-svg-icons/faBell';
@@ -10,6 +10,7 @@ import Drawer from '../drawer/Drawer';
 import {useNavigation} from '@react-navigation/native';
 import {useUser} from '../../contexts/UserContext';
 import {COLORS} from '../../constants/constants';
+import styled from 'styled-components/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -39,16 +40,15 @@ export default function Footer() {
   };
 
   return (
-    <View style={styles.view1}>
+    <View1>
       {drawerValue === 1 && (
         <Drawer state={animacaoAtiva} handleDrawer={handleDrawer} />
       )}
-      {currentScreen != 'AccessRecovery' &&
-        currentScreen != 'Register' &&
-        currentScreen != 'Login' && (
-          <View style={styles.view2}>
+      {currentScreen !== 'AccessRecovery' &&
+        currentScreen !== 'Register' &&
+        currentScreen !== 'Login' && (
+          <View2>
             <Pressable
-              style={styles.pressable}
               onPress={() => {
                 Keyboard.dismiss();
                 navigation.navigate('Home');
@@ -58,24 +58,22 @@ export default function Footer() {
                 color={
                   currentScreen === 'Home' ? COLORS.YELLOW_MAIN : COLORS.WHITE
                 }
-                style={styles.image}
+                style={imageStyle}
                 size={height * 0.035}
               />
             </Pressable>
             <Pressable
-              style={styles.pressable}
               onPress={() => {
                 Keyboard.dismiss();
               }}>
               <FontAwesomeIcon
                 icon={faBell}
                 color={COLORS.WHITE}
-                style={styles.imageMiddle}
+                style={imageMiddleStyle}
                 size={height * 0.04}
               />
             </Pressable>
-            <Pressable
-              style={styles.pressableMain}
+            <PressableMain
               onPress={() => {
                 Keyboard.dismiss();
                 navigation.navigate('FindDependentLocally');
@@ -87,12 +85,11 @@ export default function Footer() {
                     ? COLORS.YELLOW_MAIN
                     : COLORS.WHITE
                 }
-                style={styles.imageMain}
+                style={imageMainStyle}
                 size={height * 0.045}
               />
-            </Pressable>
+            </PressableMain>
             <Pressable
-              style={styles.pressable}
               onPress={() => {
                 Keyboard.dismiss();
                 navigation.navigate('UserProfile');
@@ -104,7 +101,7 @@ export default function Footer() {
                     ? COLORS.YELLOW_MAIN
                     : COLORS.WHITE
                 }
-                style={styles.imageMiddle}
+                style={imageMiddleStyle}
                 size={height * 0.04}
               />
             </Pressable>
@@ -112,63 +109,66 @@ export default function Footer() {
               onPress={() => {
                 Keyboard.dismiss();
                 handleDrawer();
-              }}
-              style={styles.pressable}>
+              }}>
               <FontAwesomeIcon
                 icon={faBars}
                 color={
-                  drawerButtonValue == 0 ? COLORS.WHITE : COLORS.YELLOW_MAIN
+                  drawerButtonValue === 0 ? COLORS.WHITE : COLORS.YELLOW_MAIN
                 }
-                style={styles.image}
+                style={imageStyle}
                 size={height * 0.035}
               />
             </Pressable>
-          </View>
+          </View2>
         )}
-    </View>
+    </View1>
   );
 }
 
-const styles = StyleSheet.create({
-  image: {
-    height: height * 0.035,
-    width: height * 0.035,
-  },
-  imageMain: {
-    height: height * 0.045,
-    padding: 15,
-    width: height * 0.045,
-  },
-  imageMiddle: {
-    height: height * 0.04,
-    marginBottom: 8,
-    width: height * 0.04,
-  },
-  pressable: {
-    justifyContent: 'center',
-    padding: 15,
-  },
-  pressableMain: {
-    backgroundColor: COLORS.DARK_BLUE,
-    borderColor: COLORS.WHITE,
-    borderRadius: width * 0.5,
-    borderWidth: 3,
-    bottom: 20,
-    padding: 15,
-  },
-  view1: {
-    bottom: 0,
-    flex: 1,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-  },
-  view2: {
-    backgroundColor: COLORS.BLUE_MAIN,
-    borderTopEndRadius: 30,
-    borderTopStartRadius: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-});
+const imageStyle = {
+  height: height * 0.035,
+  width: height * 0.035,
+};
+
+const imageMainStyle = {
+  height: height * 0.045,
+  padding: 15,
+  width: height * 0.045,
+};
+
+const imageMiddleStyle = {
+  height: height * 0.04,
+  marginBottom: 8,
+  width: height * 0.04,
+};
+
+const View1 = styled.View`
+  bottom: 0;
+  flex: 1;
+  left: 0;
+  position: absolute;
+  right: 0;
+`;
+
+const View2 = styled.View`
+  background-color: ${COLORS.BLUE_MAIN};
+  border-top-end-radius: 30px;
+  border-top-start-radius: 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+const Pressable = styled.Pressable`
+  justify-content: center;
+  padding: 15px;
+`;
+
+const PressableMain = styled.Pressable`
+  background-color: ${COLORS.DARK_BLUE};
+  border-color: ${COLORS.WHITE};
+  border-radius: ${width * 0.5}px;
+  border-width: 3px;
+  bottom: 20px;
+  padding: 15px;
+`;

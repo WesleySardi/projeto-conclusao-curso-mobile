@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View, Pressable, Animated, Dimensions} from 'react-native';
+import {Animated, Dimensions} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faCircleHalfStroke} from '@fortawesome/free-solid-svg-icons/faCircleHalfStroke';
 import * as Animatable from 'react-native-animatable';
 import {COLORS} from '../../constants/constants';
+import styled from 'styled-components/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -20,11 +21,11 @@ export default function Drawer({state}) {
   }, [animacaoAtiva]);
 
   return (
-    <View style={styles.view1}>
+    <View1>
       <Animatable.View style={[{opacity: opacity}, styles.blur]}>
         <Animatable.View style={{opacity: opacity}}>
-          <View style={styles.view2}>
-            <Pressable style={styles.pressable}>
+          <View2>
+            <Pressable>
               <FontAwesomeIcon
                 icon={faCircleHalfStroke}
                 color={COLORS.WHITE}
@@ -32,40 +33,41 @@ export default function Drawer({state}) {
                 size={height * 0.035}
               />
             </Pressable>
-          </View>
+          </View2>
         </Animatable.View>
       </Animatable.View>
-    </View>
+    </View1>
   );
 }
 
-const styles = StyleSheet.create({
+const View1 = styled.View`
+  position: absolute;
+  bottom: 0;
+  height: ${height}px;
+  width: ${width}px;
+`;
+
+const View2 = styled.View`
+  background-color: ${COLORS.BLUE_MAIN};
+  border-bottom-start-radius: 30px;
+  height: ${height * 0.35}px;
+  width: ${width * 0.15}px;
+  justify-content: flex-end;
+`;
+
+const Pressable = styled.Pressable`
+  padding-bottom: ${width * 0.05}px;
+  align-items: center;
+`;
+
+const styles = {
   blur: {
     alignItems: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     width: '100%',
     height: '100%',
   },
-  pressable: {
-    paddingBottom: width * 0.05,
-    alignItems: 'center',
+  icon: {
+    margin: 0,
   },
-  text: {
-    color: COLORS.WHITE,
-    fontSize: height * 0.025,
-    fontWeight: '500',
-  },
-  view1: {
-    position: 'absolute',
-    bottom: 0,
-    height: height,
-    width: width,
-  },
-  view2: {
-    backgroundColor: COLORS.BLUE_MAIN,
-    borderBottomStartRadius: 30,
-    height: height * 0.35,
-    width: width * 0.15,
-    justifyContent: 'flex-end',
-  },
-});
+};
