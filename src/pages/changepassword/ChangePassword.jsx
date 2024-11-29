@@ -26,6 +26,9 @@ export default function ChangePassword({navigation}) {
   const [isNovaSenhaVisible, setIsNovaSenhaVisible] = useState(false);
   const [isRepSenhaVisible, setIsRepSenhaVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const chooseIcon = condition => {
+    condition ? faEye : faEyeSlash;
+  };
 
   const changeData = async () => {
     if (textoNovaSenhaInput != textoRepSenhaInput) {
@@ -64,14 +67,10 @@ export default function ChangePassword({navigation}) {
             <Text style={styles.titleInput}>Nova senha</Text>
             <View style={styles.viewInputs}>
               <Pressable
-                onPress={
-                  isNovaSenhaVisible
-                    ? () => setIsNovaSenhaVisible(false)
-                    : () => setIsNovaSenhaVisible(true)
-                }
+                onPress={() => setIsRepSenhaVisible(prevState => !prevState)}
                 style={styles.pressableVisible}>
                 <FontAwesomeIcon
-                  icon={isNovaSenhaVisible ? faEye : faEyeSlash}
+                  icon={() => chooseIcon(isNovaSenhaVisible)}
                   color={COLORS.BLUE_MAIN}
                   style={styles.iconVisible}
                   size={height * 0.03}
@@ -89,14 +88,10 @@ export default function ChangePassword({navigation}) {
             <Text style={styles.titleInput}>Confirme a nova senha</Text>
             <View style={styles.viewInputs}>
               <Pressable
-                onPress={
-                  isRepSenhaVisible
-                    ? () => setIsRepSenhaVisible(false)
-                    : () => setIsRepSenhaVisible(true)
-                }
+                onPress={() => setIsRepSenhaVisible(prevState => !prevState)}
                 style={styles.pressableVisible}>
                 <FontAwesomeIcon
-                  icon={isRepSenhaVisible ? faEye : faEyeSlash}
+                  icon={() => chooseIcon(isRepSenhaVisible)}
                   color={COLORS.BLUE_MAIN}
                   style={styles.iconVisible}
                   size={height * 0.03}
@@ -119,7 +114,7 @@ export default function ChangePassword({navigation}) {
             onPress={() => changeData()}
             style={() => styles.pressable(loading)}>
             <Text style={styles.titleButton}>
-              {loading ? 'Carregando...' : 'Confirmar'}
+              {(loading && 'Carregando...') || 'Confirmar'}
             </Text>
           </Pressable>
         </View>

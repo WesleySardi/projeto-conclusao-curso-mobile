@@ -166,14 +166,10 @@ export default function Registration({navigation}) {
             <Text style={styles.titleInput}>Senha</Text>
             <View style={styles.viewVisibility}>
               <Pressable
-                onPress={
-                  isPasswordVisible
-                    ? () => setIsPasswordVisible(false)
-                    : () => setIsPasswordVisible(true)
-                }
+                onPress={() => setIsPasswordVisible(prev => !prev)}
                 style={styles.pressableVisible}>
                 <FontAwesomeIcon
-                  icon={(isPasswordVisible && faEye) || faEyeSlash}
+                  icon={isPasswordVisible ? faEye : faEyeSlash}
                   color="#33A1DE"
                   style={styles.iconVisible}
                   size={height * 0.03}
@@ -183,7 +179,7 @@ export default function Registration({navigation}) {
             <TextInput
               placeholder="Senha"
               placeholderTextColor={COLORS.GREY_MAIN}
-              secureTextEntry={isPasswordVisible ? false : true}
+              secureTextEntry={!isPasswordVisible}
               onChangeText={text => setPasswordValue(text)}
               value={passwordValue}
               style={styles.input}
@@ -194,11 +190,7 @@ export default function Registration({navigation}) {
             <Text style={styles.titleInput}>Confirmar senha</Text>
             <View style={styles.viewVisibility}>
               <Pressable
-                onPress={
-                  isConfPasswordVisible
-                    ? () => setIsConfPasswordVisible(false)
-                    : () => setIsConfPasswordVisible(true)
-                }
+                onPress={() => setIsConfPasswordVisible(prev => !prev)}
                 style={styles.pressableVisible}>
                 <FontAwesomeIcon
                   icon={isConfPasswordVisible ? faEye : faEyeSlash}
@@ -211,7 +203,7 @@ export default function Registration({navigation}) {
             <TextInput
               placeholder="Confirmar senha"
               placeholderTextColor={COLORS.GREY_MAIN}
-              secureTextEntry={isConfPasswordVisible ? false : true}
+              secureTextEntry={!isConfPasswordVisible}
               onChangeText={text => setConfPasswordValue(text)}
               value={confPasswordValue}
               style={styles.input}
