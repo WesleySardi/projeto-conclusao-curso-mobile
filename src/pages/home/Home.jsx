@@ -58,6 +58,7 @@ export default function Home({navigation}) {
   const [isPressedForward, setIsPressedForward] = useState(false);
   const [changeDependentColor, setChangeDependentColor] = useState(false);
   const [isList, setIsList] = useState(false);
+  const textStyle = {color: COLORS.DARK_BLUE, fontWeight: 'bold'};
 
   const findCurrentResponsible = async () => {
     const response = await attCurrentResponsible(emailRes, authToken);
@@ -102,7 +103,7 @@ export default function Home({navigation}) {
       return acc;
     }, []);
 
-    if (isList == false) {
+    if (!isList) {
       if (indices[0] == undefined) return setValueToShowData(0);
       else return setValueToShowData(indices[0]);
     } else {
@@ -147,7 +148,7 @@ export default function Home({navigation}) {
   };
 
   const changeDependent = type => {
-    if (changeDependentColor == false) {
+    if (!changeDependentColor) {
       setChangeDependentColor(true);
     } else {
       setChangeDependentColor(false);
@@ -167,13 +168,13 @@ export default function Home({navigation}) {
 
     if (type === 'forward') {
       setValueToShowData(
-        (valueToShowData + 1) % (userData ? 0 : userData.length),
+        (valueToShowData + 1) % (!userData ? 0 : userData.length),
       );
       setIsPressedForward(true);
     } else {
       setValueToShowData(
         (valueToShowData - 1 + userData.length) %
-          (userData ? 0 : userData.length),
+          (!userData ? 0 : userData.length),
       );
       setIsPressedBackward(true);
     }
@@ -181,7 +182,7 @@ export default function Home({navigation}) {
 
   const changeDependentNavigation = () => {
     setTextoInput('');
-    if (isList == false) {
+    if (!isList) {
       setListData(userData);
       setIsList(true);
     } else {
@@ -202,7 +203,7 @@ export default function Home({navigation}) {
   }, [navigation]);
 
   useEffect(() => {
-    if (valuesToShowData.length >= 0 && (userData ? 0 : userData.length) > 0) {
+    if (valuesToShowData.length >= 0 && (!userData ? 0 : userData.length) > 0) {
       setListData(valuesToShowData.map(indice => userData[indice]));
       setUserDataToBeShown(userData[valueToShowData]);
     }
@@ -220,7 +221,7 @@ export default function Home({navigation}) {
           style={[
             styles.viewWelcome,
             {
-              bottom: height * (userData ? 0.2 : 0.025),
+              bottom: !userData ? height * 0.2 : height * 0.025,
             },
           ]}>
           <View style={styles.viewWelcomeTexts}>
@@ -229,7 +230,7 @@ export default function Home({navigation}) {
           </View>
         </View>
 
-        {userData ? (
+        {!userData ? (
           <View style={styles.viewNoDependents}>
             <Pressable
               onPress={() => handlePress('register')}
@@ -288,7 +289,7 @@ export default function Home({navigation}) {
                   <Text style={styles.list_dependentsTotalText}>
                     Você é responsável por:{' '}
                     <Text style={{color: COLORS.RED_MAIN, fontWeight: 'bold'}}>
-                      {userData ? 0 : userData.length}
+                      {!userData ? 0 : userData.length}
                     </Text>{' '}
                     dependentes.
                   </Text>
@@ -374,24 +375,15 @@ export default function Home({navigation}) {
                   <View style={styles.viewDependentInfo}>
                     <View style={styles.infoDep}>
                       <Text style={[styles.textInfoDep, styles.spaceBottom]}>
-                        <Text
-                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
-                          Idade:
-                        </Text>{' '}
+                        <Text style={textStyle}>Idade:</Text>{' '}
                         {userDataToBeShown?.idadeDep}
                       </Text>
                       <Text style={[styles.textInfoDep, styles.spaceTopBottom]}>
-                        <Text
-                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
-                          Gênero:
-                        </Text>{' '}
+                        <Text style={textStyle}>Gênero:</Text>{' '}
                         {userDataToBeShown?.generoDep}
                       </Text>
                       <Text style={[styles.textInfoDep, styles.spaceTop]}>
-                        <Text
-                          style={{color: COLORS.DARK_BLUE, fontWeight: 'bold'}}>
-                          Tipo Sanguíneo:
-                        </Text>{' '}
+                        <Text style={textStyle}>Tipo Sanguíneo:</Text>{' '}
                         {userDataToBeShown?.tipoSanguineo}
                       </Text>
                     </View>
