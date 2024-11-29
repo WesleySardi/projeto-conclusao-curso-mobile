@@ -167,13 +167,13 @@ export default function Home({navigation}) {
 
     if (type === 'forward') {
       setValueToShowData(
-        (valueToShowData + 1) % (userData === null ? 0 : userData.length),
+        (valueToShowData + 1) % (userData ? 0 : userData.length),
       );
       setIsPressedForward(true);
     } else {
       setValueToShowData(
         (valueToShowData - 1 + userData.length) %
-          (userData === null ? 0 : userData.length),
+          (userData ? 0 : userData.length),
       );
       setIsPressedBackward(true);
     }
@@ -202,10 +202,7 @@ export default function Home({navigation}) {
   }, [navigation]);
 
   useEffect(() => {
-    if (
-      valuesToShowData.length >= 0 &&
-      (userData === null ? 0 : userData.length) > 0
-    ) {
+    if (valuesToShowData.length >= 0 && (userData ? 0 : userData.length) > 0) {
       setListData(valuesToShowData.map(indice => userData[indice]));
       setUserDataToBeShown(userData[valueToShowData]);
     }
@@ -223,7 +220,7 @@ export default function Home({navigation}) {
           style={[
             styles.viewWelcome,
             {
-              bottom: userData === null ? height * 0.2 : height * 0.025,
+              bottom: height * (userData ? 0.2 : 0.025),
             },
           ]}>
           <View style={styles.viewWelcomeTexts}>
@@ -232,7 +229,7 @@ export default function Home({navigation}) {
           </View>
         </View>
 
-        {userData === null ? (
+        {userData ? (
           <View style={styles.viewNoDependents}>
             <Pressable
               onPress={() => handlePress('register')}
@@ -269,8 +266,9 @@ export default function Home({navigation}) {
                     style={[
                       styles.buttonChangeDependentNavigation,
                       {
-                        backgroundColor:
-                          isList == true ? COLORS.GREY_MAIN : COLORS.BLACK,
+                        backgroundColor: isList
+                          ? COLORS.GREY_MAIN
+                          : COLORS.BLACK,
                       },
                     ]}
                     onPress={() => changeDependentNavigation()}>
@@ -284,13 +282,13 @@ export default function Home({navigation}) {
                 </View>
               </View>
             </View>
-            {isList == true ? (
+            {isList ? (
               <View style={styles.list_centralizationView}>
                 <View style={styles.list_viewDependentsInfoBackground}>
                   <Text style={styles.list_dependentsTotalText}>
                     Você é responsável por:{' '}
                     <Text style={{color: COLORS.RED_MAIN, fontWeight: 'bold'}}>
-                      {userData === null ? 0 : userData.length}
+                      {userData ? 0 : userData.length}
                     </Text>{' '}
                     dependentes.
                   </Text>

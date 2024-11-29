@@ -101,7 +101,7 @@ export default function Login({navigation}) {
                     }
                     style={styles.pressableVisible}>
                     <FontAwesomeIcon
-                      icon={isPasswordVisible ? faEye : faEyeSlash}
+                      icon={(isPasswordVisible && faEye) || faEyeSlash}
                       color={COLORS.BLUE_MAIN}
                       style={styles.iconVisible}
                       size={height * 0.03}

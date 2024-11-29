@@ -173,7 +173,7 @@ export default function Registration({navigation}) {
                 }
                 style={styles.pressableVisible}>
                 <FontAwesomeIcon
-                  icon={isPasswordVisible ? faEye : faEyeSlash}
+                  icon={(isPasswordVisible && faEye) || faEyeSlash}
                   color="#33A1DE"
                   style={styles.iconVisible}
                   size={height * 0.03}

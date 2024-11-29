@@ -63,22 +63,22 @@ export default function RegisterOrChangeUser({navigation}) {
     try {
       await NfcManager.requestTechnology(NfcTech.Ndef);
 
-      var responseCpfDep = await encryptUrlRequest(
+      let responseCpfDep = await encryptUrlRequest(
         {url: currentRes.cpfDep},
         authToken,
       );
 
-      var encryptedCpfDep = responseCpfDep.contentResponse.encryptedUrl;
+      let encryptedCpfDep = responseCpfDep.contentResponse.encryptedUrl;
 
-      var responseEmergePhone = await encryptUrlRequest(
+      let responseEmergePhone = await encryptUrlRequest(
         {url: emergePhone},
         authToken,
       );
 
-      var encryptedEmergePhone =
+      let encryptedEmergePhone =
         responseEmergePhone.contentResponse.encryptedUrl;
 
-      var url =
+      let url =
         URLs.ENCRYPT +
         `/home?cpfDep=${encodeURIComponent(
           encryptedCpfDep,
@@ -125,7 +125,7 @@ export default function RegisterOrChangeUser({navigation}) {
   const changeData = async () => {
     setLoading(true);
     if (isCreate) {
-      var newUser = {
+      let newUser = {
         cpfDep: textoCPFInput,
         nomeDep: textoNomeInput,
         idadeDep: textoIdadeInput,
@@ -149,7 +149,7 @@ export default function RegisterOrChangeUser({navigation}) {
         console.error(error);
       }
     } else {
-      var newUser = currentRes;
+      let newUser = currentRes;
 
       newUser.cpfDep = textoCPFInput;
       newUser.nomeDep = textoNomeInput;
