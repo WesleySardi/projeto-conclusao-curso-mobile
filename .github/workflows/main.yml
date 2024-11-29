@@ -81,8 +81,8 @@ jobs:
           S3_BUCKET: "zlo-mobile"
         run: |
           APK_PATH="android/app/build/outputs/apk/release/app-release.apk"
-          aws s3 cp $APK_PATH s3://$S3_BUCKET/app-release-${{ github.run_id }}.apk
-          echo "Download URL: https://$S3_BUCKET.s3.amazonaws.com/app-release-${{ github.run_id }}.apk"
+          aws s3 cp $APK_PATH s3://$S3_BUCKET/app-release.apk
+          echo "Download URL: https://$S3_BUCKET.s3.amazonaws.com/app-release.apk"
 
       # 9. Exibir o link de download
       - name: Show download URL
