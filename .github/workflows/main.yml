@@ -60,6 +60,7 @@ jobs:
       - name: Build APK
         run: |
           cd android
+          chmod +x gradlew  # Garantir que o gradlew tenha permissões de execução
           ./gradlew assembleRelease
 
       # 6. Listar o APK gerado
