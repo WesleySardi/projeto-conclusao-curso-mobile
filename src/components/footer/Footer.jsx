@@ -10,11 +10,12 @@ import Drawer from '../drawer/Drawer';
 import {useNavigation} from '@react-navigation/native';
 import {useUser} from '../../contexts/UserContext';
 import {COLORS} from '../../constants/constants';
+import registerDevice from '../../functions/registerDevice';
 
 const {width, height} = Dimensions.get('window');
 
 export default function Footer() {
-  const {currentScreen} = useUser();
+  const {currentScreen, authToken, currentRes} = useUser();
   const [drawerValue, setDrawerValue] = useState(0);
   const [drawerButtonValue, setDrawerButtonValue] = useState(0);
   const [animacaoAtiva, setAnimacaoAtiva] = useState(false);
@@ -45,7 +46,8 @@ export default function Footer() {
       )}
       {currentScreen != 'AccessRecovery' &&
         currentScreen != 'Register' &&
-        currentScreen != 'Login' && (
+        currentScreen != 'Login' &&
+        currentScreen != 'HeatmapPage' && (
           <View style={styles.view2}>
             <Pressable
               style={styles.pressable}
@@ -66,10 +68,12 @@ export default function Footer() {
               style={styles.pressable}
               onPress={() => {
                 Keyboard.dismiss();
+                registerDevice(currentRes.cpfRes, authToken)
+                navigation.navigate('NotificationTab');
               }}>
               <FontAwesomeIcon
                 icon={faBell}
-                color={COLORS.WHITE}
+                color={currentScreen === 'NotificationTab' ? COLORS.YELLOW_MAIN : COLORS.WHITE}
                 style={styles.imageMiddle}
                 size={height * 0.04}
               />

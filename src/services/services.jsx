@@ -542,7 +542,7 @@ const tryAuthRegisterRequest = async (emailData, passwordData, setLoading) => {
     const response = await axios.post(`${URLs.AUTH}/auth/register`, {
       email: emailData,
       password: passwordData,
-      role: 'RESPONSÁVEL',
+      role: 'RESPONSAVEL',
     });
 
     return response;
@@ -641,6 +641,7 @@ export const registerResponsibleRequest = async (data, setLoading) => {
     data.senhaRes,
     setLoading,
   );
+  console.log("ResponseVerify: ", responseVerify)
 
   if (responseVerify != null) {
     setLoading(false);
