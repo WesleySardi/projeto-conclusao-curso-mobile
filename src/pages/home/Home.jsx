@@ -345,7 +345,7 @@ export default function Home({navigation}) {
                       isPressedBackward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN
                     }
                     style={styles.arrowsIcon}
-                    size={isPressedBackward ? width * 0.1 : width * 0.09}
+                    size={width * (isPressedBackward ? 0.1 : 0.09)}
                   />
                 </Pressable>
                 <View
