@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, FlatList, Text, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
-import { NotificationItem } from './components/NotificationItem';
+import NotificationItem from './components/NotificationItem';
 import { useNotifications } from './hooks/useNotifications';
 import { useUser } from "../../contexts/UserContext"
 
@@ -14,7 +14,7 @@ const NotificationTab = () => {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#4CAF50" />
+        <ActivityIndicator size="large" color="#4CAF50"  testID="activity-indicator"/>
       </View>
     );
   }

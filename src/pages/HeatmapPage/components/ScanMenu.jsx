@@ -1,11 +1,8 @@
-// components/ScanMenu.jsx
-
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 const ScanMenu = ({ points, onItemPress }) => {
-  // Função para formatar a data
   const formatDate = (timestamp) => {
     const date = new Date(timestamp * 1000); // Converter para milissegundos
     return date.toLocaleString();
@@ -21,6 +18,7 @@ const ScanMenu = ({ points, onItemPress }) => {
           <TouchableOpacity
             style={styles.legendItem}
             onPress={() => onItemPress({ latitude: item.latitude, longitude: item.longitude })}
+            testID="scan-item"
           >
             <View style={styles.legendColor} />
             <View>

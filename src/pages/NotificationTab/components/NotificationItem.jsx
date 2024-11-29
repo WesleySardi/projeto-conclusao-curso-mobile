@@ -7,12 +7,15 @@ import {faTrash, faMap} from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 
-export const NotificationItem = ({notification, onDelete}) => {
+const NotificationItem = ({notification, onDelete}) => {
   const navigation = useNavigation();
   const renderRightActions = () => (
     <RectButton
       style={styles.deleteButton}
-      onPress={() => onDelete(notification.id_notificacao)}>
+      onPress={() => onDelete(notification.id_notificacao)}
+      accessibilityLabel="delete-button" // Adicionado
+      testID="delete-button" // Opcional
+      >
       <FontAwesomeIcon icon={faTrash} color="#fff" size={20} />
     </RectButton>
   );
@@ -25,11 +28,13 @@ export const NotificationItem = ({notification, onDelete}) => {
           style={styles.mapButton}
           onPress={() => {
             navigation.navigate('HeatmapPage', { cpf: notification.cpfDependente })
-          }}>
+          }}
+          accessibilityLabel="map-button" // Adicionado
+          testID="map-button" // Opcional
+          >
           <FontAwesomeIcon icon={faMap} color="#fff" size={20} />
-        </RectButton>
-      );
-    }
+        </RectButton>);
+        }
     return null;
   };
 
@@ -99,3 +104,5 @@ const styles = StyleSheet.create({
     width: 64,
   },
 });
+
+export default NotificationItem;

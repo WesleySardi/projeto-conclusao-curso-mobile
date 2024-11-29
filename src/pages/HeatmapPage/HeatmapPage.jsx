@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { HeatmapComponent } from './components/HeatmapComponent';
-import { useHeatmapData } from './hooks/useHeatmapData';
-import ScanMenu from './components/ScanMenu';
+import HeatmapComponent from './components/HeatmapComponent';
+import {useHeatmapData} from './hooks/useHeatmapData';
+import {ScanMenu} from './components/ScanMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faList } from '@fortawesome/free-solid-svg-icons';
-import useMenuAnimation from './hooks/useMenuAnimation';
+import {useMenuAnimation} from './hooks/useMenuAnimation';
 import { handleItemPress, handleMarkerPress } from './utils/handlers';
 import { HEADER_HEIGHT } from './constants';
 import { useRoute } from '@react-navigation/native';
@@ -23,7 +23,7 @@ const HeatmapPage = () => {
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#4CAF50" />
+        <ActivityIndicator size="large" color="#4CAF50" testID="activity-indicator"/>
       </View>
     );
   }
@@ -31,7 +31,7 @@ const HeatmapPage = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>{error}</Text>
+        <Text style={styles.errorText} testID="error-text">{error}</Text>
       </View>
     );
   }
@@ -39,7 +39,7 @@ const HeatmapPage = () => {
   if (originalPoints.length === 0) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.emptyText}>Nenhum dado disponível para exibir no mapa.</Text>
+        <Text style={styles.emptyText} testID="empty-text">Nenhum dado disponível para exibir no mapa.</Text>
       </View>
     );
   }
@@ -53,7 +53,7 @@ const HeatmapPage = () => {
       />
 
       {/* Botão Flutuante para a Legenda */}
-      <TouchableOpacity style={styles.floatingButton} onPress={toggleMenu}>
+      <TouchableOpacity style={styles.floatingButton} onPress={toggleMenu} testID="floating-button">
         <FontAwesomeIcon icon={faList} size={24} color="white" />
       </TouchableOpacity>
 
