@@ -41,17 +41,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openjdk-11-jdk wget unzip
 
-          # Baixar e instalar o SDK
+          # Baixar o SDK de ferramentas de linha de comando
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools.zip
           mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
           unzip -q commandlinetools.zip -d "$ANDROID_SDK_ROOT/cmdline-tools"
           mv "$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools" "$ANDROID_SDK_ROOT/cmdline-tools/latest"
           rm commandlinetools.zip
 
-          # Adicionar Android SDK ao PATH
-          echo "export PATH=\$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> ~/.bashrc
-          source ~/.bashrc
-          
+          # Baixar e instalar o Android SDK e pacotes necessários
+          export ANDROID_HOME=$ANDROID_SDK_ROOT
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+
           # Aceitar licenças e instalar pacotes necessários
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
