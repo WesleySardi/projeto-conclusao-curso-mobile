@@ -87,4 +87,4 @@ jobs:
       # 9. Exibir o link de download
       - name: Show download URL
         run: |
-          echo "APK Download URL: http://zlo-mobile.s3.amazonaws.com/app-release-${{ github.run_id }}.apk"
+          echo "APK Download URL: http://zlo-mobile.s3.amazonaws.com/app-release.apk"
