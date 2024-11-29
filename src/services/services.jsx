@@ -542,7 +542,7 @@ const tryAuthRegisterRequest = async (emailData, passwordData, setLoading) => {
     const response = await axios.post(`${URLs.AUTH}/auth/register`, {
       email: emailData,
       password: passwordData,
-      role: 'RESPONSÁVEL',
+      role: 'RESPONSAVEL',
     });
 
     return response;
@@ -656,7 +656,7 @@ export const registerResponsibleRequest = async (data, setLoading) => {
   }
 
   if (responseVerify == null) {
-    responseAuth = await tryAuthRegisterRequest(
+    let responseAuth = await tryAuthRegisterRequest(
       data.emailRes,
       data.senhaRes,
       setLoading,
@@ -675,7 +675,7 @@ export const registerResponsibleRequest = async (data, setLoading) => {
       return null;
     }
 
-    responseCreate = await tryCreateResponsibleRequest(data, setLoading);
+    let responseCreate = await tryCreateResponsibleRequest(data, setLoading);
 
     Toast.show({
       type: responseCreate.data.isOk ? 'success' : 'error',

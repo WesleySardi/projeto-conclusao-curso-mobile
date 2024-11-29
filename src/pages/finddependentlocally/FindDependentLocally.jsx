@@ -49,7 +49,7 @@ const FindDependentLocally = () => {
   };
 
   const decryptUrl = async url => {
-    var responseEmergePhone = await decryptUrlRequest(url, authToken);
+    let responseEmergePhone = await decryptUrlRequest(url, authToken);
 
     if (responseEmergePhone.contentResponse != null) {
       return responseEmergePhone.contentResponse.decryptedUrl;
@@ -68,7 +68,7 @@ const FindDependentLocally = () => {
 
             const params = getParamsFromUrl(parsedUrl);
 
-            var decryptedEmergPhone = await decryptUrl({
+            let decryptedEmergPhone = await decryptUrl({
               url: params.emergPhone,
             });
 
