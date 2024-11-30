@@ -59,6 +59,9 @@ export default function Home({navigation}) {
   const [changeDependentColor, setChangeDependentColor] = useState(false);
   const [isList, setIsList] = useState(false);
   const textStyle = {color: COLORS.DARK_BLUE, fontWeight: 'bold'};
+  const textColor = color => {
+    return color ? COLORS.DARK_BLUE : COLORS.GREY_MAIN;
+  };
 
   const findCurrentResponsible = async () => {
     const response = await attCurrentResponsible(emailRes, authToken);
@@ -167,14 +170,11 @@ export default function Home({navigation}) {
     setTextoInput('');
 
     if (type === 'forward') {
-      setValueToShowData(
-        (valueToShowData + 1) % (!userData ? 0 : userData.length),
-      );
+      setValueToShowData((valueToShowData + 1) % (userData?.length || 0));
       setIsPressedForward(true);
     } else {
       setValueToShowData(
-        (valueToShowData - 1 + userData.length) %
-          (!userData ? 0 : userData.length),
+        (valueToShowData - 1 + userData.length) % (userData?.length || 0),
       );
       setIsPressedBackward(true);
     }
@@ -203,7 +203,7 @@ export default function Home({navigation}) {
   }, [navigation]);
 
   useEffect(() => {
-    if (valuesToShowData.length >= 0 && (!userData ? 0 : userData.length) > 0) {
+    if (valuesToShowData.length >= 0 && (userData?.length || 0) > 0) {
       setListData(valuesToShowData.map(indice => userData[indice]));
       setUserDataToBeShown(userData[valueToShowData]);
     }
@@ -221,7 +221,7 @@ export default function Home({navigation}) {
           style={[
             styles.viewWelcome,
             {
-              bottom: !userData ? height * 0.2 : height * 0.025,
+              bottom: height * (!userData ? 0.2 : 0.025),
             },
           ]}>
           <View style={styles.viewWelcomeTexts}>
@@ -289,7 +289,7 @@ export default function Home({navigation}) {
                   <Text style={styles.list_dependentsTotalText}>
                     Você é responsável por:{' '}
                     <Text style={{color: COLORS.RED_MAIN, fontWeight: 'bold'}}>
-                      {!userData ? 0 : userData.length}
+                      {userData?.length || 0}
                     </Text>{' '}
                     dependentes.
                   </Text>
@@ -342,9 +342,7 @@ export default function Home({navigation}) {
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronLeft}
-                    color={
-                      isPressedBackward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN
-                    }
+                    color={textColor(isPressedBackward)}
                     style={styles.arrowsIcon}
                     size={width * (isPressedBackward ? 0.1 : 0.09)}
                   />
@@ -416,9 +414,7 @@ export default function Home({navigation}) {
                   style={styles.arrows}>
                   <FontAwesomeIcon
                     icon={faChevronRight}
-                    color={
-                      isPressedForward ? COLORS.DARK_BLUE : COLORS.GREY_MAIN
-                    }
+                    color={textColor(isPressedForward)}
                     style={styles.arrowsIcon}
                     size={isPressedForward ? width * 0.1 : width * 0.09}
                   />
