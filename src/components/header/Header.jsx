@@ -67,19 +67,24 @@ function Header() {
     <View style={backgroundStyle}>
       {showIcon && (
         <Pressable
-          onPress={() =>
-            currentScreen == 'ForgotPassword' || currentScreen == 'Register'
-              ? navigation.navigate('Login')
-              : currentScreen == 'EmailCheck'
-              ? navigation.navigate('UserProfile')
-              : currentScreen == 'ChangePassword'
-              ? navigation.navigate('UserProfile')
-              : currentScreen == 'AccessRecovery'
-              ? navigation.navigate('UserProfile')
-              : currentScreen == 'HeatmapPage' 
-              ? navigation.navigate('NotificationTab')
-              : navigation.navigate('Home')
-          }
+          onPress={() => {
+            let login = 'Login';
+            let userProfile = 'UserProfile';
+            let notificationTab = 'NotificationTab';
+            let home = 'Home';
+
+            const navigationMap = {
+              ForgotPassword: login,
+              Register: login,
+              EmailCheck: userProfile,
+              ChangePassword: userProfile,
+              AccessRecovery: userProfile,
+              HeatmapPage: notificationTab,
+            };
+
+            const targetScreen = navigationMap[currentScreen] || home;
+            navigation.navigate(targetScreen);
+          }}
           style={iconStyle}>
           <FontAwesomeIcon
             icon={faChevronLeft}
