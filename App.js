@@ -13,6 +13,8 @@ import AccessRecovery from './src/pages/accessrecovery/AccessRecovery';
 import ForgotPassword from './src/pages/forgotPassword/ForgotPassword';
 import ChangePassword from './src/pages/changepassword/ChangePassword';
 import UserProfile from './src/pages/userProfile/UserProfile';
+import NotificationTab from './src/pages/NotificationTab/NotificationTab'
+import HeatmapPage from './src/pages/HeatmapPage/HeatmapPage'
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {UserProvider} from './src/contexts/UserContext';
@@ -50,6 +52,8 @@ export default function App() {
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
             <Stack.Screen name="UserProfile" component={UserProfile} />
+            <Stack.Screen name="NotificationTab" component={NotificationTab} />
+            <Stack.Screen name="HeatmapPage" component={HeatmapPage} />
           </Stack.Navigator>
           <Header />
           <Footer />

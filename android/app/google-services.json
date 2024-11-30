@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "662613430524",
+    "project_id": "biomedtcc-a99e3",
+    "storage_bucket": "biomedtcc-a99e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662613430524:android:153082348de2d65ce90779",
+        "android_client_info": {
+          "package_name": "com.testenfczlo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvHW54IuuJF7A-EWgnrGaUPlT6drY5Y2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

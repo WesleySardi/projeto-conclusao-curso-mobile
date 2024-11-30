@@ -76,6 +76,8 @@ function Header() {
               ? navigation.navigate('UserProfile')
               : currentScreen == 'AccessRecovery'
               ? navigation.navigate('UserProfile')
+              : currentScreen == 'HeatmapPage' 
+              ? navigation.navigate('NotificationTab')
               : navigation.navigate('Home')
           }
           style={iconStyle}>

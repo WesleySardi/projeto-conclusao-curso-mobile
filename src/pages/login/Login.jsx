@@ -19,6 +19,7 @@ import {
   attCurrentResponsible,
   authSigninRequest,
 } from '../../services/services';
+import registerDevice from '../../functions/registerDevice';
 
 const {width, height} = Dimensions.get('window');
 
@@ -51,7 +52,7 @@ export default function Login({navigation}) {
       findCurrentResponsible('Bearer ' + response);
     }
   };
-
+  
   const findCurrentResponsible = async token => {
     const response = await attCurrentResponsible(emailValue, token);
 
@@ -61,6 +62,7 @@ export default function Login({navigation}) {
       setIdRes(response.contentResponse.cpfRes);
       setNomeRes(response.contentResponse.nomeRes);
       setEmergePhone(response.contentResponse.contato1Res);
+      registerDevice(response.contentResponse.cpfRes, token)
       navigation.navigate('Home');
     }
   };
