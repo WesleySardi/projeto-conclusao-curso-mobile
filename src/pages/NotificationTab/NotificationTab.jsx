@@ -43,7 +43,7 @@ const NotificationTab = () => {
         renderItem={({ item }) => (
           <NotificationItem notification={item} onDelete={deleteNotification} />
         )}
-        contentContainerStyle={{ paddingTop: HEADER_HEIGHT }}
+        contentContainerStyle={{ paddingTop: HEADER_HEIGHT, paddingBottom: HEADER_HEIGHT }}
       />
     </View>
   );

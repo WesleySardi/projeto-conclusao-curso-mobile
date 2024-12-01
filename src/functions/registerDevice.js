@@ -2,6 +2,8 @@ import messaging from '@react-native-firebase/messaging';
 import axios from 'axios';
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 import URLs from '../utils/urls';
+import { findDevicesOfResponsible } from '../services/services';
+
 
 const registerDevice = async (cpf, authToken) => {
   if (!authToken) {
@@ -55,7 +57,7 @@ const registerDevice = async (cpf, authToken) => {
           return false;
         }
       } catch (err) {
-        console.log('Erro ao solicitar permissões de notificações:', err);
+        console.log('Erro ao solicitar permissões de notificações.');
         return false;
       }
     }
@@ -81,13 +83,13 @@ const registerDevice = async (cpf, authToken) => {
       if (response.status === 200 || response.status === 201) {
         console.log('Device token registrado com sucesso.');
       } else {
-        console.log('Falha ao registrar device token:', response.data);
+        console.log('Falha ao registrar device token.');
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         console.log('Device token já está registrado.');
       } else {
-        console.log('Erro ao enviar device token para o servidor:', error);
+        console.log('Erro ao enviar device token para o servidor.');
       }
     }
   };
@@ -95,21 +97,13 @@ const registerDevice = async (cpf, authToken) => {
   const getAndRegisterToken = async () => {
     try {
       const currentToken = await messaging().getToken();
-      //   console.log('Current Device Token:', currentToken);
 
       if (!currentToken) {
         console.log('No device token available.');
         return;
       }
 
-      const response = await axios.get(
-        `${URLs.BASIC}/api/devicestorage/${cpf}`,
-        {
-          headers: {
-            Authorization: authToken,
-          },
-        },
-      );
+      const response = await findDevicesOfResponsible(cpf, authToken)
 
       if (response.status === 200 && response.data.isOk) {
         const serverTokens = response.data.contentResponse.map(
@@ -124,11 +118,18 @@ const registerDevice = async (cpf, authToken) => {
           await sendDeviceTokenToServer(cpf, currentToken);
         }
       } else {
-        console.log('Failed to fetch device tokens:', response.data);
+        console.log('Failed to fetch device tokens.');
+        console.log("Device token: " + currentToken)
         await sendDeviceTokenToServer(cpf, currentToken);
       }
+      if(response === null){
+        if(response.data.status === 404 && currentToken){
+          await sendDeviceTokenToServer(cpf, currentToken);
+        }
+
+      }
     } catch (error) {
-      console.log('Error during device registration initialization:', error);
+      console.log('Error during device registration initialization.');
     }
   };
 

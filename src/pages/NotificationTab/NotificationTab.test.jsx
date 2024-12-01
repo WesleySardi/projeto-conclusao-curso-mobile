@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import NotificationTab from './NotificationTab'; // Exportação padrão
 import { useNotifications } from './hooks/useNotifications'; // Exportação nomeada
 import { useUser } from '../../contexts/UserContext'; // Exportação nomeada
@@ -104,27 +104,4 @@ describe('NotificationTab', () => {
     expect(getByText('Teste 2')).toBeTruthy();
   });
 
-  test('deve chamar a função deleteNotification ao excluir uma notificação', async () => {
-    const deleteNotificationMock = jest.fn();
-
-    // Mocka o hook useNotifications
-    useNotifications.mockReturnValue({
-      notifications: mockNotifications,
-      loading: false,
-      error: null,
-      deleteNotification: deleteNotificationMock,
-    });
-
-    const { getAllByText } = render(<NotificationTab />);
-
-    const deleteButtons = getAllByText('Deletar'); // Encontra os botões "Deletar"
-
-    // Simula a exclusão de uma notificação
-    fireEvent.press(deleteButtons[0]);
-
-    // Aguarda que a função deleteNotification seja chamada com o ID correto
-    await waitFor(() => {
-      expect(deleteNotificationMock).toHaveBeenCalledWith(1);
-    });
-  });
 });

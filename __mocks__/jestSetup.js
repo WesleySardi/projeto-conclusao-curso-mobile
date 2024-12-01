@@ -54,11 +54,44 @@ jest.mock('@fortawesome/react-native-fontawesome', () => {
 });
 
 // 5. Mock de react-navigation/native
-jest.mock('@react-navigation/native', () => ({
-  useNavigation: jest.fn(() => ({ navigate: jest.fn() })),
-}));
+jest.mock('@react-navigation/native', () => {
+  const actualNavigation = jest.requireActual('@react-navigation/native');
+  return {
+    ...actualNavigation,
+    useNavigation: jest.fn(() => ({ navigate: jest.fn() })),
+    createNavigationContainerRef: jest.fn(() => ({
+      isReady: jest.fn(() => true),
+      navigate: jest.fn(),
+    })),
+  };
+});
+
 
 // Mock do UserContext
 jest.mock('./UserContext', () => ({
   useUser: require('./UserContext').useUser,
 }));
+
+jest.mock('react-native-toast-message', () => ({
+  Toast: {
+    show: jest.fn(),
+    hide: jest.fn(),
+  },
+}));
+
+jest.mock('@react-native-firebase/messaging', () => ({
+  default: {
+    requestPermission: jest.fn(),
+    hasPermission: jest.fn(),
+    getToken: jest.fn(),
+    onMessage: jest.fn(),
+  },
+}));
+
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'android', // Pode ser 'ios' ou 'android', dependendo do teste
+  select: jest.fn((options) => options.android), // Retorna a opção correta para a plataforma
+}));
+
+
+

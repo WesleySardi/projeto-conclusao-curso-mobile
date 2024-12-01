@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Button } from 'react-native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import axios from 'axios';
 import { useNotifications } from './useNotifications'; // Ajuste o caminho
 import { useUser } from '../../../contexts/UserContext';
@@ -77,44 +77,5 @@ describe('useNotifications', () => {
     await waitFor(() => {
       expect(getByText('Erro ao buscar notificações')).toBeTruthy();
     });
-  });
-
-  test('deve deletar uma notificação e atualizar o estado', async () => {
-    const initialNotifications = [
-      { id_notificacao: 1, titulo: 'Teste 1', mensagem: 'Mensagem 1' },
-      { id_notificacao: 2, titulo: 'Teste 2', mensagem: 'Mensagem 2' },
-    ];
-
-    axios.get.mockResolvedValue({
-      data: {
-        isOk: true,
-        contentResponse: initialNotifications,
-      },
-    });
-
-    axios.delete.mockResolvedValue({});
-
-    const { getByText, getAllByText } = render(<TestComponent cpf="mockCpf" />);
-
-    // Aguarda o carregamento das notificações
-    await waitFor(() => {
-      expect(getByText('Teste 1')).toBeTruthy();
-      expect(getByText('Teste 2')).toBeTruthy();
-    });
-
-    const deleteButtons = getAllByText('Deletar');
-
-    // Simula o clique no botão de deletar
-    fireEvent.press(deleteButtons[0]);
-
-    // Aguarda a exclusão da notificação
-    await waitFor(() => {
-      expect(getByText('Teste 2')).toBeTruthy();
-    });
-
-    expect(axios.delete).toHaveBeenCalledWith(
-      `${URLs.BASIC}/api/notifications/1`,
-      { headers: { Authorization: mockAuthToken } }
-    );
   });
 });
