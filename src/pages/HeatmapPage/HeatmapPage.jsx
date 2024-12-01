@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import HeatmapComponent from './components/HeatmapComponent';
-import {useHeatmapData} from './hooks/useHeatmapData';
-import {ScanMenu} from './components/ScanMenu';
+import { HeatmapComponent } from './components/HeatmapComponent';
+import { useHeatmapData } from './hooks/useHeatmapData';
+import ScanMenu from './components/ScanMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faList } from '@fortawesome/free-solid-svg-icons';
-import {useMenuAnimation} from './hooks/useMenuAnimation';
+import useMenuAnimation from './hooks/useMenuAnimation';
 import { handleItemPress, handleMarkerPress } from './utils/handlers';
 import { HEADER_HEIGHT } from './constants';
 import { useRoute } from '@react-navigation/native';

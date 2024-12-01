@@ -17,12 +17,12 @@ export const useNotifications = cpf => {
           `${URLs.BASIC}/api/notifications/responsavel/${cpf}`,
           {headers: {Authorization: authToken}},
         );
-        // console.log('response: ', response.data.contentResponse);
 
         if (response.data.isOk) {
           setNotifications(response.data.contentResponse);
         }
       } catch (err) {
+        console.log("error.")
         setError(err.message);
       } finally {
         setLoading(false);

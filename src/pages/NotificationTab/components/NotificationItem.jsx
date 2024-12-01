@@ -7,6 +7,19 @@ import {faTrash, faMap} from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 
+// Função para formatar a data e hora
+const formatDateTime = (timestamp) => {
+  const date = new Date(timestamp * 1000); // Converta de segundos para milissegundos
+  const options = {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+  return date.toLocaleDateString('pt-BR', options).replace(',', ' às'); // Exemplo: 01/12/2024 às 10:35
+};
+
 const NotificationItem = ({notification, onDelete}) => {
   const navigation = useNavigation();
   const renderRightActions = () => (
@@ -52,17 +65,21 @@ const NotificationItem = ({notification, onDelete}) => {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{notification.titulo}</Text>
           <Text style={styles.message}>{notification.mensagem}</Text>
+          <Text style={styles.date}>{formatDateTime(notification.dataEnvio)}</Text>
         </View>
       </View>
     </Swipeable>
   );
 };
 
+// Definir validações de tipo para as props
 NotificationItem.propTypes = {
   notification: PropTypes.shape({
     id_notificacao: PropTypes.number.isRequired,
     titulo: PropTypes.string.isRequired,
     mensagem: PropTypes.string.isRequired,
+    dataEnvio: PropTypes.number.isRequired, // Unix Timestamp
+    cpfDependente: PropTypes.string, // Pode ser null
   }).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
@@ -90,6 +107,11 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 14,
     color: '#555',
+  },
+  date: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 4,
   },
   deleteButton: {
     backgroundColor: '#FF5252',
