@@ -118,7 +118,7 @@ const FindDependentLocally = () => {
             placeholder="Telefone de emergência"
             editable={false}
           />
-          <TouchableOpacity onPress={() => handlePhoneCall()}>
+          <TouchableOpacity onPress={() => handlePhoneCall()} testID="call-button">
             <Image
               source={EmergencyCallImage}
               style={{width: 100, height: 100}}
