@@ -55,15 +55,6 @@ jobs:
           # Aceitar licenças e instalar pacotes necessários
           yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-
-      # Teste abaixo
-
-      # 4.1 Criar o arquivo google-services.json
-      - name: Add google-services.json
-        run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > android/app/google-services.json
-
-      # Teste acima
       
       # 5. Gerar o APK
       - name: Build APK
