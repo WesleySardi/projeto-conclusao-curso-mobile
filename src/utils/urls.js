@@ -3,7 +3,7 @@
 const BASE_URL = 'http://zlo-main-app.us-east-1.elasticbeanstalk.com';
 const AUTH_URL =
   'http://zlo-login-microservice-env-2.eba-cm4nxyyj.us-east-1.elasticbeanstalk.com';
-const ENCRYPT_URL = 'http://zlo-main-app.us-east-1.elasticbeanstalk.com';
+const ENCRYPT_URL = 'http://zlo-third-party-access.s3-website-us-east-1.amazonaws.com';
 
 const URLs = {
   BASIC: `${BASE_URL}`,
