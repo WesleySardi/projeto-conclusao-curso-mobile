@@ -67,8 +67,8 @@ ZloApp/
 - Consumo de um microserviço de autenticação para login, cadastro e alteração de senha.
 - Navegação fluida entre telas com React Navigation.
 
-## Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
-
-## Desenvolvedores
+### Desenvolvedores
 
 - Wesley Erik Sardi
+
+### Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
