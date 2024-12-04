@@ -1,79 +1,71 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
+# ZloTrackband - Aplicativo de Gerenciamento de Pulseiras
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Descrição do Projeto
 
-## Step 1: Start the Metro Server
+O aplicativo **ZloTrackband** foi desenvolvido para gerenciar as pulseiras de auxílio para pessoas dependentes. Através deste aplicativo, o **responsável** pode gerenciar as pulseiras adquiridas, acompanhar a localização dos dependentes, editar dados de perfil e interagir com a pulseira por meio de NFC.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### Funcionalidades Principais:
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- **Cadastro/Login:** O responsável pode se cadastrar, fazer login ou recuperar a senha.
+- **Home:** Exibe os dependentes cadastrados e permite editar, excluir ou trocar dependentes.
+- **Perfil:** Permite que o responsável altere seus dados de usuário.
+- **Interação com Pulseira:** O aplicativo solicita a inserção de uma URL no chip NFC da pulseira ao manipular os dados de dependentes.
+- **Notificações:** O responsável pode acessar as notificações da conta.
+- **Mapa de Localizações:** Exibe um mapa com as últimas localizações do dependente.
+- **Trocar senha:** Permite o usuário alterar a senha, por meio de uma confirmação de código pelo e-mail.
 
-```bash
-# using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
+## Visão Geral
+
+### Introdução
+O aplicativo NFC ZloTrackband foi desenvolvido em **React Native** e está disponível para plataformas Android. Ele é utilizado para gerenciar a interação com a pulseira ZloTrackband através da tecnologia NFC.
+
+### Tecnologias Utilizadas
+- **React Native**: Framework JavaScript para desenvolvimento mobile.
+- **Styled Components**: Para estilização de componentes.
+- **Axios**: Para chamadas de APIs externas.
+- **React Navigation**: Para gerenciamento de navegação entre telas.
+
+---
+
+## Estrutura do Projeto
+```
+testeNfcZlo/
+├── android/                  # Configurações e arquivos do Android
+├── ios/                      # Configurações e arquivos do iOS
+├── src/
+│   ├── components/           # Componentes React Native
+│   ├── screens/              # Telas do aplicativo
+│   ├── navigation/           # Navegação do aplicativo
+│   ├── services/             # Serviços para chamadas de APIs externas
+│   ├── urls/                 # Arquivo com as URLs utilizadas nas APIs
+│   ├── App.js                # Componente principal
+│   ├── index.js              # Ponto de entrada do aplicativo
+├── package.json
+└── README.md
 ```
 
-## Step 2: Start your Application
+### Descrição dos Diretórios
+- **android/** e **ios/**: Configurações específicas para as plataformas Android e iOS.
+- **src/components/**: Contém os componentes reutilizáveis no React Native.
+- **src/screens/**: Telas do aplicativo, cada uma representando uma funcionalidade ou fluxo.
+- **src/navigation/**: Configuração das rotas e navegação entre telas.
+- **src/services/**: Serviços de integração com APIs externas.
+- **src/urls/**: Arquivo centralizado para gerenciar URLs usadas nas requisições.
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+---
 
-### For Android
+## Funcionalidades
+- Autenticação com JWT Token, incluindo verificação de expiração e redirecionamento para a tela de login.
+- Consumo de um microserviço de autenticação para login, cadastro e alteração de senha.
+- Navegação fluida entre telas com React Navigation.
 
-```bash
-# using npm
-npm run android
+## Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
 
-# OR using Yarn
-yarn android
-```
+Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
 
-### For iOS
+## Desenvolvedores
 
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Wesley Erik Sardi
