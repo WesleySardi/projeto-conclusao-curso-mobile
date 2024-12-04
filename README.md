@@ -1,9 +1,14 @@
+[Documentação Técnica RFC do projeto](https://docs.google.com/document/d/11Tobzwm5-JkiURC2DJRTKl8LARjj46NG/edit?usp=sharing&ouid=113156827946997430842&rtpof=true&sd=true)
 
-# ZloTrackband - Aplicativo de Gerenciamento de Pulseiras
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=WesleySardi_projeto-conclusao-curso-mobile&metric=bugs)](https://sonarcloud.io/summary/new_code?id=WesleySardi_projeto-conclusao-curso-mobile)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=WesleySardi_projeto-conclusao-curso-mobile&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=WesleySardi_projeto-conclusao-curso-mobile)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=WesleySardi_projeto-conclusao-curso-mobile&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=WesleySardi_projeto-conclusao-curso-mobile)
+
+# ZloApp- Aplicativo de Gerenciamento de Pulseiras
 
 ## Descrição do Projeto
 
-O aplicativo **ZloTrackband** foi desenvolvido para gerenciar as pulseiras de auxílio para pessoas dependentes. Através deste aplicativo, o **responsável** pode gerenciar as pulseiras adquiridas, acompanhar a localização dos dependentes, editar dados de perfil e interagir com a pulseira por meio de NFC.
+O aplicativo **ZloApp** foi desenvolvido para gerenciar as pulseiras de auxílio para pessoas dependentes. Através deste aplicativo, o **responsável** pode gerenciar as pulseiras adquiridas, acompanhar a localização dos dependentes, editar dados de perfil e interagir com a pulseira por meio de NFC.
 
 ### Funcionalidades Principais:
 
@@ -20,7 +25,7 @@ O aplicativo **ZloTrackband** foi desenvolvido para gerenciar as pulseiras de au
 ## Visão Geral
 
 ### Introdução
-O aplicativo NFC ZloTrackband foi desenvolvido em **React Native** e está disponível para plataformas Android. Ele é utilizado para gerenciar a interação com a pulseira ZloTrackband através da tecnologia NFC.
+O aplicativo ZloApp foi desenvolvido em **React Native** e está disponível para plataformas Android. Ele é utilizado para gerenciar a interação com a pulseira ZloTrackband através da tecnologia NFC.
 
 ### Tecnologias Utilizadas
 - **React Native**: Framework JavaScript para desenvolvimento mobile.
@@ -32,7 +37,7 @@ O aplicativo NFC ZloTrackband foi desenvolvido em **React Native** e está dispo
 
 ## Estrutura do Projeto
 ```
-testeNfcZlo/
+ZloApp/
 ├── android/                  # Configurações e arquivos do Android
 ├── ios/                      # Configurações e arquivos do iOS
 ├── src/
@@ -48,7 +53,7 @@ testeNfcZlo/
 ```
 
 ### Descrição dos Diretórios
-- **android/** e **ios/**: Configurações específicas para as plataformas Android e iOS.
+- **android/**: Configurações específicas para as plataformas Android.
 - **src/components/**: Contém os componentes reutilizáveis no React Native.
 - **src/screens/**: Telas do aplicativo, cada uma representando uma funcionalidade ou fluxo.
 - **src/navigation/**: Configuração das rotas e navegação entre telas.
@@ -63,8 +68,6 @@ testeNfcZlo/
 - Navegação fluida entre telas com React Navigation.
 
 ## Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
-
-Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
 
 ## Desenvolvedores
 
