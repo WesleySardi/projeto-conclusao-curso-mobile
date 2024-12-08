@@ -27,9 +27,8 @@ O aplicativo **ZloApp** foi desenvolvido para gerenciar as pulseiras de auxílio
 ### Introdução
 O aplicativo ZloApp foi desenvolvido em **React Native** e está disponível para plataformas Android. Ele é utilizado para gerenciar a interação com a pulseira ZloTrackband através da tecnologia NFC.
 
-### Tecnologias Utilizadas
+### Principais Tecnologias Utilizadas
 - **React Native**: Framework JavaScript para desenvolvimento mobile.
-- **Styled Components**: Para estilização de componentes.
 - **Axios**: Para chamadas de APIs externas.
 - **React Navigation**: Para gerenciamento de navegação entre telas.
 
@@ -55,10 +54,10 @@ zloTrackbandMobile/
 ### Descrição dos Diretórios
 - **android/**: Configurações específicas para as plataformas Android.
 - **src/components/**: Contém os componentes reutilizáveis no React Native.
-- **src/screens/**: Telas do aplicativo, cada uma representando uma funcionalidade ou fluxo.
-- **src/navigation/**: Configuração das rotas e navegação entre telas.
+- **src/pages/**: Telas do aplicativo, cada uma representando uma funcionalidade ou fluxo.
 - **src/services/**: Serviços de integração com APIs externas.
 - **src/urls/**: Arquivo centralizado para gerenciar URLs usadas nas requisições.
+- **src/utils/**: Arquivo centralizado para gerenciar métodos gerais usadas nas requisições.
 
 ---
 
