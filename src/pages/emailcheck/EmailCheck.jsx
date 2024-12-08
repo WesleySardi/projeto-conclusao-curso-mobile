@@ -55,7 +55,7 @@ export default function EmailCheck({navigation}) {
     const response = await emailVerifyRequest(emailCode, emailData);
     setIsTokenLoading(false);
 
-    if (response.contentResponse != null)
+    if (response.isOk)
       return navigation.navigate('ChangePassword');
   };
 
