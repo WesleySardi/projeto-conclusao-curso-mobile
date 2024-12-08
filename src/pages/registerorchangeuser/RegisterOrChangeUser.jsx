@@ -84,7 +84,7 @@ export default function RegisterOrChangeUser({navigation}) {
           encryptedCpfDep,
         )}&emergPhone=${encodeURIComponent(encryptedEmergePhone)}`;
 
-      const bytes = Ndef.encodeMessage([Ndef.textRecord(url)]);
+      const bytes = Ndef.encodeMessage([Ndef.uriRecord(url)]);
 
       if (bytes) {
         await NfcManager.ndefHandler.writeNdefMessage(bytes);
