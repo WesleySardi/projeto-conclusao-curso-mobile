@@ -37,7 +37,7 @@ O aplicativo ZloApp foi desenvolvido em **React Native** e está disponível par
 
 ## Estrutura do Projeto
 ```
-ZloApp/
+zloTrackbandMobile/
 ├── android/                  # Configurações e arquivos do Android
 ├── ios/                      # Configurações e arquivos do iOS
 ├── src/
@@ -70,5 +70,6 @@ ZloApp/
 ### Desenvolvedores
 
 - Wesley Erik Sardi
+- Davi Prudente Ferreira
 
 ### Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
