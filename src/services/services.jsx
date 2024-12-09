@@ -703,8 +703,39 @@ export const registerResponsibleRequest = async (data, setLoading) => {
 
 export const findDevicesOfResponsible = async (cpf, authToken) => {
   try {
-    const response = await axios.get(
-      `${URLs.BASIC}/api/devicestorage/${cpf}`,
+    const response = await axios.get(`${URLs.BASIC}/api/devicestorage/responsible/${cpf}`, {
+      headers: {
+        Authorization: authToken,
+      },
+    });
+    return response;
+  } catch (error) {
+    if (!(await isTokenActive(error.response.status))) return null;
+
+    Toast.show({
+      type: 'error',
+      position: 'top',
+      text1: 'Erro!',
+      text2: 'Erro inesperado.',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
+    return null;
+  }
+};
+
+export const sendDeviceTokenToServerService = async (
+  cpf,
+  deviceToken,
+  authToken,
+) => {
+  try {
+    const response = await axios.post(
+      `${URLs.BASIC}/api/devicestorage`,
+      {
+        tokenDispositivo: deviceToken,
+        cpfResponsavel: cpf,
+      },
       {
         headers: {
           Authorization: authToken,
@@ -713,7 +744,6 @@ export const findDevicesOfResponsible = async (cpf, authToken) => {
     );
     return response;
   } catch (error) {
-
     if (!(await isTokenActive(error.response.status))) return null;
 
     Toast.show({

@@ -1,20 +1,33 @@
 import React from 'react';
-import { View, FlatList, Text, ActivityIndicator, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import NotificationItem from './components/NotificationItem';
-import { useNotifications } from './hooks/useNotifications';
-import { useUser } from "../../contexts/UserContext"
+import {useNotifications} from './hooks/useNotifications';
+import {useUser} from '../../contexts/UserContext';
 
 const HEADER_HEIGHT = Dimensions.get('window').height * 0.1;
 
 const NotificationTab = () => {
-  const { currentRes } = useUser();
+  const {currentRes} = useUser();
 
-  const { notifications, loading, error, deleteNotification } = useNotifications(currentRes.cpfRes);
+  const {notifications, loading, error, deleteNotification} = useNotifications(
+    currentRes.cpfRes,
+  );
 
   if (loading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#4CAF50"  testID="activity-indicator"/>
+        <ActivityIndicator
+          size="large"
+          color="#4CAF50"
+          testID="activity-indicator"
+        />
       </View>
     );
   }
@@ -39,11 +52,18 @@ const NotificationTab = () => {
     <View style={styles.container}>
       <FlatList
         data={notifications}
-        keyExtractor={(item) => item.id_notificacao.toString()}
-        renderItem={({ item }) => (
-          <NotificationItem notification={item} onDelete={deleteNotification} />
+        keyExtractor={item => item.id_notificacao.toString()}
+        renderItem={({item, index}) => (
+          <NotificationItem
+            notification={item}
+            onDelete={deleteNotification}
+            index={index} // Passe o índice aqui
+          />
         )}
-        contentContainerStyle={{ paddingTop: HEADER_HEIGHT, paddingBottom: HEADER_HEIGHT }}
+        contentContainerStyle={{
+          paddingTop: HEADER_HEIGHT,
+          paddingBottom: HEADER_HEIGHT,
+        }}
       />
     </View>
   );

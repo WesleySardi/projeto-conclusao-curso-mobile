@@ -23,6 +23,7 @@ const ScanMenu = ({ points, onItemPress }) => {
             <View style={styles.legendColor} />
             <View>
               <Text style={styles.legendName}>{item.scanName}</Text>
+              <Text style={styles.legendContact}>Contato: {item.scanPhone}</Text>
               <Text style={styles.legendDate}>{formatDate(item.scanDateTime)}</Text>
             </View>
           </TouchableOpacity>
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   legendTitle: {
+    color: 'black',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
@@ -68,12 +70,19 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   legendName: {
+    color: '#666',
     fontSize: 14,
     fontWeight: '600',
+  },
+  legendContact: {
+    color: '#999',
+    fontSize: 12,
+    fontWeight: '400',
   },
   legendDate: {
     fontSize: 12,
     color: '#555',
+    fontWeight: "200"
   },
 });
 
