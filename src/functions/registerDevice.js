@@ -1,8 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
-import axios from 'axios';
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
-import URLs from '../utils/urls';
-import { findDevicesOfResponsible } from '../services/services';
+import { findDevicesOfResponsible, sendDeviceTokenToServerService } from '../services/services';
 
 
 const registerDevice = async (cpf, authToken) => {
@@ -66,19 +64,8 @@ const registerDevice = async (cpf, authToken) => {
 
   const sendDeviceTokenToServer = async (cpf, deviceToken) => {
     try {
-      const response = await axios.post(
-        `${URLs.BASIC}/api/devicestorage`,
-        {
-          tokenDispositivo: deviceToken,
-          cpfResponsavel: cpf,
-        },
-        {
-          headers: {
-            Authorization: authToken,
-            'Content-Type': 'application/json',
-          },
-        },
-      );
+      
+      const response = await sendDeviceTokenToServerService(cpf, deviceToken, authToken);
 
       if (response.status === 200 || response.status === 201) {
         console.log('Device token registrado com sucesso.');
@@ -119,7 +106,6 @@ const registerDevice = async (cpf, authToken) => {
         }
       } else {
         console.log('Failed to fetch device tokens.');
-        console.log("Device token: " + currentToken)
         await sendDeviceTokenToServer(cpf, currentToken);
       }
       if(response === null){
