@@ -10,6 +10,26 @@
 
 O aplicativo **ZloApp** foi desenvolvido para gerenciar as pulseiras de auxílio para pessoas dependentes. Através deste aplicativo, o **responsável** pode gerenciar as pulseiras adquiridas, acompanhar a localização dos dependentes, editar dados de perfil e interagir com a pulseira por meio de NFC.
 
+## Objetivo do Aplicativo
+
+O objetivo principal do **ZloApp** é proporcionar uma solução intuitiva, prática e segura para o gerenciamento das pulseiras de auxílio para dependentes. O aplicativo está em **andamento**, e algumas funcionalidades, especialmente as relacionadas à segurança, podem não estar implementadas no momento, mas serão desenvolvidas em futuras atualizações. O projeto está sendo desenvolvido levando em consideração a importância da segurança dos dados dos usuários, incluindo a conformidade com a LGPD (Lei Geral de Proteção de Dados), PHI (Protected Health Information) e HIPAA (Health Insurance Portability and Accountability Act). Além disso, o **ZloApp** busca criar um processo eficiente para o gerenciamento de dependentes e contas, sendo **prático e intuitivo** para todos os usuários, independentemente da idade.
+
+A seguir, os pontos principais:
+
+1. **Gerenciamento de Dependentes e Contas**:
+   - O aplicativo permite que o responsável gerencie de forma simples e eficiente os dados de dependentes, incluindo a localização, dados de perfil e interações com as pulseiras. O processo de cadastro, visualização e edição de dependentes foi projetado para ser **prático e intuitivo**, facilitando o uso por qualquer pessoa, independentemente da idade.
+
+2. **Conformidade com LGPD e Proteção de Dados Pessoais**:
+   - O **ZloApp** seguirá os princípios estabelecidos pela LGPD, garantindo a proteção dos dados pessoais dos usuários, como informações de login, localização dos dependentes e dados de perfil. Todos os dados coletados serão armazenados de forma segura e utilizados somente para os fins específicos do aplicativo, com o consentimento explícito dos responsáveis.
+
+3. **Proteção de Informações de Saúde (PHI) e HIPAA (Futuro)**:
+   - O aplicativo irá lidar com dados sensíveis, como a localização dos dependentes, suas interações com as pulseiras de rastreamento e seus dados médicos que são considerados informações de saúde (PHI). Para garantir a conformidade com o HIPAA, o **ZloApp** implementará medidas rigorosas de segurança no futuro, incluindo criptografia de ponta a ponta e controle de acesso restrito para proteger essas informações. Essas funcionalidades de segurança ainda estão em desenvolvimento e serão implementadas em versões futuras.
+
+4. **Interface Intuitiva e Acessível**:
+   - O **ZloApp** foi projetado para ser **intuitivo** e fácil de usar, atendendo a todas as idades. A interface é simples, com navegação fluida e funcionalidades claras. O processo de gerenciamento de dependentes e contas foi otimizado para garantir uma experiência prática e acessível, com funcionalidades que podem ser compreendidas facilmente por qualquer usuário, independentemente de sua familiaridade com tecnologia.
+
+O projeto está em constante evolução, e futuras atualizações irão incluir mais recursos de segurança, tornando o aplicativo ainda mais seguro e confiável para os usuários.
+
 ### Funcionalidades Principais:
 
 - **Cadastro/Login:** O responsável pode se cadastrar, fazer login ou recuperar a senha.
